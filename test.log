@@ -1,0 +1,1000 @@
+2025-11-21 17:12:53.098 [DBG] Scheduler: Cache lookup for key cache:session:9c0cb52f
+2025-11-21 17:12:55.113 [DBG] FileProcessor: Parsed configuration: {"timeout": 30, "retries": 3}
+2025-11-21 17:12:59.223 [WRN] Metrics: Slow query detected: 1ms for SELECT * FROM users WHERE...
+2025-11-21 17:13:00.988 [INF] Config: Batch processing completed: 488/1000 items
+2025-11-21 17:13:01.408 [INF] Metrics: Message published to events
+2025-11-21 17:13:04.226 [INF] Scheduler: Message published to notifications
+2025-11-21 17:13:07.100 [INF] Auth: File import_068cafb3.csv processed, 7166 records
+2025-11-21 17:13:09.599 [INF] FileProcessor: Batch processing completed: 670/1031 items
+2025-11-21 17:13:11.732 [WRN] Scheduler: Connection pool exhausted, waiting for available connection
+2025-11-21 17:13:15.524 [DBG] Scheduler: Connection pool status: 16/20 active
+2025-11-21 17:13:16.098 [INF] MessageQueue: Request dd1fadb6 completed in 4310ms
+2025-11-21 17:13:20.616 [INF] ApiGateway: Service started on port 8080
+2025-11-21 17:13:23.127 [INF] HttpServer: Batch processing completed: 227/1059 items
+2025-11-21 17:13:27.857 [TRC] Cache: Variable state: {counter: 42, flag: true}
+2025-11-21 17:13:31.819 [FTL] Auth: Unrecoverable error, shutting down
+2025-11-21 17:13:35.085 [INF] MessageQueue: Message published to orders
+2025-11-21 17:13:37.518 [FTL] Scheduler: Application startup failed: Connection refused
+2025-11-21 17:13:39.675 [INF] MessageQueue: User user_8606 authenticated successfully
+2025-11-21 17:13:41.366 [DBG] Metrics: Cache lookup for key cache:user:5c904261
+2025-11-21 17:13:46.269 [INF] ApiGateway: Message published to orders
+2025-11-21 17:13:51.267 [ERR] Scheduler: Failed to process request 2b450d96: Timeout exceeded
+2025-11-21 17:13:54.178 [DBG] HttpServer: Connection pool status: 6/20 active
+2025-11-21 17:13:56.668 [WRN] Config: Slow query detected: 40ms for SELECT * FROM users WHERE...
+2025-11-21 17:13:59.214 [INF] MessageQueue: Scheduled job ReportGenerator started
+2025-11-21 17:14:00.357 [ERR] HttpServer: File not found: export_24db2b70.csv
+2025-11-21 17:14:01.543 [INF] HttpServer: Batch processing completed: 137/1037 items
+2025-11-21 17:14:04.829 [WRN] FileProcessor: Retry attempt 3 for operation ProcessPayment
+2025-11-21 17:14:06.883 [FTL] HttpServer: Critical resource unavailable: Redis
+2025-11-21 17:14:10.709 [INF] MessageQueue: Scheduled job CleanupJob started
+2025-11-21 17:14:14.320 [INF] ApiGateway: File export_c78740f8.csv processed, 4044 records
+2025-11-21 17:14:17.299 [INF] Database: Configuration reloaded
+2025-11-21 17:14:20.423 [DBG] Auth: Processing request 9b376638
+2025-11-21 17:14:22.185 [INF] Metrics: Service started on port 8080
+2025-11-21 17:14:23.117 [INF] ApiGateway: Service started on port 8080
+2025-11-21 17:14:23.766 [ERR] Database: Failed to process request de382d7a: Timeout exceeded
+2025-11-21 17:14:28.236 [INF] FileProcessor: File export_db59a542.csv processed, 8640 records
+2025-11-21 17:14:30.220 [WRN] Scheduler: Connection pool exhausted, waiting for available connection
+2025-11-21 17:14:31.425 [TRC] Metrics: Loop iteration 31 of 1079
+2025-11-21 17:14:33.007 [INF] Scheduler: Health check passed
+2025-11-21 17:14:35.850 [DBG] FileProcessor: Cache lookup for key cache:user:aa19cb12
+2025-11-21 17:14:37.055 [DBG] FileProcessor: Parsed configuration: {"timeout": 30, "retries": 3}
+2025-11-21 17:14:39.134 [INF] FileProcessor: Configuration reloaded
+2025-11-21 17:14:40.086 [TRC] MessageQueue: Loop iteration 74 of 1058
+2025-11-21 17:14:43.239 [INF] ApiGateway: Message published to events
+2025-11-21 17:14:46.121 [ERR] Config: File not found: export_bdca7946.csv
+2025-11-21 17:14:50.183 [INF] Scheduler: Health check passed
+2025-11-21 17:14:51.316 [INF] Cache: Scheduled job DataSync started
+2025-11-21 17:14:53.473 [INF] HttpServer: Configuration reloaded
+2025-11-21 17:14:57.547 [INF] MessageQueue: Request 795419b3 completed in 1ms
+2025-11-21 17:14:57.752 [INF] MessageQueue: Request f0adb183 completed in 4ms
+2025-11-21 17:15:02.704 [TRC] MessageQueue: Entering method Transform with parameters {id: 123, type: "full"}
+2025-11-21 17:15:03.213 [DBG] FileProcessor: Cache lookup for key cache:config:54090c4c
+2025-11-21 17:15:05.128 [INF] HttpServer: Message published to events
+2025-11-21 17:15:05.775 [INF] MessageQueue: Scheduled job ReportGenerator started
+2025-11-21 17:15:07.730 [DBG] FileProcessor: Query execution plan generated
+2025-11-21 17:15:08.947 [DBG] ApiGateway: Cache lookup for key cache:session:88d8e0b9
+2025-11-21 17:15:11.253 [WRN] Database: Connection pool exhausted, waiting for available connection
+2025-11-21 17:15:12.956 [INF] FileProcessor: Message published to notifications
+2025-11-21 17:15:15.777 [WRN] Auth: Deprecated API endpoint called: /api/v1/legacy
+2025-11-21 17:15:17.168 [INF] Cache: Connected to database mysql://db:3306/app
+2025-11-21 17:15:17.570 [INF] HttpServer: Request b66872ba completed in 878ms
+2025-11-21 17:15:19.960 [INF] MessageQueue: Configuration reloaded
+2025-11-21 17:15:22.741 [INF] Config: User user_1894 authenticated successfully
+2025-11-21 17:15:25.727 [WRN] Database: Slow query detected: 4366ms for SELECT * FROM users WHERE...
+2025-11-21 17:15:30.672 [WRN] Metrics: Retry attempt 2 for operation SyncData
+2025-11-21 17:15:33.856 [INF] MessageQueue: Message published to events
+2025-11-21 17:15:38.464 [WRN] HttpServer: Slow query detected: 753ms for SELECT * FROM users WHERE...
+2025-11-21 17:15:38.522 [INF] Config: User user_2417 authenticated successfully
+2025-11-21 17:15:43.288 [INF] MessageQueue: Health check passed
+2025-11-21 17:15:48.128 [WRN] Scheduler: Rate limit approaching for client client_482a5ad8
+2025-11-21 17:15:51.741 [DBG] Database: Query execution plan generated
+2025-11-21 17:15:56.711 [DBG] ApiGateway: Query execution plan generated
+2025-11-21 17:15:59.753 [INF] ApiGateway: Service started on port 9000
+2025-11-21 17:16:03.035 [INF] FileProcessor: Configuration reloaded
+2025-11-21 17:16:04.835 [ERR] Scheduler: Database connection failed: Timeout exceeded
+2025-11-21 17:16:07.655 [INF] ApiGateway: Configuration reloaded
+2025-11-21 17:16:11.326 [ERR] FileProcessor: Invalid message format: Unexpected field "foo" at position 42
+2025-11-21 17:16:11.623 [INF] MessageQueue: Connected to database postgres://db:5432/app
+2025-11-21 17:16:13.127 [DBG] Database: Connection pool status: 2/20 active
+2025-11-21 17:16:15.212 [INF] Scheduler: File import_abc23fcc.csv processed, 7287 records
+2025-11-21 17:16:16.491 [INF] Scheduler: Message published to orders
+2025-11-21 17:16:17.077 [WRN] Database: Rate limit approaching for client client_e4f76bf9
+2025-11-21 17:16:21.275 [INF] Config: Scheduled job CleanupJob started
+2025-11-21 17:16:21.961 [INF] HttpServer: Message published to orders
+2025-11-21 17:16:25.927 [INF] Cache: Request 6e8403b4 completed in 268ms
+2025-11-21 17:16:27.800 [INF] Config: Scheduled job CleanupJob started
+2025-11-21 17:16:28.936 [DBG] Auth: Processing request 6fef3a33
+2025-11-21 17:16:32.166 [INF] ApiGateway: Request 29b374be completed in 1467ms
+2025-11-21 17:16:36.743 [WRN] Auth: Slow query detected: 77ms for SELECT * FROM users WHERE...
+2025-11-21 17:16:41.362 [INF] ApiGateway: Connected to database postgres://db:5432/app
+2025-11-21 17:16:44.268 [DBG] Cache: Parsed configuration: {"timeout": 30, "retries": 3}
+2025-11-21 17:16:45.997 [INF] Auth: Service started on port 3000
+2025-11-21 17:16:48.984 [INF] MessageQueue: Health check passed
+2025-11-21 17:16:50.195 [INF] ApiGateway: Message published to notifications
+2025-11-21 17:16:55.156 [ERR] Config: Database connection failed: Invalid token
+2025-11-21 17:16:59.902 [DBG] HttpServer: Parsed configuration: {"timeout": 30, "retries": 3}
+2025-11-21 17:17:02.277 [ERR] ApiGateway: Timeout waiting for response from UserService
+2025-11-21 17:17:06.112 [INF] Database: Connected to database postgres://db:5432/app
+2025-11-21 17:17:08.602 [INF] Database: Health check passed
+2025-11-21 17:17:09.681 [TRC] HttpServer: Variable state: {counter: 42, flag: true}
+2025-11-21 17:17:09.999 [INF] ApiGateway: Batch processing completed: 596/1065 items
+2025-11-21 17:17:13.977 [DBG] FileProcessor: Cache lookup for key cache:user:176c342c
+2025-11-21 17:17:18.562 [WRN] FileProcessor: Rate limit approaching for client client_ab8c258a
+2025-11-21 17:17:20.842 [DBG] MessageQueue: Parsed configuration: {"timeout": 30, "retries": 3}
+2025-11-21 17:17:23.181 [INF] Cache: Batch processing completed: 585/1037 items
+2025-11-21 17:17:24.996 [INF] Database: Health check passed
+2025-11-21 17:17:26.127 [DBG] FileProcessor: Parsed configuration: {"timeout": 30, "retries": 3}
+2025-11-21 17:17:28.779 [ERR] Scheduler: Authentication failed for user user_8944
+2025-11-21 17:17:29.057 [WRN] Metrics: Certificate expires in 15 days
+2025-11-21 17:17:29.399 [DBG] ApiGateway: Processing request 67bad36f
+2025-11-21 17:17:34.361 [INF] Cache: Service started on port 8080
+2025-11-21 17:17:37.298 [INF] HttpServer: File export_58c59567.csv processed, 1334 records
+2025-11-21 17:17:41.442 [WRN] FileProcessor: Deprecated API endpoint called: /api/v1/users
+2025-11-21 17:17:45.963 [DBG] HttpServer: Connection pool status: 11/20 active
+2025-11-21 17:17:48.945 [ERR] Database: Invalid message format: Unexpected field "foo" at position 42
+2025-11-21 17:17:51.638 [WRN] Auth: Slow query detected: 168ms for SELECT * FROM users WHERE...
+2025-11-21 17:17:53.386 [WRN] FileProcessor: Deprecated API endpoint called: /api/v1/orders
+2025-11-21 17:17:57.248 [INF] ApiGateway: Configuration reloaded
+2025-11-21 17:17:57.712 [WRN] Metrics: Certificate expires in 22 days
+2025-11-21 17:17:58.348 [ERR] Metrics: Failed to process request 867bd59c: Connection refused
+2025-11-21 17:18:00.072 [INF] Cache: File import_068beed3.csv processed, 1094 records
+2025-11-21 17:18:04.896 [ERR] MessageQueue: Invalid message format: Unexpected field "foo" at position 42
+2025-11-21 17:18:05.740 [WRN] HttpServer: Certificate expires in 30 days
+2025-11-21 17:18:08.172 [INF] Metrics: Service started on port 443
+2025-11-21 17:18:10.512 [INF] Config: Scheduled job BackupJob started
+2025-11-21 17:18:11.692 [DBG] Config: Connection pool status: 11/20 active
+2025-11-21 17:18:16.449 [INF] Metrics: Batch processing completed: 620/1096 items
+2025-11-21 17:18:19.791 [INF] Metrics: File data_2811bdbf.csv processed, 7177 records
+2025-11-21 17:18:23.185 [INF] ApiGateway: Configuration reloaded
+2025-11-21 17:18:27.560 [INF] Metrics: Connected to database mysql://db:3306/app
+2025-11-21 17:18:27.843 [INF] Database: Scheduled job BackupJob started
+2025-11-21 17:18:30.874 [FTL] Metrics: Critical resource unavailable: MessageBroker
+2025-11-21 17:18:32.898 [DBG] HttpServer: Cache lookup for key cache:config:ffee12ec
+2025-11-21 17:18:35.970 [INF] ApiGateway: Connected to database mysql://db:3306/app
+2025-11-21 17:18:38.119 [TRC] Scheduler: Variable state: {counter: 42, flag: true}
+2025-11-21 17:18:42.507 [INF] ApiGateway: User user_9005 authenticated successfully
+2025-11-21 17:18:46.255 [INF] Scheduler: Configuration reloaded
+2025-11-21 17:18:47.662 [WRN] Config: Slow query detected: 58ms for SELECT * FROM users WHERE...
+2025-11-21 17:18:50.321 [DBG] FileProcessor: Parsed configuration: {"timeout": 30, "retries": 3}
+2025-11-21 17:18:53.729 [INF] Scheduler: Request 3b530efc completed in 147ms
+2025-11-21 17:18:55.178 [INF] ApiGateway: Service started on port 5000
+2025-11-21 17:18:58.336 [INF] Config: User user_7271 authenticated successfully
+2025-11-21 17:18:59.367 [INF] MessageQueue: Request 97a10c09 completed in 7ms
+2025-11-21 17:19:03.016 [INF] ApiGateway: Configuration reloaded
+2025-11-21 17:19:06.152 [INF] Metrics: Configuration reloaded
+2025-11-21 17:19:07.887 [WRN] Auth: Deprecated API endpoint called: /api/v1/users
+2025-11-21 17:19:09.114 [INF] FileProcessor: File data_c27a6911.csv processed, 8906 records
+2025-11-21 17:19:10.131 [TRC] Config: Entering method Transform with parameters {id: 123, type: "full"}
+2025-11-21 17:19:15.096 [DBG] Cache: Parsed configuration: {"timeout": 30, "retries": 3}
+2025-11-21 17:19:17.146 [INF] FileProcessor: Connected to database mysql://db:3306/app
+2025-11-21 17:19:18.552 [INF] Database: Health check passed
+2025-11-21 17:19:22.011 [WRN] HttpServer: Rate limit approaching for client client_3bcb82f9
+2025-11-21 17:19:23.656 [DBG] HttpServer: Connection pool status: 4/20 active
+2025-11-21 17:19:25.320 [INF] Cache: Request 26becd85 completed in 1277ms
+2025-11-21 17:19:25.650 [INF] Scheduler: Scheduled job CleanupJob started
+2025-11-21 17:19:25.832 [INF] Cache: Configuration reloaded
+2025-11-21 17:19:28.191 [INF] FileProcessor: User user_2389 authenticated successfully
+2025-11-21 17:19:32.614 [INF] Metrics: Message published to orders
+2025-11-21 17:19:36.475 [INF] MessageQueue: Connected to database mysql://db:3306/app
+2025-11-21 17:19:36.750 [INF] Database: Batch processing completed: 558/1100 items
+2025-11-21 17:19:40.847 [DBG] MessageQueue: Cache lookup for key cache:config:75469a78
+2025-11-21 17:19:43.456 [INF] Config: Connected to database mysql://db:3306/app
+2025-11-21 17:19:46.058 [TRC] ApiGateway: Entering method ProcessOrder with parameters {id: 123, type: "full"}
+2025-11-21 17:19:46.918 [DBG] HttpServer: Query execution plan generated
+2025-11-21 17:19:48.351 [INF] MessageQueue: Message published to events
+2025-11-21 17:19:52.346 [FTL] Database: Critical resource unavailable: MessageBroker
+2025-11-21 17:19:55.827 [INF] Scheduler: Health check passed
+2025-11-21 17:19:58.085 [INF] Database: Connected to database postgres://db:5432/app
+2025-11-21 17:20:00.792 [INF] FileProcessor: Service started on port 9000
+2025-11-21 17:20:05.530 [INF] Cache: Connected to database postgres://db:5432/app
+2025-11-21 17:20:05.565 [DBG] Metrics: Query execution plan generated
+2025-11-21 17:20:08.936 [ERR] Cache: Authentication failed for user user_2768
+2025-11-21 17:20:13.539 [DBG] Database: Parsed configuration: {"timeout": 30, "retries": 3}
+2025-11-21 17:20:17.999 [ERR] Scheduler: Failed to process request c660cd70: Timeout exceeded
+2025-11-21 17:20:19.018 [INF] HttpServer: Scheduled job CleanupJob started
+2025-11-21 17:20:20.505 [INF] Metrics: Message published to tasks
+2025-11-21 17:20:23.857 [INF] Database: Health check passed
+2025-11-21 17:20:25.797 [INF] Config: Batch processing completed: 451/1055 items
+2025-11-21 17:20:28.380 [INF] Auth: Service started on port 9000
+2025-11-21 17:20:30.228 [INF] Cache: Configuration reloaded
+2025-11-21 17:20:30.310 [INF] MessageQueue: Connected to database postgres://db:5432/app
+2025-11-21 17:20:32.728 [INF] Cache: Health check passed
+2025-11-21 17:20:36.077 [INF] Cache: Batch processing completed: 175/1094 items
+2025-11-21 17:20:39.802 [INF] ApiGateway: Scheduled job DataSync started
+2025-11-21 17:20:40.709 [WRN] Database: Memory usage at 83%
+2025-11-21 17:20:42.874 [INF] Config: File data_562edd9a.csv processed, 574 records
+2025-11-21 17:20:47.573 [ERR] Metrics: Database connection failed: Resource not found
+2025-11-21 17:20:48.365 [WRN] FileProcessor: Rate limit approaching for client client_916d8dc0
+2025-11-21 17:20:51.705 [ERR] Scheduler: File not found: export_b86464ea.csv
+2025-11-21 17:20:52.946 [INF] HttpServer: Service started on port 5000
+2025-11-21 17:20:53.916 [INF] FileProcessor: Configuration reloaded
+2025-11-21 17:20:58.903 [INF] ApiGateway: Scheduled job ReportGenerator started
+2025-11-21 17:20:59.620 [DBG] Config: Processing request cc351b3d
+2025-11-21 17:21:01.157 [INF] ApiGateway: Batch processing completed: 536/1099 items
+2025-11-21 17:21:02.325 [WRN] ApiGateway: Memory usage at 94%
+2025-11-21 17:21:05.901 [DBG] FileProcessor: Cache lookup for key cache:user:228a0aa6
+2025-11-21 17:21:09.681 [INF] Config: Health check passed
+2025-11-21 17:21:13.565 [INF] FileProcessor: Service started on port 3000
+2025-11-21 17:21:14.852 [INF] Cache: Batch processing completed: 979/1051 items
+2025-11-21 17:21:16.409 [INF] Config: File import_1097a732.csv processed, 7659 records
+2025-11-21 17:21:20.011 [INF] HttpServer: Service started on port 443
+2025-11-21 17:21:20.250 [ERR] Config: Authentication failed for user user_6639
+2025-11-21 17:21:22.267 [INF] ApiGateway: Scheduled job ReportGenerator started
+2025-11-21 17:21:23.769 [INF] MessageQueue: Message published to events
+2025-11-21 17:21:25.875 [INF] MessageQueue: Request 5c58338d completed in 2333ms
+2025-11-21 17:21:29.721 [INF] MessageQueue: Health check passed
+2025-11-21 17:21:30.963 [INF] Auth: Batch processing completed: 554/1095 items
+2025-11-21 17:21:33.908 [WRN] MessageQueue: Memory usage at 70%
+2025-11-21 17:21:34.129 [INF] ApiGateway: Request b268cb21 completed in 15ms
+2025-11-21 17:21:37.209 [INF] Config: Request bcacf0ad completed in 1047ms
+2025-11-21 17:21:38.379 [WRN] Auth: Connection pool exhausted, waiting for available connection
+2025-11-21 17:21:41.259 [DBG] Scheduler: Cache lookup for key cache:session:37d892ec
+2025-11-21 17:21:44.190 [DBG] Database: Connection pool status: 20/20 active
+2025-11-21 17:21:45.515 [INF] Metrics: Health check passed
+2025-11-21 17:21:47.539 [INF] Scheduler: Request 7df33a30 completed in 173ms
+2025-11-21 17:21:48.952 [TRC] ApiGateway: Loop iteration 61 of 1020
+2025-11-21 17:21:50.096 [WRN] Cache: Slow query detected: 969ms for SELECT * FROM users WHERE...
+2025-11-21 17:21:55.049 [DBG] Config: Parsed configuration: {"timeout": 30, "retries": 3}
+2025-11-21 17:21:55.451 [INF] HttpServer: Service started on port 443
+2025-11-21 17:21:55.546 [INF] FileProcessor: Request b7a3a1e7 completed in 371ms
+2025-11-21 17:21:56.018 [INF] Cache: Service started on port 8080
+2025-11-21 17:21:59.210 [FTL] Cache: Data corruption detected in users
+2025-11-21 17:22:02.381 [INF] Cache: Service started on port 3000
+2025-11-21 17:22:03.592 [ERR] Database: Unhandled exception in ApiGateway: Connection refused
+2025-11-21 17:22:03.859 [DBG] Config: Processing request b06e60ab
+2025-11-21 17:22:03.900 [INF] Auth: File export_dc36d46a.csv processed, 3675 records
+2025-11-21 17:22:06.518 [INF] MessageQueue: Batch processing completed: 544/1084 items
+2025-11-21 17:22:10.073 [INF] Cache: Connected to database mysql://db:3306/app
+2025-11-21 17:22:10.749 [INF] ApiGateway: Batch processing completed: 309/1018 items
+2025-11-21 17:22:15.727 [INF] Cache: Batch processing completed: 868/1008 items
+2025-11-21 17:22:16.166 [INF] Auth: Connected to database mysql://db:3306/app
+2025-11-21 17:22:18.622 [WRN] Auth: Certificate expires in 9 days
+2025-11-21 17:22:19.337 [WRN] ApiGateway: Connection pool exhausted, waiting for available connection
+2025-11-21 17:22:22.193 [WRN] Cache: Connection pool exhausted, waiting for available connection
+2025-11-21 17:22:26.259 [DBG] Database: Parsed configuration: {"timeout": 30, "retries": 3}
+2025-11-21 17:22:28.246 [INF] ApiGateway: Request 58b791a9 completed in 163ms
+2025-11-21 17:22:31.778 [TRC] Metrics: Loop iteration 62 of 1017
+2025-11-21 17:22:35.993 [FTL] Database: Critical resource unavailable: MessageBroker
+2025-11-21 17:22:40.705 [DBG] MessageQueue: Processing request bf891aed
+2025-11-21 17:22:41.260 [DBG] Scheduler: Connection pool status: 5/20 active
+2025-11-21 17:22:43.080 [INF] Config: Scheduled job BackupJob started
+2025-11-21 17:22:46.210 [TRC] FileProcessor: Loop iteration 32 of 1070
+2025-11-21 17:22:46.291 [INF] Cache: Service started on port 443
+2025-11-21 17:22:51.137 [WRN] Cache: Deprecated API endpoint called: /api/v1/orders
+2025-11-21 17:22:55.140 [INF] Metrics: Request a8b8f2d5 completed in 118ms
+2025-11-21 17:22:57.159 [INF] HttpServer: Configuration reloaded
+2025-11-21 17:22:57.238 [DBG] FileProcessor: Connection pool status: 6/20 active
+2025-11-21 17:23:01.026 [DBG] Cache: Processing request 1911721c
+2025-11-21 17:23:05.093 [FTL] Auth: Critical resource unavailable: Database
+2025-11-21 17:23:07.344 [INF] Metrics: Configuration reloaded
+2025-11-21 17:23:11.296 [INF] Scheduler: User user_2415 authenticated successfully
+2025-11-21 17:23:15.905 [WRN] Config: Rate limit approaching for client client_fc519910
+2025-11-21 17:23:16.737 [ERR] HttpServer: Authentication failed for user user_2750
+2025-11-21 17:23:16.758 [FTL] FileProcessor: Critical resource unavailable: Database
+2025-11-21 17:23:17.920 [INF] Cache: Configuration reloaded
+2025-11-21 17:23:19.464 [DBG] Scheduler: Connection pool status: 5/20 active
+2025-11-21 17:23:21.449 [TRC] Scheduler: Loop iteration 14 of 1015
+2025-11-21 17:23:22.153 [WRN] Auth: Slow query detected: 90ms for SELECT * FROM users WHERE...
+2025-11-21 17:23:22.929 [INF] MessageQueue: Message published to orders
+2025-11-21 17:23:25.291 [INF] Database: Scheduled job DataSync started
+2025-11-21 17:23:29.854 [ERR] HttpServer: Authentication failed for user user_7194
+2025-11-21 17:23:30.054 [INF] ApiGateway: Configuration reloaded
+2025-11-21 17:23:31.913 [TRC] FileProcessor: Entering method ValidateInput with parameters {id: 123, type: "full"}
+2025-11-21 17:23:36.728 [DBG] FileProcessor: Cache lookup for key cache:user:86bdac57
+2025-11-21 17:23:38.240 [INF] Database: Connected to database postgres://db:5432/app
+2025-11-21 17:23:43.167 [WRN] ApiGateway: Slow query detected: 990ms for SELECT * FROM users WHERE...
+2025-11-21 17:23:46.515 [ERR] Database: Database connection failed: Permission denied
+2025-11-21 17:23:49.268 [WRN] HttpServer: Slow query detected: 154ms for SELECT * FROM users WHERE...
+2025-11-21 17:23:51.179 [DBG] Cache: Parsed configuration: {"timeout": 30, "retries": 3}
+2025-11-21 17:23:51.804 [TRC] Cache: Loop iteration 87 of 1089
+2025-11-21 17:23:53.118 [DBG] FileProcessor: Parsed configuration: {"timeout": 30, "retries": 3}
+2025-11-21 17:23:56.794 [INF] Auth: Message published to tasks
+2025-11-21 17:23:59.213 [DBG] Auth: Cache lookup for key cache:user:85f7e529
+2025-11-21 17:24:04.130 [INF] HttpServer: File import_0f4dba1f.csv processed, 1527 records
+2025-11-21 17:24:05.261 [ERR] Metrics: Unhandled exception in MessageQueue: Connection refused
+2025-11-21 17:24:08.758 [INF] Cache: User user_4638 authenticated successfully
+2025-11-21 17:24:11.635 [INF] MessageQueue: Service started on port 8080
+2025-11-21 17:24:15.438 [WRN] ApiGateway: Rate limit approaching for client client_6cd82e48
+2025-11-21 17:24:18.497 [INF] MessageQueue: Scheduled job CleanupJob started
+2025-11-21 17:24:22.278 [INF] Cache: Request 1ca161e0 completed in 2404ms
+2025-11-21 17:24:27.067 [INF] HttpServer: User user_3135 authenticated successfully
+2025-11-21 17:24:30.704 [INF] MessageQueue: Health check passed
+2025-11-21 17:24:30.917 [TRC] FileProcessor: Entering method ValidateInput with parameters {id: 123, type: "full"}
+2025-11-21 17:24:31.465 [INF] Cache: Request 4909a97e completed in 107ms
+2025-11-21 17:24:31.699 [INF] Scheduler: User user_9404 authenticated successfully
+2025-11-21 17:24:33.001 [INF] ApiGateway: Batch processing completed: 399/1081 items
+2025-11-21 17:24:37.605 [INF] FileProcessor: Scheduled job CleanupJob started
+2025-11-21 17:24:39.762 [DBG] Database: Connection pool status: 18/20 active
+2025-11-21 17:24:40.175 [DBG] Config: Cache lookup for key cache:config:b39c8663
+2025-11-21 17:24:44.199 [WRN] MessageQueue: Certificate expires in 30 days
+2025-11-21 17:24:48.606 [TRC] ApiGateway: Loop iteration 44 of 1022
+2025-11-21 17:24:49.809 [ERR] Database: Failed to process request 23ef48cb: Connection refused
+2025-11-21 17:24:53.957 [INF] Database: Configuration reloaded
+2025-11-21 17:24:58.527 [INF] Config: Connected to database mysql://db:3306/app
+2025-11-21 17:25:03.045 [INF] Auth: Health check passed
+2025-11-21 17:25:06.150 [INF] Config: Batch processing completed: 115/1038 items
+2025-11-21 17:25:07.290 [INF] FileProcessor: Batch processing completed: 964/1046 items
+2025-11-21 17:25:08.634 [ERR] Config: Authentication failed for user user_3636
+2025-11-21 17:25:09.353 [ERR] Config: Unhandled exception in FileProcessor: Invalid token
+2025-11-21 17:25:10.950 [INF] Auth: Service started on port 3000
+2025-11-21 17:25:13.998 [ERR] MessageQueue: Unhandled exception in Config: Connection refused
+2025-11-21 17:25:15.040 [ERR] Auth: Timeout waiting for response from UserService
+2025-11-21 17:25:16.337 [INF] HttpServer: File data_aed03af8.csv processed, 6883 records
+2025-11-21 17:25:17.747 [INF] Config: Configuration reloaded
+2025-11-21 17:25:18.528 [INF] Metrics: Request bcce7cbd completed in 146ms
+2025-11-21 17:25:19.583 [TRC] Auth: Entering method Transform with parameters {id: 123, type: "full"}
+2025-11-21 17:25:22.803 [DBG] Config: Processing request c3178585
+2025-11-21 17:25:24.052 [DBG] Metrics: Query execution plan generated
+2025-11-21 17:25:26.810 [ERR] MessageQueue: Database connection failed: Timeout exceeded
+2025-11-21 17:25:28.568 [WRN] HttpServer: Memory usage at 76%
+2025-11-21 17:25:31.503 [WRN] ApiGateway: Certificate expires in 6 days
+2025-11-21 17:25:32.940 [TRC] MessageQueue: Variable state: {counter: 42, flag: true}
+2025-11-21 17:25:37.114 [TRC] Database: Loop iteration 94 of 1071
+2025-11-21 17:25:39.391 [WRN] HttpServer: Retry attempt 5 for operation SyncData
+2025-11-21 17:25:42.893 [INF] ApiGateway: File import_408b9532.csv processed, 2697 records
+2025-11-21 17:25:46.468 [INF] Scheduler: Batch processing completed: 283/1047 items
+2025-11-21 17:25:50.038 [INF] MessageQueue: Service started on port 9000
+2025-11-21 17:25:52.806 [INF] Config: Scheduled job BackupJob started
+2025-11-21 17:25:54.853 [DBG] ApiGateway: Parsed configuration: {"timeout": 30, "retries": 3}
+2025-11-21 17:25:58.150 [INF] Database: File export_b84733bf.csv processed, 2259 records
+2025-11-21 17:26:00.281 [INF] Metrics: Connected to database mysql://db:3306/app
+2025-11-21 17:26:00.586 [WRN] Auth: Certificate expires in 1 days
+2025-11-21 17:26:03.457 [DBG] MessageQueue: Cache lookup for key cache:session:52e90168
+2025-11-21 17:26:05.590 [INF] HttpServer: Message published to tasks
+2025-11-21 17:26:07.908 [ERR] FileProcessor: File not found: data_792c9999.csv
+2025-11-21 17:26:08.707 [TRC] HttpServer: Variable state: {counter: 42, flag: true}
+2025-11-21 17:26:10.247 [INF] Config: User user_2556 authenticated successfully
+2025-11-21 17:26:14.412 [INF] Cache: Health check passed
+2025-11-21 17:26:18.638 [WRN] HttpServer: Retry attempt 2 for operation SendEmail
+2025-11-21 17:26:21.058 [INF] Config: Request 87b0176a completed in 78ms
+2025-11-21 17:26:23.585 [INF] FileProcessor: Service started on port 8080
+2025-11-21 17:26:26.279 [INF] Config: User user_8440 authenticated successfully
+2025-11-21 17:26:30.220 [INF] Auth: Request 482a51b6 completed in 21ms
+2025-11-21 17:26:33.585 [INF] Scheduler: Service started on port 5000
+2025-11-21 17:26:35.377 [INF] Auth: Message published to tasks
+2025-11-21 17:26:38.250 [DBG] FileProcessor: Processing request 9b581814
+2025-11-21 17:26:38.608 [INF] Metrics: File import_8de64ff0.csv processed, 9278 records
+2025-11-21 17:26:43.329 [WRN] FileProcessor: Memory usage at 87%
+2025-11-21 17:26:45.665 [WRN] ApiGateway: Slow query detected: 1523ms for SELECT * FROM users WHERE...
+2025-11-21 17:26:46.912 [WRN] Scheduler: Connection pool exhausted, waiting for available connection
+2025-11-21 17:26:48.474 [WRN] HttpServer: Deprecated API endpoint called: /api/v1/legacy
+2025-11-21 17:26:49.980 [INF] MessageQueue: Health check passed
+2025-11-21 17:26:53.571 [INF] HttpServer: Configuration reloaded
+2025-11-21 17:26:54.556 [INF] HttpServer: Request 9d19b23a completed in 3178ms
+2025-11-21 17:26:56.694 [WRN] HttpServer: Slow query detected: 2119ms for SELECT * FROM users WHERE...
+2025-11-21 17:27:01.291 [FTL] Metrics: Data corruption detected in orders
+2025-11-21 17:27:03.757 [INF] HttpServer: User user_9057 authenticated successfully
+2025-11-21 17:27:04.658 [WRN] Scheduler: Certificate expires in 17 days
+2025-11-21 17:27:06.795 [ERR] HttpServer: Authentication failed for user user_5570
+2025-11-21 17:27:09.983 [ERR] Cache: Unhandled exception in FileProcessor: Connection refused
+2025-11-21 17:27:12.342 [INF] Metrics: Health check passed
+2025-11-21 17:27:16.760 [ERR] Config: Database connection failed: Resource not found
+2025-11-21 17:27:21.380 [INF] Database: Health check passed
+2025-11-21 17:27:24.621 [INF] FileProcessor: Scheduled job BackupJob started
+2025-11-21 17:27:27.266 [INF] HttpServer: Connected to database postgres://db:5432/app
+2025-11-21 17:27:31.934 [WRN] HttpServer: Slow query detected: 168ms for SELECT * FROM users WHERE...
+2025-11-21 17:27:33.238 [FTL] ApiGateway: Critical resource unavailable: MessageBroker
+2025-11-21 17:27:34.668 [ERR] MessageQueue: Database connection failed: Connection refused
+2025-11-21 17:27:38.619 [INF] Config: Health check passed
+2025-11-21 17:27:39.489 [INF] HttpServer: Message published to events
+2025-11-21 17:27:42.125 [INF] ApiGateway: Scheduled job ReportGenerator started
+2025-11-21 17:27:43.651 [DBG] Scheduler: Processing request 031b1353
+2025-11-21 17:27:47.226 [INF] Auth: User user_7362 authenticated successfully
+2025-11-21 17:27:49.639 [WRN] MessageQueue: Deprecated API endpoint called: /api/v1/orders
+2025-11-21 17:27:52.661 [INF] Database: Message published to orders
+2025-11-21 17:27:53.053 [INF] Auth: Batch processing completed: 929/1074 items
+2025-11-21 17:27:53.112 [INF] Scheduler: Batch processing completed: 814/1018 items
+2025-11-21 17:27:57.444 [INF] HttpServer: User user_6383 authenticated successfully
+2025-11-21 17:27:58.858 [WRN] FileProcessor: Memory usage at 82%
+2025-11-21 17:28:01.393 [TRC] MessageQueue: Entering method ValidateInput with parameters {id: 123, type: "full"}
+2025-11-21 17:28:02.952 [ERR] FileProcessor: Invalid message format: Unexpected field "foo" at position 42
+2025-11-21 17:28:05.423 [DBG] Auth: Query execution plan generated
+2025-11-21 17:28:09.453 [INF] Cache: Health check passed
+2025-11-21 17:28:14.028 [ERR] MessageQueue: Failed to process request 73ad9153: Resource not found
+2025-11-21 17:28:18.246 [INF] Metrics: Message published to orders
+2025-11-21 17:28:20.514 [INF] Metrics: Request 5c3a1a0f completed in 1925ms
+2025-11-21 17:28:23.704 [INF] HttpServer: Health check passed
+2025-11-21 17:28:26.327 [INF] Metrics: Batch processing completed: 875/1053 items
+2025-11-21 17:28:29.804 [DBG] Metrics: Connection pool status: 3/20 active
+2025-11-21 17:28:31.334 [DBG] Config: Parsed configuration: {"timeout": 30, "retries": 3}
+2025-11-21 17:28:36.325 [TRC] ApiGateway: Variable state: {counter: 42, flag: true}
+2025-11-21 17:28:40.209 [WRN] Scheduler: Deprecated API endpoint called: /api/v1/legacy
+2025-11-21 17:28:41.298 [WRN] Config: Retry attempt 4 for operation SyncData
+2025-11-21 17:28:46.018 [INF] Scheduler: Configuration reloaded
+2025-11-21 17:28:49.425 [INF] Scheduler: Health check passed
+2025-11-21 17:28:50.332 [INF] FileProcessor: Batch processing completed: 725/1002 items
+2025-11-21 17:28:52.531 [FTL] Metrics: Critical resource unavailable: MessageBroker
+2025-11-21 17:28:54.470 [DBG] Cache: Cache lookup for key cache:config:a0e47754
+2025-11-21 17:28:56.162 [INF] Cache: Request a629a2ec completed in 41ms
+2025-11-21 17:28:59.561 [ERR] Auth: Database connection failed: Permission denied
+2025-11-21 17:29:00.008 [ERR] Cache: Database connection failed: Invalid token
+2025-11-21 17:29:04.421 [INF] FileProcessor: Configuration reloaded
+2025-11-21 17:29:04.673 [INF] Config: Configuration reloaded
+2025-11-21 17:29:05.584 [INF] Auth: Connected to database mysql://db:3306/app
+2025-11-21 17:29:08.523 [DBG] Scheduler: Query execution plan generated
+2025-11-21 17:29:09.123 [INF] Scheduler: Scheduled job ReportGenerator started
+2025-11-21 17:29:10.709 [INF] Cache: Health check passed
+2025-11-21 17:29:14.904 [DBG] FileProcessor: Connection pool status: 18/20 active
+2025-11-21 17:29:19.324 [DBG] Config: Connection pool status: 6/20 active
+2025-11-21 17:29:24.231 [DBG] Cache: Query execution plan generated
+2025-11-21 17:29:24.749 [FTL] FileProcessor: Unrecoverable error, shutting down
+2025-11-21 17:29:25.559 [INF] Scheduler: Request f47d2e8a completed in 4442ms
+2025-11-21 17:29:28.899 [INF] MessageQueue: Health check passed
+2025-11-21 17:29:32.357 [ERR] Scheduler: Failed to process request c8c10ff6: Invalid token
+2025-11-21 17:29:36.713 [INF] HttpServer: Configuration reloaded
+2025-11-21 17:29:41.607 [INF] MessageQueue: Health check passed
+2025-11-21 17:29:45.703 [ERR] Cache: Authentication failed for user user_9393
+2025-11-21 17:29:50.628 [DBG] Cache: Processing request 7f9d017e
+2025-11-21 17:29:52.938 [WRN] Database: Certificate expires in 18 days
+2025-11-21 17:29:53.438 [DBG] Auth: Processing request a6aa76da
+2025-11-21 17:29:57.518 [INF] Config: User user_7354 authenticated successfully
+2025-11-21 17:29:58.427 [DBG] HttpServer: Connection pool status: 16/20 active
+2025-11-21 17:30:01.031 [DBG] FileProcessor: Connection pool status: 9/20 active
+2025-11-21 17:30:02.233 [INF] MessageQueue: User user_5780 authenticated successfully
+2025-11-21 17:30:03.510 [ERR] Database: Timeout waiting for response from PaymentService
+2025-11-21 17:30:06.225 [INF] Scheduler: Configuration reloaded
+2025-11-21 17:30:10.363 [ERR] Auth: Failed to process request c0711db4: Resource not found
+2025-11-21 17:30:15.119 [DBG] Scheduler: Cache lookup for key cache:config:b06d2082
+2025-11-21 17:30:16.265 [WRN] FileProcessor: Memory usage at 71%
+2025-11-21 17:30:20.543 [DBG] HttpServer: Parsed configuration: {"timeout": 30, "retries": 3}
+2025-11-21 17:30:24.680 [INF] Cache: User user_6832 authenticated successfully
+2025-11-21 17:30:29.095 [FTL] HttpServer: Unrecoverable error, shutting down
+2025-11-21 17:30:32.768 [INF] ApiGateway: Health check passed
+2025-11-21 17:30:35.788 [ERR] ApiGateway: Authentication failed for user user_6411
+2025-11-21 17:30:38.560 [ERR] HttpServer: Authentication failed for user user_7568
+2025-11-21 17:30:40.474 [WRN] ApiGateway: Certificate expires in 16 days
+2025-11-21 17:30:42.533 [INF] Cache: User user_2663 authenticated successfully
+2025-11-21 17:30:45.362 [ERR] Database: File not found: export_e8ba3e5e.csv
+2025-11-21 17:30:46.529 [INF] Database: Request b7d2186e completed in 2886ms
+2025-11-21 17:30:50.301 [INF] Scheduler: User user_3165 authenticated successfully
+2025-11-21 17:30:50.661 [TRC] Cache: Entering method ProcessOrder with parameters {id: 123, type: "full"}
+2025-11-21 17:30:53.648 [INF] ApiGateway: User user_5729 authenticated successfully
+2025-11-21 17:30:56.947 [WRN] Database: Connection pool exhausted, waiting for available connection
+2025-11-21 17:31:01.432 [ERR] MessageQueue: Timeout waiting for response from PaymentService
+2025-11-21 17:31:05.758 [INF] Config: Request c0bd3a9b completed in 715ms
+2025-11-21 17:31:10.313 [INF] Auth: User user_6532 authenticated successfully
+2025-11-21 17:31:12.203 [WRN] HttpServer: Memory usage at 91%
+2025-11-21 17:31:12.791 [TRC] Auth: Variable state: {counter: 42, flag: true}
+2025-11-21 17:31:14.240 [INF] Metrics: Scheduled job DataSync started
+2025-11-21 17:31:18.996 [INF] HttpServer: Configuration reloaded
+2025-11-21 17:31:21.817 [INF] Cache: Service started on port 443
+2025-11-21 17:31:26.121 [INF] ApiGateway: Request e660364a completed in 3083ms
+2025-11-21 17:31:27.264 [INF] Auth: Connected to database mysql://db:3306/app
+2025-11-21 17:31:31.948 [WRN] Database: Slow query detected: 37ms for SELECT * FROM users WHERE...
+2025-11-21 17:31:33.864 [INF] HttpServer: Scheduled job CleanupJob started
+2025-11-21 17:31:34.499 [INF] Auth: Request 283efc81 completed in 994ms
+2025-11-21 17:31:35.795 [DBG] Config: Parsed configuration: {"timeout": 30, "retries": 3}
+2025-11-21 17:31:40.703 [INF] Cache: Request 6aeec0fe completed in 42ms
+2025-11-21 17:31:41.907 [TRC] ApiGateway: Variable state: {counter: 42, flag: true}
+2025-11-21 17:31:43.019 [INF] Metrics: Connected to database postgres://db:5432/app
+2025-11-21 17:31:44.940 [INF] Cache: Message published to notifications
+2025-11-21 17:31:47.249 [INF] Config: Connected to database mysql://db:3306/app
+2025-11-21 17:31:47.962 [WRN] MessageQueue: Certificate expires in 28 days
+2025-11-21 17:31:50.697 [WRN] FileProcessor: Deprecated API endpoint called: /api/v1/legacy
+2025-11-21 17:31:51.961 [INF] Scheduler: Service started on port 9000
+2025-11-21 17:31:52.979 [ERR] Scheduler: Timeout waiting for response from UserService
+2025-11-21 17:31:55.462 [INF] Scheduler: Request 74cf7b4f completed in 497ms
+2025-11-21 17:31:57.519 [INF] Auth: Configuration reloaded
+2025-11-21 17:31:58.955 [FTL] MessageQueue: Critical resource unavailable: Database
+2025-11-21 17:32:00.501 [INF] HttpServer: Health check passed
+2025-11-21 17:32:04.598 [DBG] Scheduler: Query execution plan generated
+2025-11-21 17:32:05.742 [WRN] MessageQueue: Rate limit approaching for client client_1e3158ab
+2025-11-21 17:32:09.732 [INF] Auth: Request 58ee42eb completed in 73ms
+2025-11-21 17:32:13.336 [WRN] Auth: Connection pool exhausted, waiting for available connection
+2025-11-21 17:32:13.622 [INF] ApiGateway: Connected to database postgres://db:5432/app
+2025-11-21 17:32:17.217 [INF] FileProcessor: Health check passed
+2025-11-21 17:32:19.897 [INF] FileProcessor: File export_328005b2.csv processed, 8089 records
+2025-11-21 17:32:20.465 [DBG] Scheduler: Connection pool status: 19/20 active
+2025-11-21 17:32:21.558 [TRC] Cache: Variable state: {counter: 42, flag: true}
+2025-11-21 17:32:24.028 [INF] ApiGateway: Connected to database mysql://db:3306/app
+2025-11-21 17:32:25.846 [INF] Config: File import_293f9f4c.csv processed, 2780 records
+2025-11-21 17:32:27.791 [INF] HttpServer: Request b299ba6d completed in 1596ms
+2025-11-21 17:32:29.614 [INF] ApiGateway: File export_3210b558.csv processed, 8269 records
+2025-11-21 17:32:33.858 [DBG] Database: Cache lookup for key cache:session:bd571e63
+2025-11-21 17:32:35.635 [INF] FileProcessor: Request e8b9114c completed in 1609ms
+2025-11-21 17:32:39.397 [INF] FileProcessor: Service started on port 8080
+2025-11-21 17:32:42.917 [INF] Auth: File data_af4f8b09.csv processed, 9120 records
+2025-11-21 17:32:45.490 [DBG] Scheduler: Query execution plan generated
+2025-11-21 17:32:46.541 [INF] Metrics: Service started on port 3000
+2025-11-21 17:32:49.134 [WRN] FileProcessor: Deprecated API endpoint called: /api/v1/orders
+2025-11-21 17:32:51.345 [WRN] ApiGateway: Deprecated API endpoint called: /api/v1/orders
+2025-11-21 17:32:55.155 [INF] Metrics: Configuration reloaded
+2025-11-21 17:32:57.039 [INF] Database: Connected to database postgres://db:5432/app
+2025-11-21 17:33:01.630 [INF] ApiGateway: File import_a7d186f9.csv processed, 2572 records
+2025-11-21 17:33:05.405 [DBG] Scheduler: Parsed configuration: {"timeout": 30, "retries": 3}
+2025-11-21 17:33:07.244 [WRN] Cache: Rate limit approaching for client client_e6448c3e
+2025-11-21 17:33:07.633 [INF] HttpServer: Batch processing completed: 279/1079 items
+2025-11-21 17:33:08.839 [INF] ApiGateway: Service started on port 5000
+2025-11-21 17:33:12.528 [WRN] Metrics: Retry attempt 2 for operation ProcessPayment
+2025-11-21 17:33:17.503 [DBG] FileProcessor: Connection pool status: 11/20 active
+2025-11-21 17:33:18.603 [INF] Metrics: Request 5d377454 completed in 128ms
+2025-11-21 17:33:21.598 [INF] Cache: Request 5c9779f1 completed in 428ms
+2025-11-21 17:33:23.626 [WRN] Config: Certificate expires in 4 days
+2025-11-21 17:33:26.794 [INF] MessageQueue: Service started on port 9000
+2025-11-21 17:33:30.964 [INF] FileProcessor: Batch processing completed: 134/1074 items
+2025-11-21 17:33:34.825 [WRN] Database: Connection pool exhausted, waiting for available connection
+2025-11-21 17:33:36.835 [INF] FileProcessor: Scheduled job ReportGenerator started
+2025-11-21 17:33:38.035 [INF] ApiGateway: Connected to database mysql://db:3306/app
+2025-11-21 17:33:41.661 [TRC] Config: Variable state: {counter: 42, flag: true}
+2025-11-21 17:33:44.727 [INF] Scheduler: User user_8208 authenticated successfully
+2025-11-21 17:33:46.175 [TRC] HttpServer: Loop iteration 99 of 1058
+2025-11-21 17:33:46.909 [WRN] ApiGateway: Retry attempt 2 for operation ProcessPayment
+2025-11-21 17:33:48.545 [INF] Metrics: Request e02a629f completed in 135ms
+2025-11-21 17:33:52.993 [INF] ApiGateway: Health check passed
+2025-11-21 17:33:56.105 [TRC] Cache: Variable state: {counter: 42, flag: true}
+2025-11-21 17:33:58.704 [WRN] Config: Retry attempt 1 for operation SyncData
+2025-11-21 17:34:00.204 [INF] Auth: File export_ba28dce0.csv processed, 2774 records
+2025-11-21 17:34:00.780 [INF] Config: Configuration reloaded
+2025-11-21 17:34:05.248 [INF] MessageQueue: Configuration reloaded
+2025-11-21 17:34:06.432 [WRN] HttpServer: Memory usage at 95%
+2025-11-21 17:34:06.759 [INF] Cache: Health check passed
+2025-11-21 17:34:11.703 [DBG] Metrics: Query execution plan generated
+2025-11-21 17:34:15.602 [WRN] MessageQueue: Slow query detected: 49ms for SELECT * FROM users WHERE...
+2025-11-21 17:34:16.009 [INF] Auth: File import_b5f19196.csv processed, 492 records
+2025-11-21 17:34:20.269 [INF] FileProcessor: Service started on port 9000
+2025-11-21 17:34:22.371 [ERR] Auth: Timeout waiting for response from UserService
+2025-11-21 17:34:24.507 [ERR] HttpServer: Database connection failed: Resource not found
+2025-11-21 17:34:24.895 [DBG] ApiGateway: Processing request 7f1a9a56
+2025-11-21 17:34:29.179 [WRN] Scheduler: Slow query detected: 17ms for SELECT * FROM users WHERE...
+2025-11-21 17:34:32.513 [INF] HttpServer: Scheduled job CleanupJob started
+2025-11-21 17:34:33.964 [INF] MessageQueue: Request dca45527 completed in 120ms
+2025-11-21 17:34:36.200 [INF] ApiGateway: Health check passed
+2025-11-21 17:34:40.612 [ERR] Metrics: Database connection failed: Permission denied
+2025-11-21 17:34:42.370 [INF] Config: Request 37e7eada completed in 145ms
+2025-11-21 17:34:43.763 [DBG] MessageQueue: Parsed configuration: {"timeout": 30, "retries": 3}
+2025-11-21 17:34:44.046 [INF] Scheduler: Message published to tasks
+2025-11-21 17:34:46.773 [INF] MessageQueue: User user_9232 authenticated successfully
+2025-11-21 17:34:50.690 [INF] ApiGateway: Service started on port 3000
+2025-11-21 17:34:51.148 [INF] Database: Batch processing completed: 257/1075 items
+2025-11-21 17:34:55.710 [INF] Cache: Connected to database postgres://db:5432/app
+2025-11-21 17:35:00.493 [WRN] Database: Certificate expires in 20 days
+2025-11-21 17:35:00.835 [INF] Cache: Batch processing completed: 232/1077 items
+2025-11-21 17:35:04.802 [INF] Database: Configuration reloaded
+2025-11-21 17:35:06.926 [ERR] Auth: File not found: data_399ab110.csv
+2025-11-21 17:35:11.217 [FTL] Cache: Critical resource unavailable: Database
+2025-11-21 17:35:15.165 [WRN] Database: Retry attempt 5 for operation SyncData
+2025-11-21 17:35:19.866 [INF] ApiGateway: Batch processing completed: 103/1086 items
+2025-11-21 17:35:23.483 [DBG] Scheduler: Cache lookup for key cache:session:8f13a4f8
+2025-11-21 17:35:26.542 [INF] Scheduler: Scheduled job CleanupJob started
+2025-11-21 17:35:28.870 [DBG] Auth: Connection pool status: 8/20 active
+2025-11-21 17:35:30.481 [DBG] ApiGateway: Connection pool status: 11/20 active
+2025-11-21 17:35:32.615 [WRN] Scheduler: Memory usage at 86%
+2025-11-21 17:35:34.876 [DBG] HttpServer: Connection pool status: 14/20 active
+2025-11-21 17:35:38.666 [INF] ApiGateway: File import_677ae8ff.csv processed, 9925 records
+2025-11-21 17:35:41.415 [ERR] Metrics: Unhandled exception in Config: Permission denied
+2025-11-21 17:35:41.766 [INF] Config: Health check passed
+2025-11-21 17:35:41.956 [INF] Auth: User user_1908 authenticated successfully
+2025-11-21 17:35:42.615 [INF] MessageQueue: Batch processing completed: 477/1042 items
+2025-11-21 17:35:43.587 [DBG] Metrics: Connection pool status: 11/20 active
+2025-11-21 17:35:45.914 [FTL] MessageQueue: Critical resource unavailable: Database
+2025-11-21 17:35:50.444 [DBG] Database: Processing request 1d2240ba
+2025-11-21 17:35:54.508 [INF] FileProcessor: Configuration reloaded
+2025-11-21 17:35:55.643 [DBG] HttpServer: Cache lookup for key cache:config:3ec56cea
+2025-11-21 17:35:59.831 [INF] Scheduler: Connected to database postgres://db:5432/app
+2025-11-21 17:36:04.744 [TRC] Cache: Variable state: {counter: 42, flag: true}
+2025-11-21 17:36:08.470 [INF] MessageQueue: Scheduled job BackupJob started
+2025-11-21 17:36:10.651 [INF] Metrics: Health check passed
+2025-11-21 17:36:15.292 [WRN] Database: Memory usage at 70%
+2025-11-21 17:36:15.403 [INF] MessageQueue: Configuration reloaded
+2025-11-21 17:36:17.070 [INF] Config: Health check passed
+2025-11-21 17:36:18.719 [DBG] FileProcessor: Parsed configuration: {"timeout": 30, "retries": 3}
+2025-11-21 17:36:22.263 [INF] HttpServer: File import_709e7040.csv processed, 3181 records
+2025-11-21 17:36:27.017 [INF] Scheduler: Service started on port 8080
+2025-11-21 17:36:29.826 [WRN] FileProcessor: Certificate expires in 30 days
+2025-11-21 17:36:33.047 [INF] HttpServer: Scheduled job DataSync started
+2025-11-21 17:36:37.179 [INF] Metrics: Configuration reloaded
+2025-11-21 17:36:39.169 [INF] ApiGateway: Request d70c9baa completed in 2618ms
+2025-11-21 17:36:43.937 [INF] Cache: File import_91169213.csv processed, 4186 records
+2025-11-21 17:36:48.080 [INF] FileProcessor: Scheduled job CleanupJob started
+2025-11-21 17:36:49.717 [ERR] Cache: Database connection failed: Permission denied
+2025-11-21 17:36:50.281 [INF] Scheduler: User user_8710 authenticated successfully
+2025-11-21 17:36:50.988 [INF] Database: Message published to tasks
+2025-11-21 17:36:55.657 [DBG] Metrics: Parsed configuration: {"timeout": 30, "retries": 3}
+2025-11-21 17:36:56.812 [INF] HttpServer: Service started on port 3000
+2025-11-21 17:36:58.922 [INF] HttpServer: File export_3debd1c2.csv processed, 6116 records
+2025-11-21 17:37:00.200 [INF] Database: Health check passed
+2025-11-21 17:37:02.419 [ERR] Config: Unhandled exception in ApiGateway: Resource not found
+2025-11-21 17:37:06.218 [INF] Metrics: Health check passed
+2025-11-21 17:37:09.729 [DBG] ApiGateway: Query execution plan generated
+2025-11-21 17:37:10.049 [INF] Scheduler: Health check passed
+2025-11-21 17:37:10.094 [INF] Metrics: File export_6b0020a7.csv processed, 2666 records
+2025-11-21 17:37:11.723 [DBG] HttpServer: Query execution plan generated
+2025-11-21 17:37:14.895 [INF] Auth: Service started on port 9000
+2025-11-21 17:37:17.303 [TRC] Config: Entering method ProcessOrder with parameters {id: 123, type: "full"}
+2025-11-21 17:37:20.636 [INF] Auth: Scheduled job CleanupJob started
+2025-11-21 17:37:21.195 [INF] ApiGateway: Message published to tasks
+2025-11-21 17:37:24.240 [INF] FileProcessor: Connected to database mysql://db:3306/app
+2025-11-21 17:37:25.394 [INF] FileProcessor: File report_1139e5b8.csv processed, 5299 records
+2025-11-21 17:37:28.986 [INF] Database: Connected to database postgres://db:5432/app
+2025-11-21 17:37:29.335 [INF] MessageQueue: Configuration reloaded
+2025-11-21 17:37:31.821 [ERR] Auth: Failed to process request 0971835b: Resource not found
+2025-11-21 17:37:34.538 [INF] Scheduler: Connected to database mysql://db:3306/app
+2025-11-21 17:37:38.164 [INF] Metrics: File report_ee456784.csv processed, 7677 records
+2025-11-21 17:37:41.987 [INF] Auth: Health check passed
+2025-11-21 17:37:43.268 [DBG] Metrics: Cache lookup for key cache:session:e80caac3
+2025-11-21 17:37:46.025 [INF] MessageQueue: Configuration reloaded
+2025-11-21 17:37:48.985 [DBG] FileProcessor: Query execution plan generated
+2025-11-21 17:37:50.498 [INF] Metrics: Batch processing completed: 481/1009 items
+2025-11-21 17:37:52.452 [INF] Metrics: Request d8b4ba23 completed in 53ms
+2025-11-21 17:37:54.563 [WRN] FileProcessor: Memory usage at 75%
+2025-11-21 17:37:59.066 [DBG] HttpServer: Processing request d8301c13
+2025-11-21 17:37:59.893 [FTL] Scheduler: Data corruption detected in transactions
+2025-11-21 17:38:02.683 [WRN] HttpServer: Rate limit approaching for client client_0163c1b2
+2025-11-21 17:38:07.252 [INF] Auth: File export_dc68e191.csv processed, 6782 records
+2025-11-21 17:38:10.212 [INF] HttpServer: Request 7c4fac34 completed in 2391ms
+2025-11-21 17:38:12.403 [INF] MessageQueue: Batch processing completed: 267/1004 items
+2025-11-21 17:38:15.051 [WRN] Config: Retry attempt 1 for operation SyncData
+2025-11-21 17:38:15.731 [WRN] Database: Slow query detected: 553ms for SELECT * FROM users WHERE...
+2025-11-21 17:38:17.175 [INF] Config: Configuration reloaded
+2025-11-21 17:38:18.732 [INF] Metrics: Scheduled job CleanupJob started
+2025-11-21 17:38:19.649 [INF] Scheduler: File data_7246c664.csv processed, 1838 records
+2025-11-21 17:38:24.436 [INF] FileProcessor: Batch processing completed: 542/1032 items
+2025-11-21 17:38:28.295 [WRN] Config: Deprecated API endpoint called: /api/v1/orders
+2025-11-21 17:38:31.510 [INF] Metrics: User user_5940 authenticated successfully
+2025-11-21 17:38:36.202 [INF] Auth: Request 570b6ef2 completed in 70ms
+2025-11-21 17:38:37.517 [INF] HttpServer: File report_fa83aa11.csv processed, 2780 records
+2025-11-21 17:38:40.281 [TRC] Auth: Loop iteration 35 of 1069
+2025-11-21 17:38:44.996 [DBG] FileProcessor: Processing request 65658ffb
+2025-11-21 17:38:45.964 [INF] Scheduler: User user_9072 authenticated successfully
+2025-11-21 17:38:50.897 [INF] FileProcessor: Service started on port 9000
+2025-11-21 17:38:53.438 [WRN] Scheduler: Rate limit approaching for client client_579d0ac2
+2025-11-21 17:38:54.802 [WRN] Metrics: Certificate expires in 5 days
+2025-11-21 17:38:56.090 [INF] ApiGateway: Health check passed
+2025-11-21 17:38:59.645 [INF] Auth: File export_e4b53338.csv processed, 2569 records
+2025-11-21 17:39:00.845 [INF] FileProcessor: User user_8580 authenticated successfully
+2025-11-21 17:39:05.268 [ERR] Auth: Failed to process request 40e533e8: Permission denied
+2025-11-21 17:39:08.496 [INF] FileProcessor: File export_da31bb63.csv processed, 6249 records
+2025-11-21 17:39:12.823 [INF] HttpServer: Configuration reloaded
+2025-11-21 17:39:13.029 [DBG] HttpServer: Parsed configuration: {"timeout": 30, "retries": 3}
+2025-11-21 17:39:14.993 [DBG] Cache: Parsed configuration: {"timeout": 30, "retries": 3}
+2025-11-21 17:39:17.369 [INF] Config: File export_6bcdc428.csv processed, 9000 records
+2025-11-21 17:39:20.070 [INF] ApiGateway: Health check passed
+2025-11-21 17:39:23.874 [TRC] Config: Loop iteration 5 of 1064
+2025-11-21 17:39:26.044 [INF] MessageQueue: Connected to database postgres://db:5432/app
+2025-11-21 17:39:26.093 [DBG] Scheduler: Processing request c503d1b4
+2025-11-21 17:39:27.273 [INF] Config: Request cb715b0a completed in 917ms
+2025-11-21 17:39:30.540 [DBG] Cache: Connection pool status: 14/20 active
+2025-11-21 17:39:31.483 [INF] FileProcessor: Batch processing completed: 260/1079 items
+2025-11-21 17:39:32.725 [ERR] Auth: Authentication failed for user user_8319
+2025-11-21 17:39:34.109 [INF] ApiGateway: User user_5948 authenticated successfully
+2025-11-21 17:39:38.775 [INF] HttpServer: Scheduled job DataSync started
+2025-11-21 17:39:39.607 [INF] MessageQueue: Request 82bee3ec completed in 2110ms
+2025-11-21 17:39:44.515 [INF] Cache: Connected to database mysql://db:3306/app
+2025-11-21 17:39:49.219 [INF] FileProcessor: Configuration reloaded
+2025-11-21 17:39:52.329 [DBG] Auth: Query execution plan generated
+2025-11-21 17:39:53.279 [WRN] MessageQueue: Deprecated API endpoint called: /api/v1/legacy
+2025-11-21 17:39:56.181 [INF] ApiGateway: Scheduled job ReportGenerator started
+2025-11-21 17:40:00.101 [DBG] Cache: Query execution plan generated
+2025-11-21 17:40:00.700 [DBG] FileProcessor: Processing request 4bc36e19
+2025-11-21 17:40:02.046 [WRN] Config: Retry attempt 5 for operation ProcessPayment
+2025-11-21 17:40:03.326 [INF] MessageQueue: Health check passed
+2025-11-21 17:40:04.246 [INF] MessageQueue: Message published to tasks
+2025-11-21 17:40:06.324 [INF] FileProcessor: Request 9da694f7 completed in 216ms
+2025-11-21 17:40:10.062 [INF] FileProcessor: User user_9812 authenticated successfully
+2025-11-21 17:40:14.941 [INF] HttpServer: Message published to tasks
+2025-11-21 17:40:16.897 [TRC] Config: Variable state: {counter: 42, flag: true}
+2025-11-21 17:40:18.181 [DBG] Config: Cache lookup for key cache:session:a8f6e817
+2025-11-21 17:40:18.402 [INF] MessageQueue: Health check passed
+2025-11-21 17:40:21.992 [INF] Metrics: Request e3a33422 completed in 1398ms
+2025-11-21 17:40:26.080 [WRN] Config: Certificate expires in 29 days
+2025-11-21 17:40:28.365 [DBG] Database: Parsed configuration: {"timeout": 30, "retries": 3}
+2025-11-21 17:40:29.390 [DBG] Auth: Parsed configuration: {"timeout": 30, "retries": 3}
+2025-11-21 17:40:33.063 [ERR] FileProcessor: Timeout waiting for response from UserService
+2025-11-21 17:40:33.858 [INF] Database: Configuration reloaded
+2025-11-21 17:40:34.362 [INF] HttpServer: User user_9576 authenticated successfully
+2025-11-21 17:40:38.659 [WRN] Metrics: Certificate expires in 18 days
+2025-11-21 17:40:42.476 [FTL] Config: Application startup failed: Resource not found
+2025-11-21 17:40:44.534 [TRC] Database: Loop iteration 87 of 1021
+2025-11-21 17:40:47.393 [DBG] Database: Parsed configuration: {"timeout": 30, "retries": 3}
+2025-11-21 17:40:47.704 [DBG] Cache: Connection pool status: 13/20 active
+2025-11-21 17:40:50.993 [DBG] Metrics: Query execution plan generated
+2025-11-21 17:40:53.646 [INF] Scheduler: Service started on port 8080
+2025-11-21 17:40:56.905 [ERR] Config: Invalid message format: Unexpected field "foo" at position 42
+2025-11-21 17:40:58.460 [DBG] MessageQueue: Connection pool status: 11/20 active
+2025-11-21 17:40:59.305 [INF] Database: File data_fcb49d30.csv processed, 8730 records
+2025-11-21 17:40:59.925 [ERR] Metrics: Authentication failed for user user_8170
+2025-11-21 17:41:03.740 [DBG] MessageQueue: Connection pool status: 11/20 active
+2025-11-21 17:41:06.195 [DBG] FileProcessor: Query execution plan generated
+2025-11-21 17:41:08.874 [INF] Scheduler: Request 921675ba completed in 429ms
+2025-11-21 17:41:09.565 [FTL] Metrics: Application startup failed: Invalid token
+2025-11-21 17:41:13.712 [INF] Cache: Service started on port 5000
+2025-11-21 17:41:15.968 [ERR] MessageQueue: Failed to process request 9d76d946: Resource not found
+2025-11-21 17:41:19.666 [WRN] ApiGateway: Slow query detected: 528ms for SELECT * FROM users WHERE...
+2025-11-21 17:41:20.966 [WRN] FileProcessor: Connection pool exhausted, waiting for available connection
+2025-11-21 17:41:25.267 [DBG] Auth: Parsed configuration: {"timeout": 30, "retries": 3}
+2025-11-21 17:41:29.845 [INF] ApiGateway: Health check passed
+2025-11-21 17:41:31.961 [INF] Metrics: Configuration reloaded
+2025-11-21 17:41:32.442 [INF] Database: Connected to database postgres://db:5432/app
+2025-11-21 17:41:32.705 [FTL] HttpServer: Data corruption detected in users
+2025-11-21 17:41:36.804 [INF] MessageQueue: Health check passed
+2025-11-21 17:41:39.762 [INF] Cache: File import_24571ae7.csv processed, 849 records
+2025-11-21 17:41:43.747 [INF] Auth: Configuration reloaded
+2025-11-21 17:41:44.999 [FTL] FileProcessor: Data corruption detected in transactions
+2025-11-21 17:41:48.401 [TRC] Metrics: Loop iteration 2 of 1038
+2025-11-21 17:41:51.445 [INF] Metrics: Health check passed
+2025-11-21 17:41:54.483 [DBG] Auth: Query execution plan generated
+2025-11-21 17:41:54.872 [DBG] HttpServer: Parsed configuration: {"timeout": 30, "retries": 3}
+2025-11-21 17:41:58.705 [INF] Metrics: Configuration reloaded
+2025-11-21 17:42:00.832 [INF] Metrics: Connected to database mysql://db:3306/app
+2025-11-21 17:42:02.210 [FTL] Database: Unrecoverable error, shutting down
+2025-11-21 17:42:04.442 [TRC] HttpServer: Entering method Transform with parameters {id: 123, type: "full"}
+2025-11-21 17:42:09.093 [ERR] Database: Failed to process request 016d9554: Connection refused
+2025-11-21 17:42:09.377 [FTL] FileProcessor: Data corruption detected in transactions
+2025-11-21 17:42:10.483 [INF] ApiGateway: Connected to database mysql://db:3306/app
+2025-11-21 17:42:13.297 [INF] ApiGateway: Batch processing completed: 807/1093 items
+2025-11-21 17:42:17.040 [DBG] HttpServer: Parsed configuration: {"timeout": 30, "retries": 3}
+2025-11-21 17:42:20.485 [WRN] MessageQueue: Slow query detected: 142ms for SELECT * FROM users WHERE...
+2025-11-21 17:42:20.932 [ERR] FileProcessor: Database connection failed: Timeout exceeded
+2025-11-21 17:42:24.981 [INF] Database: Health check passed
+2025-11-21 17:42:28.895 [INF] Scheduler: User user_1893 authenticated successfully
+2025-11-21 17:42:32.674 [INF] Config: Connected to database mysql://db:3306/app
+2025-11-21 17:42:36.389 [ERR] Database: Failed to process request d6c81028: Invalid token
+2025-11-21 17:42:40.450 [INF] Database: User user_1818 authenticated successfully
+2025-11-21 17:42:45.447 [INF] Cache: Service started on port 8080
+2025-11-21 17:42:47.492 [DBG] Auth: Connection pool status: 16/20 active
+2025-11-21 17:42:51.791 [DBG] MessageQueue: Query execution plan generated
+2025-11-21 17:42:53.400 [WRN] ApiGateway: Connection pool exhausted, waiting for available connection
+2025-11-21 17:42:56.811 [ERR] MessageQueue: File not found: report_885884c3.csv
+2025-11-21 17:42:58.792 [TRC] Config: Variable state: {counter: 42, flag: true}
+2025-11-21 17:42:58.881 [INF] Auth: User user_7503 authenticated successfully
+2025-11-21 17:43:01.557 [FTL] HttpServer: Data corruption detected in orders
+2025-11-21 17:43:03.542 [INF] Scheduler: Configuration reloaded
+2025-11-21 17:43:08.123 [WRN] ApiGateway: Connection pool exhausted, waiting for available connection
+2025-11-21 17:43:12.405 [DBG] FileProcessor: Parsed configuration: {"timeout": 30, "retries": 3}
+2025-11-21 17:43:15.580 [INF] FileProcessor: Connected to database mysql://db:3306/app
+2025-11-21 17:43:20.024 [INF] HttpServer: File report_9f148c78.csv processed, 5100 records
+2025-11-21 17:43:24.040 [WRN] Auth: Deprecated API endpoint called: /api/v1/legacy
+2025-11-21 17:43:27.441 [DBG] Database: Parsed configuration: {"timeout": 30, "retries": 3}
+2025-11-21 17:43:28.963 [INF] Cache: Configuration reloaded
+2025-11-21 17:43:29.252 [ERR] Database: Database connection failed: Permission denied
+2025-11-21 17:43:30.633 [INF] Metrics: Configuration reloaded
+2025-11-21 17:43:31.185 [WRN] FileProcessor: Certificate expires in 27 days
+2025-11-21 17:43:32.612 [INF] Config: Message published to notifications
+2025-11-21 17:43:33.838 [INF] HttpServer: Connected to database mysql://db:3306/app
+2025-11-21 17:43:38.147 [INF] Scheduler: Batch processing completed: 171/1087 items
+2025-11-21 17:43:39.875 [ERR] MessageQueue: Timeout waiting for response from UserService
+2025-11-21 17:43:42.093 [WRN] Metrics: Memory usage at 70%
+2025-11-21 17:43:42.255 [INF] MessageQueue: Message published to notifications
+2025-11-21 17:43:45.021 [INF] Cache: User user_5088 authenticated successfully
+2025-11-21 17:43:48.601 [ERR] Config: Authentication failed for user user_3871
+2025-11-21 17:43:50.758 [WRN] MessageQueue: Deprecated API endpoint called: /api/v1/users
+2025-11-21 17:43:53.003 [INF] Auth: Batch processing completed: 721/1063 items
+2025-11-21 17:43:57.146 [INF] ApiGateway: Message published to tasks
+2025-11-21 17:44:00.423 [WRN] Metrics: Retry attempt 1 for operation SyncData
+2025-11-21 17:44:04.732 [INF] Database: Health check passed
+2025-11-21 17:44:08.550 [INF] FileProcessor: Health check passed
+2025-11-21 17:44:09.412 [INF] Cache: File export_c84b365d.csv processed, 7709 records
+2025-11-21 17:44:13.121 [DBG] HttpServer: Connection pool status: 19/20 active
+2025-11-21 17:44:15.645 [INF] ApiGateway: Scheduled job CleanupJob started
+2025-11-21 17:44:16.425 [WRN] ApiGateway: Memory usage at 84%
+2025-11-21 17:44:19.147 [ERR] Database: Timeout waiting for response from PaymentService
+2025-11-21 17:44:23.897 [INF] HttpServer: User user_9297 authenticated successfully
+2025-11-21 17:44:28.535 [INF] FileProcessor: Service started on port 8080
+2025-11-21 17:44:29.100 [FTL] Metrics: Application startup failed: Timeout exceeded
+2025-11-21 17:44:33.903 [INF] HttpServer: Batch processing completed: 772/1023 items
+2025-11-21 17:44:34.968 [INF] MessageQueue: Configuration reloaded
+2025-11-21 17:44:38.398 [INF] ApiGateway: Service started on port 5000
+2025-11-21 17:44:41.268 [DBG] Scheduler: Query execution plan generated
+2025-11-21 17:44:42.091 [FTL] Auth: Unrecoverable error, shutting down
+2025-11-21 17:44:42.871 [INF] FileProcessor: Message published to notifications
+2025-11-21 17:44:46.281 [TRC] FileProcessor: Entering method Transform with parameters {id: 123, type: "full"}
+2025-11-21 17:44:47.398 [INF] Cache: File data_db7fdde0.csv processed, 2160 records
+2025-11-21 17:44:50.666 [INF] FileProcessor: Batch processing completed: 832/1098 items
+2025-11-21 17:44:54.988 [ERR] Cache: Invalid message format: Unexpected field "foo" at position 42
+2025-11-21 17:44:56.618 [INF] Config: Scheduled job ReportGenerator started
+2025-11-21 17:44:59.482 [TRC] FileProcessor: Entering method Transform with parameters {id: 123, type: "full"}
+2025-11-21 17:45:02.496 [FTL] FileProcessor: Data corruption detected in users
+2025-11-21 17:45:04.950 [ERR] Auth: Timeout waiting for response from NotificationService
+2025-11-21 17:45:09.131 [INF] Config: Request 0410fb7b completed in 47ms
+2025-11-21 17:45:11.948 [WRN] Metrics: Memory usage at 94%
+2025-11-21 17:45:16.669 [INF] Database: Batch processing completed: 385/1070 items
+2025-11-21 17:45:19.836 [INF] Metrics: User user_2363 authenticated successfully
+2025-11-21 17:45:21.718 [ERR] Auth: Database connection failed: Permission denied
+2025-11-21 17:45:25.769 [INF] Config: Request 3d179f11 completed in 28ms
+2025-11-21 17:45:30.249 [TRC] HttpServer: Entering method Transform with parameters {id: 123, type: "full"}
+2025-11-21 17:45:35.049 [DBG] Database: Query execution plan generated
+2025-11-21 17:45:37.478 [INF] Database: Health check passed
+2025-11-21 17:45:39.314 [ERR] MessageQueue: File not found: import_5c837847.csv
+2025-11-21 17:45:41.934 [INF] FileProcessor: Request a67364f7 completed in 73ms
+2025-11-21 17:45:45.598 [INF] Metrics: Connected to database postgres://db:5432/app
+2025-11-21 17:45:45.699 [DBG] Metrics: Connection pool status: 8/20 active
+2025-11-21 17:45:49.357 [INF] Auth: Connected to database postgres://db:5432/app
+2025-11-21 17:45:53.617 [INF] MessageQueue: Connected to database mysql://db:3306/app
+2025-11-21 17:45:56.582 [INF] Cache: User user_6868 authenticated successfully
+2025-11-21 17:45:56.780 [INF] Config: Service started on port 9000
+2025-11-21 17:45:58.520 [ERR] FileProcessor: Failed to process request e731e1f4: Resource not found
+2025-11-21 17:46:00.132 [INF] Config: Connected to database postgres://db:5432/app
+2025-11-21 17:46:04.886 [DBG] FileProcessor: Connection pool status: 18/20 active
+2025-11-21 17:46:07.138 [TRC] HttpServer: Loop iteration 87 of 1007
+2025-11-21 17:46:10.517 [WRN] Cache: Slow query detected: 92ms for SELECT * FROM users WHERE...
+2025-11-21 17:46:14.556 [DBG] HttpServer: Query execution plan generated
+2025-11-21 17:46:17.676 [DBG] MessageQueue: Cache lookup for key cache:session:a8d0d5e2
+2025-11-21 17:46:22.312 [INF] HttpServer: Request 7e945aca completed in 1589ms
+2025-11-21 17:46:23.284 [INF] MessageQueue: Message published to events
+2025-11-21 17:46:26.902 [INF] Scheduler: Connected to database postgres://db:5432/app
+2025-11-21 17:46:29.713 [WRN] Cache: Retry attempt 5 for operation SendEmail
+2025-11-21 17:46:32.974 [ERR] FileProcessor: File not found: import_1f716929.csv
+2025-11-21 17:46:35.063 [INF] Config: Health check passed
+2025-11-21 17:46:36.681 [INF] Config: Connected to database postgres://db:5432/app
+2025-11-21 17:46:38.215 [INF] ApiGateway: Batch processing completed: 543/1001 items
+2025-11-21 17:46:41.549 [INF] Metrics: Request 80963022 completed in 1ms
+2025-11-21 17:46:44.390 [INF] Database: Configuration reloaded
+2025-11-21 17:46:47.890 [WRN] HttpServer: Deprecated API endpoint called: /api/v1/orders
+2025-11-21 17:46:49.820 [INF] HttpServer: Service started on port 443
+2025-11-21 17:46:50.358 [ERR] FileProcessor: Database connection failed: Resource not found
+2025-11-21 17:46:53.885 [WRN] MessageQueue: Retry attempt 1 for operation SyncData
+2025-11-21 17:46:56.028 [INF] Database: Configuration reloaded
+2025-11-21 17:46:58.247 [INF] FileProcessor: File export_85a19bc4.csv processed, 3693 records
+2025-11-21 17:47:01.288 [DBG] ApiGateway: Connection pool status: 10/20 active
+2025-11-21 17:47:05.985 [DBG] MessageQueue: Parsed configuration: {"timeout": 30, "retries": 3}
+2025-11-21 17:47:06.342 [FTL] ApiGateway: Application startup failed: Timeout exceeded
+2025-11-21 17:47:06.488 [INF] Auth: Message published to notifications
+2025-11-21 17:47:09.022 [INF] Scheduler: Connected to database mysql://db:3306/app
+2025-11-21 17:47:12.857 [INF] FileProcessor: Message published to tasks
+2025-11-21 17:47:17.774 [WRN] Config: Memory usage at 70%
+2025-11-21 17:47:20.439 [FTL] Database: Data corruption detected in transactions
+2025-11-21 17:47:20.889 [INF] HttpServer: Service started on port 3000
+2025-11-21 17:47:24.370 [INF] Database: File import_96082602.csv processed, 3791 records
+2025-11-21 17:47:26.021 [INF] MessageQueue: Batch processing completed: 863/1065 items
+2025-11-21 17:47:28.636 [DBG] ApiGateway: Query execution plan generated
+2025-11-21 17:47:31.003 [INF] Database: User user_1161 authenticated successfully
+2025-11-21 17:47:34.681 [WRN] FileProcessor: Rate limit approaching for client client_337e2c71
+2025-11-21 17:47:36.415 [INF] Database: Scheduled job ReportGenerator started
+2025-11-21 17:47:38.639 [DBG] Database: Connection pool status: 7/20 active
+2025-11-21 17:47:42.710 [INF] Metrics: Batch processing completed: 121/1096 items
+2025-11-21 17:47:44.679 [INF] ApiGateway: File export_980dfb06.csv processed, 3908 records
+2025-11-21 17:47:48.232 [INF] Scheduler: Health check passed
+2025-11-21 17:47:51.749 [TRC] MessageQueue: Variable state: {counter: 42, flag: true}
+2025-11-21 17:47:55.978 [INF] ApiGateway: Message published to orders
+2025-11-21 17:47:59.070 [DBG] HttpServer: Processing request 4c4f97bd
+2025-11-21 17:47:59.212 [FTL] Config: Unrecoverable error, shutting down
+2025-11-21 17:47:59.890 [WRN] FileProcessor: Rate limit approaching for client client_0bf9f0e4
+2025-11-21 17:48:03.692 [INF] Scheduler: Message published to notifications
+2025-11-21 17:48:07.815 [WRN] Scheduler: Memory usage at 87%
+2025-11-21 17:48:10.684 [INF] Metrics: Scheduled job BackupJob started
+2025-11-21 17:48:15.654 [WRN] Cache: Slow query detected: 106ms for SELECT * FROM users WHERE...
+2025-11-21 17:48:18.788 [ERR] Scheduler: Database connection failed: Invalid token
+2025-11-21 17:48:21.635 [INF] Config: Message published to tasks
+2025-11-21 17:48:22.217 [INF] Database: File data_a9e68b74.csv processed, 7835 records
+2025-11-21 17:48:24.927 [INF] Scheduler: Service started on port 443
+2025-11-21 17:48:27.774 [ERR] Metrics: Database connection failed: Invalid token
+2025-11-21 17:48:29.507 [INF] FileProcessor: Request 0e8a081a completed in 81ms
+2025-11-21 17:48:31.162 [DBG] Database: Query execution plan generated
+2025-11-21 17:48:32.338 [DBG] ApiGateway: Cache lookup for key cache:user:53c60b6b
+2025-11-21 17:48:34.257 [INF] FileProcessor: Connected to database postgres://db:5432/app
+2025-11-21 17:48:37.179 [INF] Config: Connected to database mysql://db:3306/app
+2025-11-21 17:48:41.091 [INF] Auth: Batch processing completed: 671/1082 items
+2025-11-21 17:48:44.796 [TRC] FileProcessor: Loop iteration 62 of 1062
+2025-11-21 17:48:45.558 [INF] ApiGateway: Request f5be682c completed in 3852ms
+2025-11-21 17:48:50.457 [DBG] Metrics: Connection pool status: 16/20 active
+2025-11-21 17:48:54.100 [INF] Scheduler: Batch processing completed: 639/1057 items
+2025-11-21 17:48:55.273 [INF] HttpServer: Connected to database mysql://db:3306/app
+2025-11-21 17:48:57.148 [INF] MessageQueue: File data_6ff27d95.csv processed, 2515 records
+2025-11-21 17:48:59.351 [INF] MessageQueue: Request e140873b completed in 431ms
+2025-11-21 17:49:01.975 [DBG] MessageQueue: Cache lookup for key cache:config:deaf5e59
+2025-11-21 17:49:04.845 [WRN] FileProcessor: Certificate expires in 17 days
+2025-11-21 17:49:07.081 [INF] HttpServer: Batch processing completed: 527/1050 items
+2025-11-21 17:49:10.992 [INF] Auth: Batch processing completed: 901/1028 items
+2025-11-21 17:49:15.220 [INF] Cache: Health check passed
+2025-11-21 17:49:18.470 [INF] Metrics: Message published to tasks
+2025-11-21 17:49:20.017 [INF] ApiGateway: Batch processing completed: 517/1043 items
+2025-11-21 17:49:21.059 [INF] MessageQueue: Scheduled job DataSync started
+2025-11-21 17:49:24.011 [INF] Auth: Message published to orders
+2025-11-21 17:49:25.218 [ERR] FileProcessor: Failed to process request 5075526d: Connection refused
+2025-11-21 17:49:28.734 [TRC] FileProcessor: Entering method Transform with parameters {id: 123, type: "full"}
+2025-11-21 17:49:30.501 [WRN] MessageQueue: Retry attempt 2 for operation SendEmail
+2025-11-21 17:49:31.301 [ERR] FileProcessor: Invalid message format: Unexpected field "foo" at position 42
+2025-11-21 17:49:33.337 [DBG] Metrics: Processing request 552ffb6c
+2025-11-21 17:49:35.021 [INF] ApiGateway: Request 2c96f8ce completed in 35ms
+2025-11-21 17:49:37.762 [DBG] Database: Cache lookup for key cache:config:9dbd95c4
+2025-11-21 17:49:37.986 [INF] Database: Connected to database postgres://db:5432/app
+2025-11-21 17:49:42.349 [INF] Scheduler: File export_1116348c.csv processed, 5033 records
+2025-11-21 17:49:45.465 [INF] Database: File report_78f32a7f.csv processed, 6449 records
+2025-11-21 17:49:45.646 [FTL] Scheduler: Application startup failed: Connection refused
+2025-11-21 17:49:47.975 [INF] Metrics: Health check passed
+2025-11-21 17:49:50.955 [INF] MessageQueue: User user_4973 authenticated successfully
+2025-11-21 17:49:53.499 [INF] Metrics: Service started on port 443
+2025-11-21 17:49:54.974 [INF] HttpServer: Message published to events
+2025-11-21 17:49:55.973 [WRN] Metrics: Retry attempt 1 for operation SendEmail
+2025-11-21 17:49:57.496 [FTL] Cache: Application startup failed: Invalid token
+2025-11-21 17:50:02.415 [INF] Cache: Message published to notifications
+2025-11-21 17:50:02.842 [WRN] Scheduler: Memory usage at 81%
+2025-11-21 17:50:03.389 [INF] Metrics: File import_deaa0e05.csv processed, 5553 records
+2025-11-21 17:50:08.272 [WRN] Database: Certificate expires in 14 days
+2025-11-21 17:50:12.678 [INF] FileProcessor: Connected to database postgres://db:5432/app
+2025-11-21 17:50:15.858 [INF] Database: Connected to database mysql://db:3306/app
+2025-11-21 17:50:16.798 [INF] Metrics: Batch processing completed: 259/1053 items
+2025-11-21 17:50:19.811 [DBG] Config: Cache lookup for key cache:session:f318764a
+2025-11-21 17:50:20.070 [INF] MessageQueue: Connected to database postgres://db:5432/app
+2025-11-21 17:50:21.019 [INF] Auth: Scheduled job ReportGenerator started
+2025-11-21 17:50:21.905 [ERR] Auth: Timeout waiting for response from PaymentService
+2025-11-21 17:50:22.177 [INF] Database: Configuration reloaded
+2025-11-21 17:50:22.841 [DBG] MessageQueue: Query execution plan generated
+2025-11-21 17:50:25.687 [INF] MessageQueue: Message published to orders
+2025-11-21 17:50:26.025 [INF] Cache: Scheduled job DataSync started
+2025-11-21 17:50:28.897 [DBG] Scheduler: Processing request af94cb64
+2025-11-21 17:50:32.223 [INF] Metrics: Configuration reloaded
+2025-11-21 17:50:36.670 [DBG] Metrics: Parsed configuration: {"timeout": 30, "retries": 3}
+2025-11-21 17:50:40.618 [INF] FileProcessor: Service started on port 9000
+2025-11-21 17:50:43.005 [FTL] Metrics: Critical resource unavailable: Redis
+2025-11-21 17:50:45.106 [ERR] Database: Failed to process request bedc91a8: Resource not found
+2025-11-21 17:50:49.872 [INF] Database: Scheduled job BackupJob started
+2025-11-21 17:50:54.343 [ERR] MessageQueue: Authentication failed for user user_2092
+2025-11-21 17:50:58.786 [WRN] ApiGateway: Slow query detected: 28ms for SELECT * FROM users WHERE...
+2025-11-21 17:50:59.653 [FTL] Config: Unrecoverable error, shutting down
+2025-11-21 17:51:03.594 [INF] Database: File import_a61e2704.csv processed, 9649 records
+2025-11-21 17:51:05.562 [INF] Cache: File import_56976a90.csv processed, 1498 records
+2025-11-21 17:51:08.120 [FTL] HttpServer: Data corruption detected in orders
+2025-11-21 17:51:08.190 [INF] ApiGateway: Service started on port 443
+2025-11-21 17:51:09.551 [INF] Scheduler: Batch processing completed: 150/1093 items
+2025-11-21 17:51:11.589 [INF] Config: Service started on port 9000
+2025-11-21 17:51:14.416 [INF] HttpServer: User user_8234 authenticated successfully
+2025-11-21 17:51:15.328 [FTL] Scheduler: Critical resource unavailable: Database
+2025-11-21 17:51:19.438 [INF] MessageQueue: Health check passed
+2025-11-21 17:51:19.918 [INF] ApiGateway: Batch processing completed: 821/1080 items
+2025-11-21 17:51:20.861 [DBG] Config: Processing request 276ed878
+2025-11-21 17:51:23.935 [DBG] Database: Connection pool status: 16/20 active
+2025-11-21 17:51:27.610 [DBG] FileProcessor: Parsed configuration: {"timeout": 30, "retries": 3}
+2025-11-21 17:51:28.849 [WRN] Config: Memory usage at 83%
+2025-11-21 17:51:31.358 [FTL] ApiGateway: Data corruption detected in orders
+2025-11-21 17:51:31.761 [WRN] Cache: Deprecated API endpoint called: /api/v1/orders
+2025-11-21 17:51:35.098 [TRC] Metrics: Variable state: {counter: 42, flag: true}
+2025-11-21 17:51:35.193 [WRN] ApiGateway: Memory usage at 72%
+2025-11-21 17:51:39.343 [WRN] Scheduler: Retry attempt 5 for operation ProcessPayment
+2025-11-21 17:51:40.701 [INF] FileProcessor: Connected to database mysql://db:3306/app
+2025-11-21 17:51:41.973 [INF] Config: Service started on port 9000
+2025-11-21 17:51:45.610 [INF] Metrics: Message published to notifications
+2025-11-21 17:51:46.459 [ERR] Config: Database connection failed: Permission denied
+2025-11-21 17:51:47.022 [INF] HttpServer: User user_6133 authenticated successfully
+2025-11-21 17:51:48.253 [DBG] Auth: Processing request b870ef3d
+2025-11-21 17:51:52.502 [DBG] HttpServer: Processing request a270ab8a
+2025-11-21 17:51:53.176 [TRC] Database: Loop iteration 32 of 1027
+2025-11-21 17:51:56.747 [WRN] FileProcessor: Memory usage at 91%
+2025-11-21 17:51:57.995 [DBG] ApiGateway: Processing request 17a56743
+2025-11-21 17:52:00.047 [INF] Auth: User user_9936 authenticated successfully
+2025-11-21 17:52:00.727 [TRC] MessageQueue: Variable state: {counter: 42, flag: true}
+2025-11-21 17:52:03.204 [FTL] MessageQueue: Unrecoverable error, shutting down
+2025-11-21 17:52:05.598 [ERR] Scheduler: File not found: export_79827185.csv
+2025-11-21 17:52:07.025 [FTL] FileProcessor: Critical resource unavailable: Database
+2025-11-21 17:52:07.868 [WRN] FileProcessor: Memory usage at 78%
+2025-11-21 17:52:07.987 [INF] MessageQueue: Message published to events
+2025-11-21 17:52:11.286 [TRC] Cache: Entering method ProcessOrder with parameters {id: 123, type: "full"}
+2025-11-21 17:52:14.730 [INF] HttpServer: Batch processing completed: 172/1092 items
+2025-11-21 17:52:18.431 [FTL] Config: Critical resource unavailable: Redis
+2025-11-21 17:52:23.034 [TRC] Metrics: Variable state: {counter: 42, flag: true}
+2025-11-21 17:52:26.118 [INF] Database: Connected to database postgres://db:5432/app
+2025-11-21 17:52:26.791 [INF] Config: Batch processing completed: 168/1018 items
+2025-11-21 17:52:30.351 [ERR] Metrics: Timeout waiting for response from PaymentService
+2025-11-21 17:52:32.875 [INF] Auth: Scheduled job DataSync started
+2025-11-21 17:52:37.199 [INF] MessageQueue: Message published to tasks
+2025-11-21 17:52:38.409 [WRN] Database: Memory usage at 73%
+2025-11-21 17:52:41.262 [ERR] MessageQueue: Authentication failed for user user_7244
+2025-11-21 17:52:42.690 [INF] Database: Request fbc2f5d1 completed in 407ms
+2025-11-21 17:52:47.452 [INF] Scheduler: User user_8910 authenticated successfully
+2025-11-21 17:52:49.546 [ERR] MessageQueue: Failed to process request b967a1dd: Timeout exceeded
+2025-11-21 17:52:49.633 [INF] ApiGateway: Connected to database mysql://db:3306/app
+2025-11-21 17:52:52.836 [INF] Auth: Connected to database mysql://db:3306/app
+2025-11-21 17:52:56.231 [DBG] Config: Cache lookup for key cache:config:66b5c14e
+2025-11-21 17:53:00.457 [INF] Scheduler: Service started on port 8080
+2025-11-21 17:53:02.258 [INF] HttpServer: Message published to events
+2025-11-21 17:53:02.912 [INF] FileProcessor: Service started on port 5000
+2025-11-21 17:53:06.522 [INF] MessageQueue: File export_d878a778.csv processed, 5374 records
+2025-11-21 17:53:07.703 [WRN] Cache: Rate limit approaching for client client_7b574085
+2025-11-21 17:53:09.321 [ERR] FileProcessor: Invalid message format: Unexpected field "foo" at position 42
+2025-11-21 17:53:10.536 [TRC] HttpServer: Loop iteration 4 of 1016
+2025-11-21 17:53:11.795 [FTL] Scheduler: Critical resource unavailable: MessageBroker
+2025-11-21 17:53:14.344 [INF] FileProcessor: Request d49504ab completed in 31ms
+2025-11-21 17:53:17.574 [ERR] Scheduler: Failed to process request 6454c4eb: Invalid token
+2025-11-21 17:53:18.864 [ERR] HttpServer: File not found: data_b9830771.csv
+2025-11-21 17:53:21.499 [INF] ApiGateway: Health check passed
+2025-11-21 17:53:23.137 [INF] Cache: Request 5ddcb7cd completed in 109ms
+2025-11-21 17:53:25.066 [ERR] MessageQueue: Database connection failed: Timeout exceeded
+2025-11-21 17:53:26.555 [INF] Metrics: Request 2b301548 completed in 73ms
+2025-11-21 17:53:31.138 [DBG] ApiGateway: Parsed configuration: {"timeout": 30, "retries": 3}
+2025-11-21 17:53:34.454 [INF] MessageQueue: Connected to database mysql://db:3306/app
+2025-11-21 17:53:38.062 [INF] Cache: User user_8971 authenticated successfully
+2025-11-21 17:53:39.235 [INF] Config: Message published to notifications
+2025-11-21 17:53:42.204 [INF] Scheduler: Request a4bf3801 completed in 10ms
+2025-11-21 17:53:43.861 [DBG] Config: Cache lookup for key cache:session:f47d9ffa
+2025-11-21 17:53:47.009 [ERR] HttpServer: Failed to process request 20a3b428: Resource not found
+2025-11-21 17:53:51.041 [DBG] Auth: Processing request 43013285
+2025-11-21 17:53:53.112 [FTL] Config: Unrecoverable error, shutting down
+2025-11-21 17:53:53.814 [WRN] Scheduler: Slow query detected: 2940ms for SELECT * FROM users WHERE...
+2025-11-21 17:53:55.663 [INF] ApiGateway: Request 45b3f602 completed in 1571ms
+2025-11-21 17:53:56.320 [INF] Database: Health check passed
+2025-11-21 17:54:01.213 [INF] MessageQueue: Scheduled job ReportGenerator started
+2025-11-21 17:54:03.894 [INF] Scheduler: Service started on port 5000
+2025-11-21 17:54:05.962 [INF] Cache: Message published to notifications
+2025-11-21 17:54:09.338 [WRN] FileProcessor: Connection pool exhausted, waiting for available connection
+2025-11-21 17:54:11.783 [DBG] Database: Parsed configuration: {"timeout": 30, "retries": 3}
+2025-11-21 17:54:16.328 [INF] Config: Batch processing completed: 171/1023 items
+2025-11-21 17:54:18.299 [DBG] Cache: Connection pool status: 18/20 active
+2025-11-21 17:54:19.689 [DBG] FileProcessor: Query execution plan generated
+2025-11-21 17:54:23.050 [ERR] Config: Timeout waiting for response from NotificationService
+2025-11-21 17:54:27.774 [INF] MessageQueue: Connected to database mysql://db:3306/app
+2025-11-21 17:54:30.072 [DBG] HttpServer: Cache lookup for key cache:user:c2ef39c2
+2025-11-21 17:54:34.075 [INF] MessageQueue: Request 0aa52530 completed in 3677ms
+2025-11-21 17:54:34.745 [FTL] ApiGateway: Application startup failed: Permission denied
+2025-11-21 17:54:35.679 [INF] ApiGateway: Health check passed
+2025-11-21 17:54:36.329 [WRN] ApiGateway: Memory usage at 79%
