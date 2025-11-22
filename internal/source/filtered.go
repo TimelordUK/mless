@@ -229,3 +229,38 @@ func (f *FilteredProvider) OriginalLineNumber(filteredIndex int) int {
 	}
 	return f.filteredIndices[filteredIndex]
 }
+
+// FilteredIndexFor returns the filtered index for an original line number.
+// If the exact line is filtered out, returns the nearest filtered index at or after.
+// Returns -1 if no matching filtered line exists.
+func (f *FilteredProvider) FilteredIndexFor(originalLine int) int {
+	f.rebuildIndex()
+
+	// If no filter active, original == filtered
+	if !f.IsFiltered() {
+		return originalLine
+	}
+
+	if len(f.filteredIndices) == 0 {
+		return -1
+	}
+
+	// Binary search for originalLine or nearest at/after
+	low, high := 0, len(f.filteredIndices)
+	for low < high {
+		mid := (low + high) / 2
+		if f.filteredIndices[mid] < originalLine {
+			low = mid + 1
+		} else {
+			high = mid
+		}
+	}
+
+	// low is now the first index where filteredIndices[low] >= originalLine
+	if low < len(f.filteredIndices) {
+		return low
+	}
+
+	// All filtered lines are before originalLine, return last one
+	return len(f.filteredIndices) - 1
+}

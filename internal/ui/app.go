@@ -404,10 +404,18 @@ func (m *Model) handleGotoTimeKey(msg tea.KeyMsg) (tea.Model, tea.Cmd) {
 	case "enter":
 		timeStr := m.searchInput.Value()
 		if target := m.parseTimeInput(timeStr); target != nil {
-			lineNum := m.source.FindLineAtTime(*target)
-			if lineNum >= 0 {
-				m.viewport.GotoLine(lineNum)
-				m.viewport.SetHighlightedLine(lineNum)
+			originalLine := m.source.FindLineAtTime(*target)
+			if originalLine >= 0 {
+				// Map original line to filtered index
+				filteredIndex := m.filteredSource.FilteredIndexFor(originalLine)
+				if filteredIndex >= 0 {
+					m.viewport.GotoLine(filteredIndex)
+					// Highlight using the actual original line at that filtered position
+					actualOriginal := m.filteredSource.OriginalLineNumber(filteredIndex)
+					if actualOriginal >= 0 {
+						m.viewport.SetHighlightedLine(actualOriginal)
+					}
+				}
 			}
 		}
 		m.mode = ModeNormal
