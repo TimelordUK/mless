@@ -386,7 +386,7 @@ func (m *Model) handleKey(msg tea.KeyMsg) (tea.Model, tea.Cmd) {
 	case "S": // Enter slice mode for range input
 		m.mode = ModeSlice
 		m.searchInput.SetValue("")
-		m.searchInput.Placeholder = "Range (e.g., 'a-'b, 100-500, .-$)..."
+		m.searchInput.Placeholder = "Range (e.g., 'a-'b, 13:00-14:00, 100-500)..."
 		m.searchInput.Focus()
 		return m, textinput.Blink
 
@@ -864,7 +864,7 @@ func (m *Model) parseAndSlice(rangeStr string) {
 	m.performSlice(start, end)
 }
 
-// parseLineRef parses a line reference like ".", "$", "$-100", "'a", or "500"
+// parseLineRef parses a line reference like ".", "$", "$-100", "'a", "13:00", or "500"
 func (m *Model) parseLineRef(ref string, current, total int) int {
 	ref = strings.TrimSpace(ref)
 
@@ -889,6 +889,17 @@ func (m *Model) parseLineRef(ref string, current, total int) int {
 			}
 		}
 		return -1 // Mark not found
+	}
+
+	// Handle time references like 13:00 or 13:00:00
+	if strings.Contains(ref, ":") && !strings.HasPrefix(ref, "$") && !strings.HasPrefix(ref, ".") {
+		if target := m.parseTimeInput(ref); target != nil {
+			line := m.source.FindLineAtTime(*target)
+			if line >= 0 {
+				return line
+			}
+		}
+		return -1 // Time not found
 	}
 
 	// Handle $-N or $+N
@@ -1199,7 +1210,7 @@ func (m *Model) renderHelp() string {
 			"M               Clear all marks",
 		}},
 		{"Slicing", []string{
-			"S               Slice range (e.g., 'a-'b, 100-500, .-$)",
+			"S               Slice range (e.g., 'a-'b, 13:00-14:00, 100-$)",
 			"ctrl+s          Slice from current to end",
 			"R               Revert slice / resync cache",
 		}},
