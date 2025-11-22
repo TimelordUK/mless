@@ -39,6 +39,8 @@ const (
 	ModeGotoTime
 	ModeFilter
 	ModeSlice
+	ModeMarkSet  // Waiting for mark character (ma-mz)
+	ModeMarkJump // Waiting for mark character ('a-'z)
 )
 
 // Model is the main application model
@@ -76,6 +78,9 @@ type Model struct {
 	// Slice state
 	slicer     *slice.Slicer
 	sliceStack []*slice.Info // Stack for nested slices
+
+	// Marks (a-z) - stores original line numbers
+	marks map[rune]int
 }
 
 // NewModel creates a new application model
@@ -151,6 +156,7 @@ func NewModelWithOptions(opts ModelOptions) (*Model, error) {
 		cachePath:      cachePath,
 		isCached:       isCached,
 		slicer:         slice.NewSlicer(),
+		marks:          make(map[rune]int),
 	}, nil
 }
 
@@ -224,6 +230,12 @@ func (m *Model) handleKey(msg tea.KeyMsg) (tea.Model, tea.Cmd) {
 	}
 	if m.mode == ModeSlice {
 		return m.handleSliceKey(msg)
+	}
+	if m.mode == ModeMarkSet {
+		return m.handleMarkSetKey(msg)
+	}
+	if m.mode == ModeMarkJump {
+		return m.handleMarkJumpKey(msg)
 	}
 
 	// Normal mode
@@ -371,6 +383,18 @@ func (m *Model) handleKey(msg tea.KeyMsg) (tea.Model, tea.Cmd) {
 		m.searchInput.Placeholder = "Range (e.g., 100-500 or -500 or 100-)..."
 		m.searchInput.Focus()
 		return m, textinput.Blink
+
+	case "m": // Enter mark set mode
+		m.mode = ModeMarkSet
+
+	case "'": // Enter mark jump mode
+		m.mode = ModeMarkJump
+
+	case "]'": // Next mark
+		m.nextMark()
+
+	case "['": // Previous mark
+		m.prevMark()
 	}
 
 	return m, nil
@@ -649,6 +673,130 @@ func (m *Model) handleSliceKey(msg tea.KeyMsg) (tea.Model, tea.Cmd) {
 	return m, cmd
 }
 
+func (m *Model) handleMarkSetKey(msg tea.KeyMsg) (tea.Model, tea.Cmd) {
+	key := msg.String()
+	m.mode = ModeNormal
+
+	// Check if it's a valid mark character (a-z)
+	if len(key) == 1 && key[0] >= 'a' && key[0] <= 'z' {
+		// Get original line number for current position
+		currentFiltered := m.viewport.CurrentLine()
+		originalLine := m.filteredSource.OriginalLineNumber(currentFiltered)
+		if originalLine >= 0 {
+			m.marks[rune(key[0])] = originalLine
+		}
+	}
+
+	return m, nil
+}
+
+func (m *Model) handleMarkJumpKey(msg tea.KeyMsg) (tea.Model, tea.Cmd) {
+	key := msg.String()
+	m.mode = ModeNormal
+
+	// Check if it's a valid mark character (a-z)
+	if len(key) == 1 && key[0] >= 'a' && key[0] <= 'z' {
+		if originalLine, ok := m.marks[rune(key[0])]; ok {
+			// Map original line to filtered index
+			filteredIndex := m.filteredSource.FilteredIndexFor(originalLine)
+			if filteredIndex >= 0 {
+				m.viewport.GotoLine(filteredIndex)
+				// Highlight the actual line at that position
+				actualOriginal := m.filteredSource.OriginalLineNumber(filteredIndex)
+				if actualOriginal >= 0 {
+					m.viewport.SetHighlightedLine(actualOriginal)
+				}
+			}
+		}
+	}
+
+	return m, nil
+}
+
+// nextMark jumps to the next mark by line order
+func (m *Model) nextMark() {
+	if len(m.marks) == 0 {
+		return
+	}
+
+	// Get current original line
+	currentFiltered := m.viewport.CurrentLine()
+	currentOriginal := m.filteredSource.OriginalLineNumber(currentFiltered)
+
+	// Find next mark after current position
+	var nextLine int = -1
+	var firstLine int = -1
+
+	for _, line := range m.marks {
+		if firstLine == -1 || line < firstLine {
+			firstLine = line
+		}
+		if line > currentOriginal {
+			if nextLine == -1 || line < nextLine {
+				nextLine = line
+			}
+		}
+	}
+
+	// Wrap around if no mark after current
+	if nextLine == -1 {
+		nextLine = firstLine
+	}
+
+	if nextLine >= 0 {
+		filteredIndex := m.filteredSource.FilteredIndexFor(nextLine)
+		if filteredIndex >= 0 {
+			m.viewport.GotoLine(filteredIndex)
+			actualOriginal := m.filteredSource.OriginalLineNumber(filteredIndex)
+			if actualOriginal >= 0 {
+				m.viewport.SetHighlightedLine(actualOriginal)
+			}
+		}
+	}
+}
+
+// prevMark jumps to the previous mark by line order
+func (m *Model) prevMark() {
+	if len(m.marks) == 0 {
+		return
+	}
+
+	// Get current original line
+	currentFiltered := m.viewport.CurrentLine()
+	currentOriginal := m.filteredSource.OriginalLineNumber(currentFiltered)
+
+	// Find previous mark before current position
+	var prevLine int = -1
+	var lastLine int = -1
+
+	for _, line := range m.marks {
+		if line > lastLine {
+			lastLine = line
+		}
+		if line < currentOriginal {
+			if line > prevLine {
+				prevLine = line
+			}
+		}
+	}
+
+	// Wrap around if no mark before current
+	if prevLine == -1 {
+		prevLine = lastLine
+	}
+
+	if prevLine >= 0 {
+		filteredIndex := m.filteredSource.FilteredIndexFor(prevLine)
+		if filteredIndex >= 0 {
+			m.viewport.GotoLine(filteredIndex)
+			actualOriginal := m.filteredSource.OriginalLineNumber(filteredIndex)
+			if actualOriginal >= 0 {
+				m.viewport.SetHighlightedLine(actualOriginal)
+			}
+		}
+	}
+}
+
 // parseAndSlice parses a range string and performs the slice
 func (m *Model) parseAndSlice(rangeStr string) {
 	// Get current position (original line number)
@@ -851,6 +999,17 @@ func (m *Model) revertSlice() {
 // View implements tea.Model
 func (m *Model) View() string {
 	var builder strings.Builder
+
+	// Update viewport with current marks (reverse map: line -> char)
+	if len(m.marks) > 0 {
+		reverseMarks := make(map[int]rune)
+		for char, line := range m.marks {
+			reverseMarks[line] = char
+		}
+		m.viewport.SetMarks(reverseMarks)
+	} else {
+		m.viewport.SetMarks(nil)
+	}
 
 	// Main content
 	builder.WriteString(m.viewport.Render())

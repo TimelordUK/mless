@@ -34,6 +34,9 @@ type Viewport struct {
 
 	// Highlighted line (original index, -1 for none)
 	highlightedLine int
+
+	// Marks (original line number -> mark character)
+	marks map[int]rune
 }
 
 // NewViewport creates a new viewport
@@ -60,6 +63,11 @@ func (v *Viewport) SetHighlightedLine(originalIndex int) {
 // ClearHighlight removes any line highlight
 func (v *Viewport) ClearHighlight() {
 	v.highlightedLine = -1
+}
+
+// SetMarks updates the marks to display (original line -> rune)
+func (v *Viewport) SetMarks(marks map[int]rune) {
+	v.marks = marks
 }
 
 // SetRenderer sets the line renderer
@@ -180,12 +188,26 @@ func (v *Viewport) Render() string {
 		isHighlighted := v.highlightedLine >= 0 && originalIdx == v.highlightedLine
 
 		if v.showLineNumbers {
-			numStr := fmt.Sprintf("%*d ", lineNumWidth, lineNum)
+			// Check if this line has a mark
+			markChar := ' '
+			if v.marks != nil {
+				if m, ok := v.marks[originalIdx]; ok {
+					markChar = m
+				}
+			}
+
+			numStr := fmt.Sprintf("%*d", lineNumWidth, lineNum)
 			if isHighlighted {
 				// Highlight line number with marker
-				builder.WriteString(v.highlightStyle.Render(numStr))
+				builder.WriteString(v.highlightStyle.Render(fmt.Sprintf("%c%s ", markChar, numStr)))
 			} else {
-				builder.WriteString(v.lineNumberStyle.Render(numStr))
+				if markChar != ' ' {
+					// Show mark character in highlight style
+					builder.WriteString(v.highlightStyle.Render(string(markChar)))
+					builder.WriteString(v.lineNumberStyle.Render(fmt.Sprintf("%s ", numStr)))
+				} else {
+					builder.WriteString(v.lineNumberStyle.Render(fmt.Sprintf(" %s ", numStr)))
+				}
 			}
 		}
 
