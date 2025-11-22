@@ -35,6 +35,7 @@ const (
 	ModeNormal Mode = iota
 	ModeSearch
 	ModeGoto
+	ModeGotoTime
 	ModeFilter
 )
 
@@ -211,6 +212,9 @@ func (m *Model) handleKey(msg tea.KeyMsg) (tea.Model, tea.Cmd) {
 	if m.mode == ModeFilter {
 		return m.handleFilterKey(msg)
 	}
+	if m.mode == ModeGotoTime {
+		return m.handleGotoTimeKey(msg)
+	}
 
 	// Normal mode
 	switch msg.String() {
@@ -266,6 +270,13 @@ func (m *Model) handleKey(msg tea.KeyMsg) (tea.Model, tea.Cmd) {
 		m.mode = ModeGoto
 		m.searchInput.SetValue("")
 		m.searchInput.Placeholder = "Line number..."
+		m.searchInput.Focus()
+		return m, textinput.Blink
+
+	case "ctrl+t":
+		m.mode = ModeGotoTime
+		m.searchInput.SetValue("")
+		m.searchInput.Placeholder = "Time (HH:MM:SS or HH:MM)..."
 		m.searchInput.Focus()
 		return m, textinput.Blink
 
@@ -374,6 +385,67 @@ func (m *Model) handleGotoKey(msg tea.KeyMsg) (tea.Model, tea.Cmd) {
 	var cmd tea.Cmd
 	m.searchInput, cmd = m.searchInput.Update(msg)
 	return m, cmd
+}
+
+func (m *Model) handleGotoTimeKey(msg tea.KeyMsg) (tea.Model, tea.Cmd) {
+	switch msg.String() {
+	case "enter":
+		timeStr := m.searchInput.Value()
+		if target := m.parseTimeInput(timeStr); target != nil {
+			lineNum := m.source.FindLineAtTime(*target)
+			if lineNum >= 0 {
+				m.viewport.GotoLine(lineNum)
+				m.viewport.SetHighlightedLine(lineNum)
+			}
+		}
+		m.mode = ModeNormal
+		m.searchInput.Blur()
+		m.searchInput.Placeholder = "Search..."
+		return m, nil
+
+	case "esc":
+		m.mode = ModeNormal
+		m.searchInput.Blur()
+		m.searchInput.Placeholder = "Search..."
+		return m, nil
+	}
+
+	var cmd tea.Cmd
+	m.searchInput, cmd = m.searchInput.Update(msg)
+	return m, cmd
+}
+
+// parseTimeInput parses user time input into a time.Time
+func (m *Model) parseTimeInput(input string) *time.Time {
+	// Try various formats
+	layouts := []string{
+		"15:04:05",
+		"15:04",
+		"2006-01-02 15:04:05",
+		"2006-01-02 15:04",
+		"2006-01-02T15:04:05",
+	}
+
+	for _, layout := range layouts {
+		if t, err := time.Parse(layout, input); err == nil {
+			// For time-only formats, use the date from the first line's timestamp
+			if layout == "15:04:05" || layout == "15:04" {
+				// Get reference date from first line
+				if firstTs := m.source.GetTimestamp(0); firstTs != nil {
+					t = time.Date(firstTs.Year(), firstTs.Month(), firstTs.Day(),
+						t.Hour(), t.Minute(), t.Second(), 0, firstTs.Location())
+				} else {
+					// Fallback to today
+					now := time.Now()
+					t = time.Date(now.Year(), now.Month(), now.Day(),
+						t.Hour(), t.Minute(), t.Second(), 0, time.Local)
+				}
+			}
+			return &t
+		}
+	}
+
+	return nil
 }
 
 func (m *Model) handleFilterKey(msg tea.KeyMsg) (tea.Model, tea.Cmd) {
@@ -533,6 +605,8 @@ func (m *Model) View() string {
 		status = "/" + m.searchInput.View()
 	case ModeGoto:
 		status = ":" + m.searchInput.View()
+	case ModeGotoTime:
+		status = "t:" + m.searchInput.View()
 	case ModeFilter:
 		status = "?" + m.searchInput.View()
 	default:
