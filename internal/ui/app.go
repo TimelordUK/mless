@@ -299,16 +299,22 @@ func (m *Model) handleKey(msg tea.KeyMsg) (tea.Model, tea.Cmd) {
 	// Level filtering: letters toggle levels
 	case "t": // Trace
 		m.filteredSource.ToggleLevel(source.LevelTrace)
+		m.viewport.GotoTop()
 	case "d": // Debug
 		m.filteredSource.ToggleLevel(source.LevelDebug)
+		m.viewport.GotoTop()
 	case "i": // Info
 		m.filteredSource.ToggleLevel(source.LevelInfo)
+		m.viewport.GotoTop()
 	case "w": // Warn
 		m.filteredSource.ToggleLevel(source.LevelWarn)
+		m.viewport.GotoTop()
 	case "e": // Error
 		m.filteredSource.ToggleLevel(source.LevelError)
+		m.viewport.GotoTop()
 	case "alt+f": // Fatal (use alt+f since F is for follow mode)
 		m.filteredSource.ToggleLevel(source.LevelFatal)
+		m.viewport.GotoTop()
 
 	case "F": // Follow mode
 		m.following = !m.following
@@ -320,18 +326,24 @@ func (m *Model) handleKey(msg tea.KeyMsg) (tea.Model, tea.Cmd) {
 	// Shift+letter: show this level and above
 	case "T": // Trace and above (all)
 		m.filteredSource.SetLevelAndAbove(source.LevelTrace)
+		m.viewport.GotoTop()
 	case "D": // Debug and above
 		m.filteredSource.SetLevelAndAbove(source.LevelDebug)
+		m.viewport.GotoTop()
 	case "I": // Info and above
 		m.filteredSource.SetLevelAndAbove(source.LevelInfo)
+		m.viewport.GotoTop()
 	case "W": // Warn and above
 		m.filteredSource.SetLevelAndAbove(source.LevelWarn)
+		m.viewport.GotoTop()
 	case "E": // Error and above
 		m.filteredSource.SetLevelAndAbove(source.LevelError)
+		m.viewport.GotoTop()
 	// Note: F is already used for fatal toggle, use ctrl+f for fatal-only if needed
 
 	case "0": // Clear all filters
 		m.filteredSource.ClearFilter()
+		m.viewport.GotoTop()
 
 	case "R": // Resync from source (for cached files)
 		if m.isCached {
