@@ -41,6 +41,7 @@ const (
 	ModeSlice
 	ModeMarkSet  // Waiting for mark character (ma-mz)
 	ModeMarkJump // Waiting for mark character ('a-'z)
+	ModeHelp
 )
 
 // Model is the main application model
@@ -237,6 +238,11 @@ func (m *Model) handleKey(msg tea.KeyMsg) (tea.Model, tea.Cmd) {
 	if m.mode == ModeMarkJump {
 		return m.handleMarkJumpKey(msg)
 	}
+	if m.mode == ModeHelp {
+		// Any key exits help
+		m.mode = ModeNormal
+		return m, nil
+	}
 
 	// Normal mode
 	switch msg.String() {
@@ -380,12 +386,15 @@ func (m *Model) handleKey(msg tea.KeyMsg) (tea.Model, tea.Cmd) {
 	case "S": // Enter slice mode for range input
 		m.mode = ModeSlice
 		m.searchInput.SetValue("")
-		m.searchInput.Placeholder = "Range (e.g., 100-500 or -500 or 100-)..."
+		m.searchInput.Placeholder = "Range (e.g., 'a-'b, 100-500, .-$)..."
 		m.searchInput.Focus()
 		return m, textinput.Blink
 
 	case "m": // Enter mark set mode
 		m.mode = ModeMarkSet
+
+	case "M": // Clear all marks
+		m.marks = make(map[rune]int)
 
 	case "'": // Enter mark jump mode
 		m.mode = ModeMarkJump
@@ -395,6 +404,9 @@ func (m *Model) handleKey(msg tea.KeyMsg) (tea.Model, tea.Cmd) {
 
 	case "['": // Previous mark
 		m.prevMark()
+
+	case "h": // Show help
+		m.mode = ModeHelp
 	}
 
 	return m, nil
@@ -817,12 +829,12 @@ func (m *Model) parseAndSlice(rangeStr string) {
 	var start, end int
 	var startStr, endStr string
 
-	// Find the separator dash (not one that's part of $-N)
+	// Find the separator dash (not one that's part of $-N or .-N)
 	dashIdx := -1
 	for i := 0; i < len(rangeStr); i++ {
 		if rangeStr[i] == '-' {
-			// Check if this dash is part of $-N
-			if i > 0 && rangeStr[i-1] == '$' {
+			// Check if this dash is part of $-N or .-N
+			if i > 0 && (rangeStr[i-1] == '$' || rangeStr[i-1] == '.') {
 				continue
 			}
 			dashIdx = i
@@ -852,7 +864,7 @@ func (m *Model) parseAndSlice(rangeStr string) {
 	m.performSlice(start, end)
 }
 
-// parseLineRef parses a line reference like ".", "$", "$-100", or "500"
+// parseLineRef parses a line reference like ".", "$", "$-100", "'a", or "500"
 func (m *Model) parseLineRef(ref string, current, total int) int {
 	ref = strings.TrimSpace(ref)
 
@@ -866,6 +878,17 @@ func (m *Model) parseLineRef(ref string, current, total int) int {
 
 	if ref == "$" {
 		return total
+	}
+
+	// Handle mark references like 'a
+	if strings.HasPrefix(ref, "'") && len(ref) >= 2 {
+		markChar := ref[1]
+		if markChar >= 'a' && markChar <= 'z' {
+			if line, ok := m.marks[rune(markChar)]; ok {
+				return line
+			}
+		}
+		return -1 // Mark not found
 	}
 
 	// Handle $-N or $+N
@@ -1000,6 +1023,11 @@ func (m *Model) revertSlice() {
 func (m *Model) View() string {
 	var builder strings.Builder
 
+	// Show help screen
+	if m.mode == ModeHelp {
+		return m.renderHelp()
+	}
+
 	// Update viewport with current marks (reverse map: line -> char)
 	if len(m.marks) > 0 {
 		reverseMarks := make(map[int]rune)
@@ -1128,6 +1156,83 @@ func (m *Model) View() string {
 	builder.WriteString(helpStyle.Render(help))
 
 	return builder.String()
+}
+
+// renderHelp renders the help screen
+func (m *Model) renderHelp() string {
+	titleStyle := lipgloss.NewStyle().Bold(true).Foreground(lipgloss.Color("214"))
+	helpStyle := lipgloss.NewStyle().Foreground(lipgloss.Color("252"))
+	keyStyle := lipgloss.NewStyle().Foreground(lipgloss.Color("117"))
+
+	var b strings.Builder
+	b.WriteString(titleStyle.Render("mless - Help"))
+	b.WriteString("\n\n")
+
+	sections := []struct {
+		title string
+		items []string
+	}{
+		{"Navigation", []string{
+			"j/k, up/down    Scroll line by line",
+			"f/b, pgdn/pgup  Page down/up",
+			"ctrl+d/u        Half page down/up",
+			"g/G             Go to top/bottom",
+			":N              Go to line N",
+			"ctrl+t          Go to time (HH:MM:SS)",
+		}},
+		{"Search & Filter", []string{
+			"/pattern        Search for pattern",
+			"n/N             Next/prev search result",
+			"?pattern        Filter lines (fzf-style)",
+			"esc             Clear search/filter",
+		}},
+		{"Log Levels", []string{
+			"t/d/i/w/e       Toggle trace/debug/info/warn/error",
+			"alt+f           Toggle fatal",
+			"T/D/I/W/E       Show level and above",
+			"0               Clear all level filters",
+		}},
+		{"Marks", []string{
+			"ma-mz           Set mark a-z at current line",
+			"'a-'z           Jump to mark a-z",
+			"]['             Next/prev mark",
+			"M               Clear all marks",
+		}},
+		{"Slicing", []string{
+			"S               Slice range (e.g., 'a-'b, 100-500, .-$)",
+			"ctrl+s          Slice from current to end",
+			"R               Revert slice / resync cache",
+		}},
+		{"Other", []string{
+			"F               Toggle follow mode",
+			"l               Show line numbers",
+			"h               Show this help",
+			"q               Quit",
+		}},
+	}
+
+	for _, section := range sections {
+		b.WriteString(titleStyle.Render(section.title))
+		b.WriteString("\n")
+		for _, item := range section.items {
+			// Split on first multiple spaces to separate key from description
+			parts := strings.SplitN(item, "  ", 2)
+			if len(parts) == 2 {
+				b.WriteString("  ")
+				b.WriteString(keyStyle.Render(fmt.Sprintf("%-16s", strings.TrimSpace(parts[0]))))
+				b.WriteString(helpStyle.Render(strings.TrimSpace(parts[1])))
+			} else {
+				b.WriteString("  ")
+				b.WriteString(helpStyle.Render(item))
+			}
+			b.WriteString("\n")
+		}
+		b.WriteString("\n")
+	}
+
+	b.WriteString(helpStyle.Render("Press any key to close help"))
+
+	return b.String()
 }
 
 // Close cleans up resources
