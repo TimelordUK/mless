@@ -1,5 +1,7 @@
 package source
 
+import "bytes"
+
 // LevelDetectFunc detects log level from content
 type LevelDetectFunc func(content []byte) LogLevel
 
@@ -10,6 +12,9 @@ type FilteredProvider struct {
 
 	// Level filter: if set, only show lines with these levels
 	levelFilter map[LogLevel]bool
+
+	// Text filter: substring match
+	textFilter []byte
 
 	// Cached filtered indices (original line numbers that pass filter)
 	filteredIndices []int
@@ -67,9 +72,35 @@ func (f *FilteredProvider) ClearFilter() {
 	f.dirty = true
 }
 
+// SetTextFilter sets the text substring filter
+func (f *FilteredProvider) SetTextFilter(text string) {
+	if text == "" {
+		f.textFilter = nil
+	} else {
+		f.textFilter = []byte(text)
+	}
+	f.dirty = true
+}
+
+// ClearTextFilter removes the text filter
+func (f *FilteredProvider) ClearTextFilter() {
+	f.textFilter = nil
+	f.dirty = true
+}
+
+// GetTextFilter returns the current text filter
+func (f *FilteredProvider) GetTextFilter() string {
+	return string(f.textFilter)
+}
+
+// HasTextFilter returns true if a text filter is active
+func (f *FilteredProvider) HasTextFilter() bool {
+	return len(f.textFilter) > 0
+}
+
 // IsFiltered returns true if any filter is active
 func (f *FilteredProvider) IsFiltered() bool {
-	return len(f.levelFilter) > 0
+	return len(f.levelFilter) > 0 || len(f.textFilter) > 0
 }
 
 // GetActiveFilters returns the active level filters
@@ -86,7 +117,7 @@ func (f *FilteredProvider) rebuildIndex() {
 	f.filteredIndices = nil
 
 	// If no filter, don't build index (use source directly)
-	if len(f.levelFilter) == 0 {
+	if len(f.levelFilter) == 0 && len(f.textFilter) == 0 {
 		f.dirty = false
 		return
 	}
@@ -99,16 +130,28 @@ func (f *FilteredProvider) rebuildIndex() {
 			continue
 		}
 
-		// Detect level if not already set
-		level := line.Level
-		if level == LevelUnknown && f.detector != nil {
-			level = f.detector(line.Content)
+		// Check text filter first (most common case)
+		if len(f.textFilter) > 0 {
+			if !bytes.Contains(line.Content, f.textFilter) {
+				continue
+			}
 		}
 
-		// Check if level passes filter
-		if f.levelFilter[level] {
-			f.filteredIndices = append(f.filteredIndices, i)
+		// Check level filter if active
+		if len(f.levelFilter) > 0 {
+			// Detect level if not already set
+			level := line.Level
+			if level == LevelUnknown && f.detector != nil {
+				level = f.detector(line.Content)
+			}
+
+			// Check if level passes filter
+			if !f.levelFilter[level] {
+				continue
+			}
 		}
+
+		f.filteredIndices = append(f.filteredIndices, i)
 	}
 
 	f.dirty = false
@@ -118,7 +161,7 @@ func (f *FilteredProvider) rebuildIndex() {
 func (f *FilteredProvider) LineCount() int {
 	f.rebuildIndex()
 
-	if len(f.levelFilter) == 0 {
+	if len(f.levelFilter) == 0 && len(f.textFilter) == 0 {
 		return f.source.LineCount()
 	}
 	return len(f.filteredIndices)
@@ -128,7 +171,7 @@ func (f *FilteredProvider) LineCount() int {
 func (f *FilteredProvider) GetLine(index int) (*Line, error) {
 	f.rebuildIndex()
 
-	if len(f.levelFilter) == 0 {
+	if len(f.levelFilter) == 0 && len(f.textFilter) == 0 {
 		return f.source.GetLine(index)
 	}
 
@@ -151,7 +194,7 @@ func (f *FilteredProvider) GetLine(index int) (*Line, error) {
 func (f *FilteredProvider) GetLines(start, count int) ([]*Line, error) {
 	f.rebuildIndex()
 
-	if len(f.levelFilter) == 0 {
+	if len(f.levelFilter) == 0 && len(f.textFilter) == 0 {
 		return f.source.GetLines(start, count)
 	}
 

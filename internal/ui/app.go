@@ -21,6 +21,7 @@ const (
 	ModeNormal Mode = iota
 	ModeSearch
 	ModeGoto
+	ModeFilter
 )
 
 // Model is the main application model
@@ -39,6 +40,9 @@ type Model struct {
 	searchTerm    string
 	searchResults []int // line numbers with matches
 	searchIndex   int   // current result index
+
+	// Filter state (fzf-style)
+	filterTerm string
 
 	// Status
 	filename string
@@ -114,11 +118,27 @@ func (m *Model) handleKey(msg tea.KeyMsg) (tea.Model, tea.Cmd) {
 	if m.mode == ModeGoto {
 		return m.handleGotoKey(msg)
 	}
+	if m.mode == ModeFilter {
+		return m.handleFilterKey(msg)
+	}
 
 	// Normal mode
 	switch msg.String() {
 	case "q", "ctrl+c":
 		return m, tea.Quit
+
+	case "esc":
+		// Clear all active modes/filters
+		if m.filteredSource.HasTextFilter() {
+			m.filteredSource.ClearTextFilter()
+			m.filterTerm = ""
+		}
+		if m.searchTerm != "" {
+			m.searchTerm = ""
+			m.searchResults = nil
+			m.searchIndex = 0
+			m.viewport.ClearHighlight()
+		}
 
 	case "j", "down":
 		m.viewport.ScrollDown(1)
@@ -150,6 +170,13 @@ func (m *Model) handleKey(msg tea.KeyMsg) (tea.Model, tea.Cmd) {
 		m.mode = ModeGoto
 		m.searchInput.SetValue("")
 		m.searchInput.Placeholder = "Line number..."
+		m.searchInput.Focus()
+		return m, textinput.Blink
+
+	case "?":
+		m.mode = ModeFilter
+		m.searchInput.SetValue("")
+		m.searchInput.Placeholder = "Filter..."
 		m.searchInput.Focus()
 		return m, textinput.Blink
 
@@ -241,6 +268,38 @@ func (m *Model) handleGotoKey(msg tea.KeyMsg) (tea.Model, tea.Cmd) {
 	return m, cmd
 }
 
+func (m *Model) handleFilterKey(msg tea.KeyMsg) (tea.Model, tea.Cmd) {
+	switch msg.String() {
+	case "enter":
+		// Keep filter and return to normal mode
+		m.filterTerm = m.searchInput.Value()
+		m.mode = ModeNormal
+		m.searchInput.Blur()
+		m.searchInput.Placeholder = "Search..."
+		return m, nil
+
+	case "esc":
+		// Cancel filter and clear
+		m.filteredSource.ClearTextFilter()
+		m.filterTerm = ""
+		m.viewport.GotoTop()
+		m.mode = ModeNormal
+		m.searchInput.Blur()
+		m.searchInput.Placeholder = "Search..."
+		return m, nil
+	}
+
+	// Update input and apply filter live
+	var cmd tea.Cmd
+	m.searchInput, cmd = m.searchInput.Update(msg)
+
+	// Apply filter immediately (live filtering)
+	m.filteredSource.SetTextFilter(m.searchInput.Value())
+	m.viewport.GotoTop()
+
+	return m, cmd
+}
+
 func (m *Model) performSearch() {
 	if m.searchTerm == "" {
 		m.searchResults = nil
@@ -310,6 +369,8 @@ func (m *Model) View() string {
 		status = "/" + m.searchInput.View()
 	case ModeGoto:
 		status = ":" + m.searchInput.View()
+	case ModeFilter:
+		status = "?" + m.searchInput.View()
 	default:
 		// Show filtered count vs total if filter is active
 		var lineInfo string
@@ -334,8 +395,10 @@ func (m *Model) View() string {
 		// Show active filters
 		filterInfo := ""
 		if m.filteredSource.IsFiltered() {
+			var parts []string
+
+			// Level filters
 			filters := m.filteredSource.GetActiveFilters()
-			var levels []string
 			levelNames := map[source.LogLevel]string{
 				source.LevelTrace: "TRC",
 				source.LevelDebug: "DBG",
@@ -344,13 +407,27 @@ func (m *Model) View() string {
 				source.LevelError: "ERR",
 				source.LevelFatal: "FTL",
 			}
+			var levels []string
 			for level, active := range filters {
 				if active {
 					levels = append(levels, levelNames[level])
 				}
 			}
 			if len(levels) > 0 {
-				filterInfo = fmt.Sprintf(" [%s]", strings.Join(levels, ","))
+				parts = append(parts, strings.Join(levels, ","))
+			}
+
+			// Text filter
+			if m.filteredSource.HasTextFilter() {
+				text := m.filteredSource.GetTextFilter()
+				if len(text) > 15 {
+					text = text[:15] + "..."
+				}
+				parts = append(parts, "\""+text+"\"")
+			}
+
+			if len(parts) > 0 {
+				filterInfo = fmt.Sprintf(" [%s]", strings.Join(parts, " "))
 			}
 		}
 
@@ -363,7 +440,7 @@ func (m *Model) View() string {
 
 	// Help line
 	helpStyle := lipgloss.NewStyle().Foreground(lipgloss.Color("240"))
-	help := "j/k:scroll  f/b:page  /:search  t/d/i/w/e:filter  T/D/I/W/E:lvl+  0:clear  q:quit"
+	help := "j/k:scroll  /:search  ?:filter  t/d/i/w/e:level  T/D/I/W/E:lvl+  0:clear  q:quit"
 	builder.WriteString(helpStyle.Render(help))
 
 	return builder.String()
