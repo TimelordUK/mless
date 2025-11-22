@@ -26,10 +26,14 @@ type Viewport struct {
 	// Styling
 	lineNumberStyle lipgloss.Style
 	contentStyle    lipgloss.Style
+	highlightStyle  lipgloss.Style
 
 	// Options
 	showLineNumbers bool
 	wrapLines       bool
+
+	// Highlighted line (original index, -1 for none)
+	highlightedLine int
 }
 
 // NewViewport creates a new viewport
@@ -42,8 +46,20 @@ func NewViewport(width, height int) *Viewport {
 		wrapLines:       false,
 		lineNumberStyle: lipgloss.NewStyle().Foreground(lipgloss.Color("240")),
 		contentStyle:    lipgloss.NewStyle(),
+		highlightStyle:  lipgloss.NewStyle().Foreground(lipgloss.Color("226")).Bold(true),
 		renderer:        render.NewPlainRenderer(),
+		highlightedLine: -1,
 	}
+}
+
+// SetHighlightedLine sets which original line index to highlight (-1 for none)
+func (v *Viewport) SetHighlightedLine(originalIndex int) {
+	v.highlightedLine = originalIndex
+}
+
+// ClearHighlight removes any line highlight
+func (v *Viewport) ClearHighlight() {
+	v.highlightedLine = -1
 }
 
 // SetRenderer sets the line renderer
@@ -157,9 +173,22 @@ func (v *Viewport) Render() string {
 			lineNum = line.OriginalIndex + 1
 		}
 
+		// Check if this is the highlighted line
+		originalIdx := line.OriginalIndex
+		if originalIdx == 0 {
+			// If OriginalIndex not set, use position-based index
+			originalIdx = v.scrollOffset + i
+		}
+		isHighlighted := v.highlightedLine >= 0 && originalIdx == v.highlightedLine
+
 		if v.showLineNumbers {
 			numStr := fmt.Sprintf("%*d ", lineNumWidth, lineNum)
-			builder.WriteString(v.lineNumberStyle.Render(numStr))
+			if isHighlighted {
+				// Highlight line number with marker
+				builder.WriteString(v.highlightStyle.Render(numStr))
+			} else {
+				builder.WriteString(v.lineNumberStyle.Render(numStr))
+			}
 		}
 
 		// Use renderer for content

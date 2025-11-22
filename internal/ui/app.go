@@ -125,9 +125,9 @@ func (m *Model) handleKey(msg tea.KeyMsg) (tea.Model, tea.Cmd) {
 	case "k", "up":
 		m.viewport.ScrollUp(1)
 
-	case "ctrl+d":
+	case "ctrl+d", "ctrl+f":
 		m.viewport.PageDown()
-	case "ctrl+u":
+	case "ctrl+u", "ctrl+b":
 		m.viewport.PageUp()
 
 	case "f", "pgdown", " ":
@@ -263,6 +263,9 @@ func (m *Model) performSearch() {
 	if len(m.searchResults) > 0 {
 		m.searchIndex = 0
 		m.viewport.GotoLine(m.searchResults[0])
+		m.viewport.SetHighlightedLine(m.searchResults[0])
+	} else {
+		m.viewport.ClearHighlight()
 	}
 }
 
@@ -272,6 +275,7 @@ func (m *Model) nextSearchResult() {
 	}
 	m.searchIndex = (m.searchIndex + 1) % len(m.searchResults)
 	m.viewport.GotoLine(m.searchResults[m.searchIndex])
+	m.viewport.SetHighlightedLine(m.searchResults[m.searchIndex])
 }
 
 func (m *Model) prevSearchResult() {
@@ -283,6 +287,7 @@ func (m *Model) prevSearchResult() {
 		m.searchIndex = len(m.searchResults) - 1
 	}
 	m.viewport.GotoLine(m.searchResults[m.searchIndex])
+	m.viewport.SetHighlightedLine(m.searchResults[m.searchIndex])
 }
 
 // View implements tea.Model
