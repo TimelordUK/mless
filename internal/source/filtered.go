@@ -98,6 +98,11 @@ func (f *FilteredProvider) HasTextFilter() bool {
 	return len(f.textFilter) > 0
 }
 
+// MarkDirty marks the filter index as needing rebuild
+func (f *FilteredProvider) MarkDirty() {
+	f.dirty = true
+}
+
 // IsFiltered returns true if any filter is active
 func (f *FilteredProvider) IsFiltered() bool {
 	return len(f.levelFilter) > 0 || len(f.textFilter) > 0

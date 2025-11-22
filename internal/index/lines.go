@@ -126,3 +126,64 @@ func (idx *LineIndex) ByteOffset(lineNum int) int64 {
 	}
 	return idx.offsets[lineNum]
 }
+
+// AppendNewLines indexes new content from oldSize to current file size
+func (idx *LineIndex) AppendNewLines(oldSize int64) error {
+	size := idx.file.Size()
+	if size <= oldSize {
+		return nil
+	}
+
+	// Check if the old content ended with a newline
+	// If so, oldSize is the start of a new line
+	if oldSize > 0 {
+		lastByte := make([]byte, 1)
+		_, err := idx.file.ReadAt(lastByte, oldSize-1)
+		if err != nil {
+			return err
+		}
+		if lastByte[0] == '\n' {
+			// Previous content ended with newline, so oldSize is start of new line
+			idx.offsets = append(idx.offsets, oldSize)
+		}
+	} else if oldSize == 0 && len(idx.offsets) == 0 {
+		// Empty file getting first content
+		idx.offsets = append(idx.offsets, 0)
+	}
+
+	// Read in chunks from oldSize to end to find more newlines
+	const chunkSize = 64 * 1024
+	buf := make([]byte, chunkSize)
+
+	pos := oldSize
+	for pos < size {
+		readSize := chunkSize
+		if pos+int64(readSize) > size {
+			readSize = int(size - pos)
+		}
+
+		n, err := idx.file.ReadAt(buf[:readSize], pos)
+		if err != nil {
+			return err
+		}
+
+		// Find all newlines in this chunk
+		chunk := buf[:n]
+		offset := 0
+		for {
+			i := bytes.IndexByte(chunk[offset:], '\n')
+			if i == -1 {
+				break
+			}
+			lineStart := pos + int64(offset) + int64(i) + 1
+			if lineStart < size {
+				idx.offsets = append(idx.offsets, lineStart)
+			}
+			offset += i + 1
+		}
+
+		pos += int64(n)
+	}
+
+	return nil
+}

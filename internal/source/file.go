@@ -81,3 +81,26 @@ func (s *FileSource) Close() error {
 func (s *FileSource) Path() string {
 	return s.path
 }
+
+// Refresh checks if file has grown and indexes new lines
+func (s *FileSource) Refresh() (int, error) {
+	oldSize := s.file.Size()
+	oldLineCount := s.lineIndex.LineCount()
+
+	changed, err := s.file.Refresh()
+	if err != nil {
+		return 0, err
+	}
+
+	if !changed {
+		return 0, nil
+	}
+
+	// Index new lines
+	if err := s.lineIndex.AppendNewLines(oldSize); err != nil {
+		return 0, err
+	}
+
+	newLines := s.lineIndex.LineCount() - oldLineCount
+	return newLines, nil
+}

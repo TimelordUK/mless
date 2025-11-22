@@ -167,17 +167,15 @@ func (v *Viewport) Render() string {
 			builder.WriteString("\n")
 		}
 
-		// Use original index if available (for filtered views), otherwise use position
-		lineNum := v.scrollOffset + i + 1 // 1-based for display
-		if line.OriginalIndex > 0 {
-			lineNum = line.OriginalIndex + 1
-		}
+		// Line number: use OriginalIndex (always set by source/filtered provider)
+		lineNum := line.OriginalIndex + 1 // 1-based for display
 
 		// Check if this is the highlighted line
-		originalIdx := line.OriginalIndex
-		if originalIdx == 0 {
-			// If OriginalIndex not set, use position-based index
-			originalIdx = v.scrollOffset + i
+		// Use OriginalIndex if set (> 0 or explicitly 0 for first line)
+		// For filtered views, OriginalIndex is always set
+		originalIdx := v.scrollOffset + i
+		if line.OriginalIndex > 0 || (i == 0 && line.OriginalIndex == 0) {
+			originalIdx = line.OriginalIndex
 		}
 		isHighlighted := v.highlightedLine >= 0 && originalIdx == v.highlightedLine
 

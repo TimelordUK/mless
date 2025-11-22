@@ -54,6 +54,36 @@ func (m *MappedFile) Close() error {
 	return m.reader.Close()
 }
 
+// Refresh re-opens the file if it has grown, returns true if size changed
+func (m *MappedFile) Refresh() (bool, error) {
+	info, err := os.Stat(m.path)
+	if err != nil {
+		return false, err
+	}
+
+	newSize := info.Size()
+	if newSize <= m.size {
+		return false, nil
+	}
+
+	// File has grown, re-open it
+	m.reader.Close()
+
+	reader, err := mmap.Open(m.path)
+	if err != nil {
+		return false, err
+	}
+
+	m.reader = reader
+	m.size = newSize
+	return true, nil
+}
+
+// PreviousSize returns the size before last refresh (for incremental indexing)
+func (m *MappedFile) PreviousSize() int64 {
+	return m.size
+}
+
 // ReadRange reads bytes from start to end
 func (m *MappedFile) ReadRange(start, end int64) ([]byte, error) {
 	if end > m.size {

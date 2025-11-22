@@ -154,6 +154,8 @@ def main():
     parser.add_argument('-f', '--format', choices=['bracket', 'standard'],
                         default='standard', help='Log format style')
     parser.add_argument('-s', '--seed', type=int, help='Random seed for reproducibility')
+    parser.add_argument('--stream', action='store_true', help='Stream mode: append lines with delays')
+    parser.add_argument('--delay', type=float, default=0.5, help='Delay between lines in stream mode (seconds)')
 
     args = parser.parse_args()
 
@@ -163,16 +165,28 @@ def main():
     # Start time, advance 10-5000ms per line
     timestamp = datetime.now() - timedelta(hours=random.randint(1, 24))
 
-    with open(args.output, 'w') as f:
-        for _ in range(args.lines):
+    mode = 'a' if args.stream else 'w'
+
+    with open(args.output, mode) as f:
+        for i in range(args.lines):
             line = generate_log_line(timestamp, args.format)
             f.write(line + '\n')
+
+            if args.stream:
+                f.flush()
+                import time
+                time.sleep(args.delay)
+                if (i + 1) % 10 == 0:
+                    print(f'Streamed {i + 1}/{args.lines} lines', end='\r')
 
             # Advance time (variable intervals for realism)
             ms_delta = random.randint(10, 5000)
             timestamp += timedelta(milliseconds=ms_delta)
 
-    print(f'Generated {args.lines} lines to {args.output}')
+    if args.stream:
+        print(f'\nStreamed {args.lines} lines to {args.output}')
+    else:
+        print(f'Generated {args.lines} lines to {args.output}')
 
 if __name__ == '__main__':
     main()

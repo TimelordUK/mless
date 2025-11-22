@@ -7,6 +7,7 @@ import (
 	"os"
 	"path/filepath"
 	"strings"
+	"time"
 
 	"github.com/charmbracelet/bubbles/textinput"
 	tea "github.com/charmbracelet/bubbletea"
@@ -17,6 +18,9 @@ import (
 	"github.com/user/mless/internal/view"
 	"github.com/user/mless/pkg/logformat"
 )
+
+// tickMsg is sent periodically in follow mode
+type tickMsg time.Time
 
 // ModelOptions contains options for creating a new model
 type ModelOptions struct {
@@ -62,6 +66,9 @@ type Model struct {
 	sourcePath string // Original file path
 	cachePath  string // Cached file path (empty if not cached)
 	isCached   bool
+
+	// Follow mode
+	following bool
 }
 
 // NewModel creates a new application model
@@ -174,9 +181,23 @@ func (m *Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		// Reserve 2 lines for status bar
 		m.viewport.SetSize(msg.Width, msg.Height-2)
 		return m, nil
+
+	case tickMsg:
+		if m.following {
+			m.checkForNewLines()
+			return m, m.tickCmd()
+		}
+		return m, nil
 	}
 
 	return m, nil
+}
+
+// tickCmd returns a command that sends a tick after a delay
+func (m *Model) tickCmd() tea.Cmd {
+	return tea.Tick(500*time.Millisecond, func(t time.Time) tea.Msg {
+		return tickMsg(t)
+	})
 }
 
 func (m *Model) handleKey(msg tea.KeyMsg) (tea.Model, tea.Cmd) {
@@ -198,6 +219,9 @@ func (m *Model) handleKey(msg tea.KeyMsg) (tea.Model, tea.Cmd) {
 
 	case "esc":
 		// Clear all active modes/filters
+		if m.following {
+			m.following = false
+		}
 		if m.filteredSource.HasTextFilter() {
 			m.filteredSource.ClearTextFilter()
 			m.filterTerm = ""
@@ -227,6 +251,9 @@ func (m *Model) handleKey(msg tea.KeyMsg) (tea.Model, tea.Cmd) {
 	case "g", "home":
 		m.viewport.GotoTop()
 	case "G", "end":
+		// Refresh file to pick up any new content, then go to bottom
+		m.source.Refresh()
+		m.filteredSource.MarkDirty()
 		m.viewport.GotoBottom()
 
 	case "/":
@@ -269,8 +296,15 @@ func (m *Model) handleKey(msg tea.KeyMsg) (tea.Model, tea.Cmd) {
 		m.filteredSource.ToggleLevel(source.LevelWarn)
 	case "e": // Error
 		m.filteredSource.ToggleLevel(source.LevelError)
-	case "F": // Fatal (capital to avoid conflict with page-down f)
+	case "alt+f": // Fatal (use alt+f since F is for follow mode)
 		m.filteredSource.ToggleLevel(source.LevelFatal)
+
+	case "F": // Follow mode
+		m.following = !m.following
+		if m.following {
+			m.viewport.GotoBottom()
+			return m, m.tickCmd()
+		}
 
 	// Shift+letter: show this level and above
 	case "T": // Trace and above (all)
@@ -423,6 +457,23 @@ func (m *Model) prevSearchResult() {
 	m.viewport.SetHighlightedLine(m.searchResults[m.searchIndex])
 }
 
+// checkForNewLines checks if file has grown and updates view
+func (m *Model) checkForNewLines() {
+	newLines, err := m.source.Refresh()
+	if err != nil {
+		m.err = err
+		return
+	}
+
+	if newLines > 0 {
+		// Mark filter as dirty to rebuild index with new lines
+		m.filteredSource.MarkDirty()
+
+		// Auto-scroll to bottom in follow mode
+		m.viewport.GotoBottom()
+	}
+}
+
 // resyncFromSource re-copies the source file to cache and reloads
 func (m *Model) resyncFromSource() {
 	if !m.isCached || m.sourcePath == "" || m.cachePath == "" {
@@ -550,8 +601,14 @@ func (m *Model) View() string {
 			cachedInfo = " [cached]"
 		}
 
-		status = fmt.Sprintf(" %s%s  %s  %s%s%s",
-			m.filename, cachedInfo, lineInfo, percent, searchInfo, filterInfo)
+		// Follow indicator
+		followInfo := ""
+		if m.following {
+			followInfo = " [following]"
+		}
+
+		status = fmt.Sprintf(" %s%s%s  %s  %s%s%s",
+			m.filename, cachedInfo, followInfo, lineInfo, percent, searchInfo, filterInfo)
 	}
 
 	builder.WriteString(statusStyle.Render(status))
