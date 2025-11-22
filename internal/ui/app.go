@@ -14,6 +14,7 @@ import (
 	"github.com/charmbracelet/lipgloss"
 	"github.com/user/mless/internal/config"
 	"github.com/user/mless/internal/render"
+	"github.com/user/mless/internal/slice"
 	"github.com/user/mless/internal/source"
 	"github.com/user/mless/internal/view"
 	"github.com/user/mless/pkg/logformat"
@@ -37,6 +38,7 @@ const (
 	ModeGoto
 	ModeGotoTime
 	ModeFilter
+	ModeSlice
 )
 
 // Model is the main application model
@@ -70,6 +72,10 @@ type Model struct {
 
 	// Follow mode
 	following bool
+
+	// Slice state
+	slicer     *slice.Slicer
+	sliceStack []*slice.Info // Stack for nested slices
 }
 
 // NewModel creates a new application model
@@ -144,6 +150,7 @@ func NewModelWithOptions(opts ModelOptions) (*Model, error) {
 		sourcePath:     opts.Filepath,
 		cachePath:      cachePath,
 		isCached:       isCached,
+		slicer:         slice.NewSlicer(),
 	}, nil
 }
 
@@ -214,6 +221,9 @@ func (m *Model) handleKey(msg tea.KeyMsg) (tea.Model, tea.Cmd) {
 	}
 	if m.mode == ModeGotoTime {
 		return m.handleGotoTimeKey(msg)
+	}
+	if m.mode == ModeSlice {
+		return m.handleSliceKey(msg)
 	}
 
 	// Normal mode
@@ -345,10 +355,22 @@ func (m *Model) handleKey(msg tea.KeyMsg) (tea.Model, tea.Cmd) {
 		m.filteredSource.ClearFilter()
 		m.viewport.GotoTop()
 
-	case "R": // Resync from source (for cached files)
-		if m.isCached {
+	case "R": // Revert slice or resync from source
+		if len(m.sliceStack) > 0 {
+			m.revertSlice()
+		} else if m.isCached {
 			m.resyncFromSource()
 		}
+
+	case "ctrl+s": // Quick slice from current line to end
+		m.sliceFromCurrent()
+
+	case "S": // Enter slice mode for range input
+		m.mode = ModeSlice
+		m.searchInput.SetValue("")
+		m.searchInput.Placeholder = "Range (e.g., 100-500 or -500 or 100-)..."
+		m.searchInput.Focus()
+		return m, textinput.Blink
 	}
 
 	return m, nil
@@ -605,6 +627,227 @@ func (m *Model) resyncFromSource() {
 	m.viewport.ClearHighlight()
 }
 
+func (m *Model) handleSliceKey(msg tea.KeyMsg) (tea.Model, tea.Cmd) {
+	switch msg.String() {
+	case "enter":
+		rangeStr := m.searchInput.Value()
+		m.parseAndSlice(rangeStr)
+		m.mode = ModeNormal
+		m.searchInput.Blur()
+		m.searchInput.Placeholder = "Search..."
+		return m, nil
+
+	case "esc":
+		m.mode = ModeNormal
+		m.searchInput.Blur()
+		m.searchInput.Placeholder = "Search..."
+		return m, nil
+	}
+
+	var cmd tea.Cmd
+	m.searchInput, cmd = m.searchInput.Update(msg)
+	return m, cmd
+}
+
+// parseAndSlice parses a range string and performs the slice
+func (m *Model) parseAndSlice(rangeStr string) {
+	// Get current position (original line number)
+	currentFiltered := m.viewport.CurrentLine()
+	currentLine := m.filteredSource.OriginalLineNumber(currentFiltered)
+	if currentLine < 0 {
+		currentLine = 0
+	}
+	totalLines := m.source.LineCount()
+
+	// Parse range - split on first dash that's not part of an offset
+	// Format: start-end where start/end can be:
+	//   . = current position
+	//   $ = end of file
+	//   $-N = end minus N
+	//   N = absolute line number
+
+	var start, end int
+	var startStr, endStr string
+
+	// Find the separator dash (not one that's part of $-N)
+	dashIdx := -1
+	for i := 0; i < len(rangeStr); i++ {
+		if rangeStr[i] == '-' {
+			// Check if this dash is part of $-N
+			if i > 0 && rangeStr[i-1] == '$' {
+				continue
+			}
+			dashIdx = i
+			break
+		}
+	}
+
+	if dashIdx >= 0 {
+		startStr = rangeStr[:dashIdx]
+		endStr = rangeStr[dashIdx+1:]
+	} else {
+		// Single value - from that point to end
+		startStr = rangeStr
+		endStr = "$"
+	}
+
+	start = m.parseLineRef(startStr, currentLine, totalLines)
+	end = m.parseLineRef(endStr, currentLine, totalLines)
+
+	if start < 0 {
+		start = 0
+	}
+	if end > totalLines {
+		end = totalLines
+	}
+
+	m.performSlice(start, end)
+}
+
+// parseLineRef parses a line reference like ".", "$", "$-100", or "500"
+func (m *Model) parseLineRef(ref string, current, total int) int {
+	ref = strings.TrimSpace(ref)
+
+	if ref == "" {
+		return 0
+	}
+
+	if ref == "." {
+		return current
+	}
+
+	if ref == "$" {
+		return total
+	}
+
+	// Handle $-N or $+N
+	if strings.HasPrefix(ref, "$") {
+		offset := 0
+		fmt.Sscanf(ref[1:], "%d", &offset)
+		return total + offset // offset is negative for $-100
+	}
+
+	// Handle .-N or .+N
+	if strings.HasPrefix(ref, ".") {
+		offset := 0
+		fmt.Sscanf(ref[1:], "%d", &offset)
+		return current + offset
+	}
+
+	// Absolute line number (1-based input, convert to 0-based)
+	var lineNum int
+	fmt.Sscanf(ref, "%d", &lineNum)
+	return lineNum - 1
+}
+
+// sliceFromCurrent slices from current viewport line to end
+func (m *Model) sliceFromCurrent() {
+	// Get original line number for current position
+	currentFiltered := m.viewport.CurrentLine()
+	originalLine := m.filteredSource.OriginalLineNumber(currentFiltered)
+	if originalLine < 0 {
+		originalLine = 0
+	}
+
+	m.performSlice(originalLine, m.source.LineCount())
+}
+
+// performSlice executes a slice operation and switches to the sliced file
+func (m *Model) performSlice(start, end int) {
+	info, cachePath, err := m.slicer.SliceRange(m.source, start, end)
+	if err != nil {
+		m.err = err
+		return
+	}
+
+	// Track parent slice info
+	if len(m.sliceStack) > 0 {
+		info.Parent = m.sliceStack[len(m.sliceStack)-1]
+	}
+	m.sliceStack = append(m.sliceStack, info)
+
+	// Close current source
+	m.source.Close()
+
+	// Open sliced file
+	src, err := source.NewFileSource(cachePath)
+	if err != nil {
+		m.err = err
+		// Pop the failed slice
+		m.sliceStack = m.sliceStack[:len(m.sliceStack)-1]
+		return
+	}
+
+	// Update source
+	m.source = src
+	m.isCached = true
+
+	// Recreate filtered provider
+	detector := logformat.NewLevelDetector(&m.config.LogLevels)
+	m.filteredSource = source.NewFilteredProvider(src, detector.Detect)
+	m.viewport.SetProvider(m.filteredSource)
+
+	// Reset position and clear filters
+	m.filteredSource.ClearFilter()
+	m.viewport.GotoTop()
+
+	// Clear search results
+	m.searchResults = nil
+	m.searchTerm = ""
+	m.viewport.ClearHighlight()
+}
+
+// revertSlice returns to the parent file/slice
+func (m *Model) revertSlice() {
+	if len(m.sliceStack) == 0 {
+		return
+	}
+
+	// Get current slice info
+	current := m.sliceStack[len(m.sliceStack)-1]
+	m.sliceStack = m.sliceStack[:len(m.sliceStack)-1]
+
+	// Cleanup current slice file
+	m.slicer.Cleanup(current)
+
+	// Close current source
+	m.source.Close()
+
+	// Determine which file to open
+	var pathToOpen string
+	if len(m.sliceStack) > 0 {
+		// Open parent slice
+		pathToOpen = m.sliceStack[len(m.sliceStack)-1].CachePath
+	} else {
+		// Open original file
+		pathToOpen = m.sourcePath
+		m.isCached = false
+	}
+
+	// Open the file
+	src, err := source.NewFileSource(pathToOpen)
+	if err != nil {
+		m.err = err
+		return
+	}
+
+	// Update source
+	m.source = src
+
+	// Recreate filtered provider
+	detector := logformat.NewLevelDetector(&m.config.LogLevels)
+	m.filteredSource = source.NewFilteredProvider(src, detector.Detect)
+	m.viewport.SetProvider(m.filteredSource)
+
+	// Reset position
+	m.viewport.GotoTop()
+
+	// Clear search results
+	m.searchResults = nil
+	m.searchTerm = ""
+	m.viewport.ClearHighlight()
+}
+
 // View implements tea.Model
 func (m *Model) View() string {
 	var builder strings.Builder
@@ -629,6 +872,8 @@ func (m *Model) View() string {
 		status = "t:" + m.searchInput.View()
 	case ModeFilter:
 		status = "?" + m.searchInput.View()
+	case ModeSlice:
+		status = "S:" + m.searchInput.View()
 	default:
 		// Show filtered count vs total if filter is active
 		var lineInfo string
@@ -689,10 +934,13 @@ func (m *Model) View() string {
 			}
 		}
 
-		// Cached indicator
-		cachedInfo := ""
-		if m.isCached {
-			cachedInfo = " [cached]"
+		// Slice/cached indicator
+		sliceInfo := ""
+		if len(m.sliceStack) > 0 {
+			current := m.sliceStack[len(m.sliceStack)-1]
+			sliceInfo = fmt.Sprintf(" [slice:%d-%d]", current.StartLine+1, current.EndLine)
+		} else if m.isCached {
+			sliceInfo = " [cached]"
 		}
 
 		// Follow indicator
@@ -709,7 +957,7 @@ func (m *Model) View() string {
 		}
 
 		status = fmt.Sprintf(" %s%s%s  %s%s  %s%s%s",
-			m.filename, cachedInfo, followInfo, lineInfo, timeInfo, percent, searchInfo, filterInfo)
+			m.filename, sliceInfo, followInfo, lineInfo, timeInfo, percent, searchInfo, filterInfo)
 	}
 
 	builder.WriteString(statusStyle.Render(status))
