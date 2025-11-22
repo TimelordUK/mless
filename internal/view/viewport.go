@@ -151,7 +151,11 @@ func (v *Viewport) Render() string {
 			builder.WriteString("\n")
 		}
 
+		// Use original index if available (for filtered views), otherwise use position
 		lineNum := v.scrollOffset + i + 1 // 1-based for display
+		if line.OriginalIndex > 0 {
+			lineNum = line.OriginalIndex + 1
+		}
 
 		if v.showLineNumbers {
 			numStr := fmt.Sprintf("%*d ", lineNumWidth, lineNum)

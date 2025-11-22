@@ -6,7 +6,8 @@ import random
 from datetime import datetime, timedelta
 
 LEVELS = ['TRC', 'DBG', 'INF', 'WRN', 'ERR', 'FTL']
-LEVEL_WEIGHTS = [5, 15, 50, 15, 10, 5]  # INFO most common
+# Realistic production distribution: mostly INFO with DEBUG, rare errors
+LEVEL_WEIGHTS = [2, 25, 60, 8, 4, 1]  # TRC 2%, DBG 25%, INF 60%, WRN 8%, ERR 4%, FTL 1%
 
 COMPONENTS = [
     'HttpServer', 'Database', 'Cache', 'Auth', 'Scheduler',
@@ -27,16 +28,26 @@ MESSAGES = {
         'Query execution plan generated',
     ],
     'INF': [
+        'GET /api/v1/users/{UserId} completed in {Duration}ms',
+        'POST /api/v1/orders completed in {Duration}ms',
+        'GET /api/v1/products?page={Index} completed in {Duration}ms',
+        'PUT /api/v1/users/{UserId}/profile completed in {Duration}ms',
+        'DELETE /api/v1/sessions/{RequestId} completed in {Duration}ms',
         'Request {RequestId} completed in {Duration}ms',
         'User {UserId} authenticated successfully',
         'Scheduled job {JobName} started',
+        'Scheduled job {JobName} completed in {Duration}ms',
         'File {FileName} processed, {Records} records',
         'Service started on port {Port}',
         'Health check passed',
         'Configuration reloaded',
         'Connected to database {Database}',
         'Message published to {Queue}',
+        'Message consumed from {Queue} in {Duration}ms',
         'Batch processing completed: {Processed}/{Total} items',
+        'Cache hit for key {Key}',
+        'Database query executed in {Duration}ms',
+        'Outbound HTTP call to {Service} completed in {Duration}ms',
     ],
     'WRN': [
         'Slow query detected: {Duration}ms for {Query}',

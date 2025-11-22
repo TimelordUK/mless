@@ -11,6 +11,7 @@ import (
 	"github.com/user/mless/internal/render"
 	"github.com/user/mless/internal/source"
 	"github.com/user/mless/internal/view"
+	"github.com/user/mless/pkg/logformat"
 )
 
 // Mode represents the current UI mode
@@ -24,10 +25,11 @@ const (
 
 // Model is the main application model
 type Model struct {
-	viewport    *view.Viewport
-	source      *source.FileSource
-	searchInput textinput.Model
-	config      *config.Config
+	viewport       *view.Viewport
+	source         *source.FileSource
+	filteredSource *source.FilteredProvider
+	searchInput    textinput.Model
+	config         *config.Config
 
 	mode   Mode
 	width  int
@@ -55,8 +57,12 @@ func NewModel(filepath string) (*Model, error) {
 		return nil, err
 	}
 
+	// Set up level detector and filtered provider
+	detector := logformat.NewLevelDetector(&cfg.LogLevels)
+	filtered := source.NewFilteredProvider(src, detector.Detect)
+
 	viewport := view.NewViewport(80, 24)
-	viewport.SetProvider(src)
+	viewport.SetProvider(filtered)
 	viewport.SetShowLineNumbers(cfg.Display.ShowLineNumbers)
 
 	// Set up log level renderer
@@ -68,12 +74,13 @@ func NewModel(filepath string) (*Model, error) {
 	ti.CharLimit = 256
 
 	return &Model{
-		viewport:    viewport,
-		source:      src,
-		searchInput: ti,
-		config:      cfg,
-		mode:        ModeNormal,
-		filename:    filepath,
+		viewport:       viewport,
+		source:         src,
+		filteredSource: filtered,
+		searchInput:    ti,
+		config:         cfg,
+		mode:           ModeNormal,
+		filename:       filepath,
 	}, nil
 }
 
@@ -118,9 +125,9 @@ func (m *Model) handleKey(msg tea.KeyMsg) (tea.Model, tea.Cmd) {
 	case "k", "up":
 		m.viewport.ScrollUp(1)
 
-	case "d", "ctrl+d":
+	case "ctrl+d":
 		m.viewport.PageDown()
-	case "u", "ctrl+u":
+	case "ctrl+u":
 		m.viewport.PageUp()
 
 	case "f", "pgdown", " ":
@@ -154,6 +161,36 @@ func (m *Model) handleKey(msg tea.KeyMsg) (tea.Model, tea.Cmd) {
 	case "l":
 		// Toggle line numbers
 		m.viewport.SetShowLineNumbers(true)
+
+	// Level filtering: letters toggle levels
+	case "t": // Trace
+		m.filteredSource.ToggleLevel(source.LevelTrace)
+	case "d": // Debug
+		m.filteredSource.ToggleLevel(source.LevelDebug)
+	case "i": // Info
+		m.filteredSource.ToggleLevel(source.LevelInfo)
+	case "w": // Warn
+		m.filteredSource.ToggleLevel(source.LevelWarn)
+	case "e": // Error
+		m.filteredSource.ToggleLevel(source.LevelError)
+	case "F": // Fatal (capital to avoid conflict with page-down f)
+		m.filteredSource.ToggleLevel(source.LevelFatal)
+
+	// Shift+letter: show this level and above
+	case "T": // Trace and above (all)
+		m.filteredSource.SetLevelAndAbove(source.LevelTrace)
+	case "D": // Debug and above
+		m.filteredSource.SetLevelAndAbove(source.LevelDebug)
+	case "I": // Info and above
+		m.filteredSource.SetLevelAndAbove(source.LevelInfo)
+	case "W": // Warn and above
+		m.filteredSource.SetLevelAndAbove(source.LevelWarn)
+	case "E": // Error and above
+		m.filteredSource.SetLevelAndAbove(source.LevelError)
+	// Note: F is already used for fatal toggle, use ctrl+f for fatal-only if needed
+
+	case "0": // Clear all filters
+		m.filteredSource.ClearFilter()
 	}
 
 	return m, nil
@@ -269,9 +306,18 @@ func (m *Model) View() string {
 	case ModeGoto:
 		status = ":" + m.searchInput.View()
 	default:
-		lineInfo := fmt.Sprintf("L%d/%d",
-			m.viewport.CurrentLine()+1,
-			m.source.LineCount())
+		// Show filtered count vs total if filter is active
+		var lineInfo string
+		if m.filteredSource.IsFiltered() {
+			lineInfo = fmt.Sprintf("L%d/%d (of %d)",
+				m.viewport.CurrentLine()+1,
+				m.filteredSource.LineCount(),
+				m.source.LineCount())
+		} else {
+			lineInfo = fmt.Sprintf("L%d/%d",
+				m.viewport.CurrentLine()+1,
+				m.source.LineCount())
+		}
 
 		percent := fmt.Sprintf("%.0f%%", m.viewport.PercentScrolled())
 
@@ -280,8 +326,31 @@ func (m *Model) View() string {
 			searchInfo = fmt.Sprintf(" [%d matches]", len(m.searchResults))
 		}
 
-		status = fmt.Sprintf(" %s  %s  %s%s",
-			m.filename, lineInfo, percent, searchInfo)
+		// Show active filters
+		filterInfo := ""
+		if m.filteredSource.IsFiltered() {
+			filters := m.filteredSource.GetActiveFilters()
+			var levels []string
+			levelNames := map[source.LogLevel]string{
+				source.LevelTrace: "TRC",
+				source.LevelDebug: "DBG",
+				source.LevelInfo:  "INF",
+				source.LevelWarn:  "WRN",
+				source.LevelError: "ERR",
+				source.LevelFatal: "FTL",
+			}
+			for level, active := range filters {
+				if active {
+					levels = append(levels, levelNames[level])
+				}
+			}
+			if len(levels) > 0 {
+				filterInfo = fmt.Sprintf(" [%s]", strings.Join(levels, ","))
+			}
+		}
+
+		status = fmt.Sprintf(" %s  %s  %s%s%s",
+			m.filename, lineInfo, percent, searchInfo, filterInfo)
 	}
 
 	builder.WriteString(statusStyle.Render(status))
@@ -289,7 +358,7 @@ func (m *Model) View() string {
 
 	// Help line
 	helpStyle := lipgloss.NewStyle().Foreground(lipgloss.Color("240"))
-	help := "j/k:scroll  f/b:page  g/G:top/bottom  /:search  n/N:next/prev  q:quit"
+	help := "j/k:scroll  f/b:page  /:search  t/d/i/w/e:filter  T/D/I/W/E:lvl+  0:clear  q:quit"
 	builder.WriteString(helpStyle.Render(help))
 
 	return builder.String()
