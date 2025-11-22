@@ -1,0 +1,51 @@
+# mless configuration
+# Copy to ~/.config/mless/config.toml
+
+[theme]
+name = "subtle"
+line_numbers = "240"      # Dark gray
+status_bar = "236"        # Darker gray background
+status_bar_text = "252"   # Light gray text
+search_match = "226"      # Yellow
+
+[theme.levels]
+trace = "240"   # Dark gray
+debug = "244"   # Medium gray
+info = "250"    # Light gray
+warn = "214"    # Orange
+error = "167"   # Soft red
+fatal = "196"   # Bright red
+
+# Alternative "vivid" theme:
+# [theme.levels]
+# trace = "243"
+# debug = "75"    # Blue
+# info = "78"     # Green
+# warn = "214"    # Orange
+# error = "196"   # Red
+# fatal = "201"   # Magenta
+
+[log_levels]
+trace_patterns = ["[TRC]", "[TRACE]", "TRACE", "TRC"]
+debug_patterns = ["[DBG]", "[DEBUG]", "DEBUG", "DBG"]
+info_patterns = ["[INF]", "[INFO]", "INFO", "INF"]
+warn_patterns = ["[WRN]", "[WARN]", "[WARNING]", "WARN", "WRN", "WARNING"]
+error_patterns = ["[ERR]", "[ERROR]", "ERROR", "ERR"]
+fatal_patterns = ["[FTL]", "[FATAL]", "FATAL", "FTL", "[CRIT]", "CRITICAL"]
+
+[keybindings]
+quit = ["q", "ctrl+c"]
+scroll_up = ["k", "up"]
+scroll_down = ["j", "down"]
+page_up = ["b", "pgup", "ctrl+u"]
+page_down = ["f", "pgdown", "ctrl+d", " "]
+top = ["g", "home"]
+bottom = ["G", "end"]
+search = ["/"]
+next_match = ["n"]
+prev_match = ["N"]
+
+[display]
+show_line_numbers = true
+tab_width = 4
+wrap_lines = false

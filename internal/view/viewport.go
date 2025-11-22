@@ -5,6 +5,7 @@ import (
 	"strings"
 
 	"github.com/charmbracelet/lipgloss"
+	"github.com/user/mless/internal/render"
 	"github.com/user/mless/internal/source"
 )
 
@@ -13,6 +14,7 @@ import (
 // It only knows how to display lines from a LineProvider
 type Viewport struct {
 	provider source.LineProvider
+	renderer render.Renderer
 
 	// Dimensions
 	width  int
@@ -40,7 +42,13 @@ func NewViewport(width, height int) *Viewport {
 		wrapLines:       false,
 		lineNumberStyle: lipgloss.NewStyle().Foreground(lipgloss.Color("240")),
 		contentStyle:    lipgloss.NewStyle(),
+		renderer:        render.NewPlainRenderer(),
 	}
+}
+
+// SetRenderer sets the line renderer
+func (v *Viewport) SetRenderer(r render.Renderer) {
+	v.renderer = r
 }
 
 // SetProvider sets the line provider
@@ -150,19 +158,18 @@ func (v *Viewport) Render() string {
 			builder.WriteString(v.lineNumberStyle.Render(numStr))
 		}
 
-		content := string(line.Content)
+		// Use renderer for content
+		content := v.renderer.Render(line)
 
-		// Truncate if needed
+		// Truncate if needed (note: this is naive with ANSI codes)
 		availableWidth := v.width
 		if v.showLineNumbers {
 			availableWidth -= lineNumWidth + 1
 		}
 
-		if len(content) > availableWidth && availableWidth > 0 {
-			content = content[:availableWidth]
-		}
-
-		builder.WriteString(v.contentStyle.Render(content))
+		// For now, just write the styled content
+		// TODO: proper truncation with ANSI awareness
+		builder.WriteString(content)
 	}
 
 	// Pad with empty lines if needed

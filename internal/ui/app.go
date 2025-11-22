@@ -7,6 +7,8 @@ import (
 	"github.com/charmbracelet/bubbles/textinput"
 	tea "github.com/charmbracelet/bubbletea"
 	"github.com/charmbracelet/lipgloss"
+	"github.com/user/mless/internal/config"
+	"github.com/user/mless/internal/render"
 	"github.com/user/mless/internal/source"
 	"github.com/user/mless/internal/view"
 )
@@ -22,13 +24,14 @@ const (
 
 // Model is the main application model
 type Model struct {
-	viewport   *view.Viewport
-	source     *source.FileSource
+	viewport    *view.Viewport
+	source      *source.FileSource
 	searchInput textinput.Model
+	config      *config.Config
 
-	mode       Mode
-	width      int
-	height     int
+	mode   Mode
+	width  int
+	height int
 
 	// Search state
 	searchTerm    string
@@ -42,6 +45,11 @@ type Model struct {
 
 // NewModel creates a new application model
 func NewModel(filepath string) (*Model, error) {
+	cfg, err := config.Load()
+	if err != nil {
+		return nil, err
+	}
+
 	src, err := source.NewFileSource(filepath)
 	if err != nil {
 		return nil, err
@@ -49,6 +57,11 @@ func NewModel(filepath string) (*Model, error) {
 
 	viewport := view.NewViewport(80, 24)
 	viewport.SetProvider(src)
+	viewport.SetShowLineNumbers(cfg.Display.ShowLineNumbers)
+
+	// Set up log level renderer
+	renderer := render.NewLogLevelRenderer(cfg)
+	viewport.SetRenderer(renderer)
 
 	ti := textinput.New()
 	ti.Placeholder = "Search..."
@@ -58,6 +71,7 @@ func NewModel(filepath string) (*Model, error) {
 		viewport:    viewport,
 		source:      src,
 		searchInput: ti,
+		config:      cfg,
 		mode:        ModeNormal,
 		filename:    filepath,
 	}, nil
