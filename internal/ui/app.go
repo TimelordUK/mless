@@ -607,8 +607,15 @@ func (m *Model) View() string {
 			followInfo = " [following]"
 		}
 
-		status = fmt.Sprintf(" %s%s%s  %s  %s%s%s",
-			m.filename, cachedInfo, followInfo, lineInfo, percent, searchInfo, filterInfo)
+		// Get timestamp for current line
+		timeInfo := ""
+		currentLine := m.viewport.CurrentLine()
+		if ts := m.source.GetTimestamp(currentLine); ts != nil {
+			timeInfo = fmt.Sprintf(" %s", ts.Format("15:04:05"))
+		}
+
+		status = fmt.Sprintf(" %s%s%s  %s%s  %s%s%s",
+			m.filename, cachedInfo, followInfo, lineInfo, timeInfo, percent, searchInfo, filterInfo)
 	}
 
 	builder.WriteString(statusStyle.Render(status))

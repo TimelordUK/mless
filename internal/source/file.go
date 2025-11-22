@@ -1,6 +1,8 @@
 package source
 
 import (
+	"time"
+
 	"github.com/user/mless/internal/index"
 	mlessio "github.com/user/mless/internal/io"
 )
@@ -103,4 +105,19 @@ func (s *FileSource) Refresh() (int, error) {
 
 	newLines := s.lineIndex.LineCount() - oldLineCount
 	return newLines, nil
+}
+
+// GetTimestamp returns the timestamp for a line
+func (s *FileSource) GetTimestamp(lineNum int) *time.Time {
+	return s.lineIndex.GetTimestamp(lineNum)
+}
+
+// FindLineAtTime finds the first line at or after the given time
+func (s *FileSource) FindLineAtTime(target time.Time) int {
+	return s.lineIndex.FindLineAtTime(target)
+}
+
+// FindLineBeforeTime finds the last line before the given time
+func (s *FileSource) FindLineBeforeTime(target time.Time) int {
+	return s.lineIndex.FindLineBeforeTime(target)
 }

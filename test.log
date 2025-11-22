@@ -4195,3 +4195,2173 @@
 2025-11-22 07:11:41.389 [DBG] Scheduler: Cache lookup for key cache:user:923c7285
 2025-11-22 07:11:45.371 [INF] MessageQueue: Request b694810b completed in 530ms
 2025-11-22 07:11:49.057 [INF] Metrics: Cache hit for key cache:user:a6c16210
+2025-11-22 07:11:52.923 [DBG] Config: Processing request 0387df07
+2025-11-22 07:11:53.815 [DBG] ApiGateway: Parsed configuration: {"timeout": 30, "retries": 3}
+2025-11-22 07:11:56.032 [INF] Config: User user_6525 authenticated successfully
+2025-11-22 07:11:58.716 [WRN] ApiGateway: Certificate expires in 21 days
+2025-11-22 07:11:59.654 [INF] Auth: Request 6fb408c7 completed in 14ms
+2025-11-22 07:12:04.192 [INF] Database: GET /api/v1/products?page=65 completed in 94ms
+2025-11-22 07:12:05.655 [DBG] Config: Connection pool status: 18/20 active
+2025-11-22 07:12:07.014 [INF] Scheduler: Message published to orders
+2025-11-22 07:12:11.721 [INF] Database: File data_80c26359.csv processed, 7690 records
+2025-11-22 07:12:16.510 [INF] Config: File import_e8710499.csv processed, 7423 records
+2025-11-22 07:12:21.307 [INF] ApiGateway: Health check passed
+2025-11-22 07:12:23.162 [DBG] MessageQueue: Connection pool status: 10/20 active
+2025-11-22 07:12:23.961 [INF] MessageQueue: Message published to orders
+2025-11-22 07:12:27.589 [INF] Config: User user_8063 authenticated successfully
+2025-11-22 07:12:28.344 [INF] MessageQueue: Scheduled job ReportGenerator started
+2025-11-22 07:12:33.075 [INF] Database: GET /api/v1/products?page=20 completed in 360ms
+2025-11-22 07:12:36.654 [DBG] MessageQueue: Connection pool status: 15/20 active
+2025-11-22 07:12:36.982 [INF] Auth: Service started on port 8080
+2025-11-22 07:12:41.174 [INF] Metrics: Database query executed in 9ms
+2025-11-22 07:12:45.959 [INF] Auth: Scheduled job ReportGenerator started
+2025-11-22 07:12:49.201 [FTL] Database: Application startup failed: Resource not found
+2025-11-22 07:12:53.107 [INF] Auth: Scheduled job DataSync started
+2025-11-22 07:12:56.693 [INF] MessageQueue: User user_5119 authenticated successfully
+2025-11-22 07:12:57.927 [INF] Cache: PUT /api/v1/users/user_4103/profile completed in 22ms
+2025-11-22 07:13:02.529 [INF] HttpServer: Cache hit for key cache:user:06555036
+2025-11-22 07:13:03.698 [WRN] Scheduler: Deprecated API endpoint called: /api/v1/orders
+2025-11-22 07:13:05.830 [DBG] Auth: Cache lookup for key cache:config:06601fe1
+2025-11-22 07:13:07.610 [INF] Metrics: PUT /api/v1/users/user_3772/profile completed in 4021ms
+2025-11-22 07:13:11.487 [INF] Metrics: Message consumed from notifications in 391ms
+2025-11-22 07:13:13.526 [DBG] MessageQueue: Processing request 7bf1c644
+2025-11-22 07:13:14.917 [INF] ApiGateway: Configuration reloaded
+2025-11-22 07:13:18.769 [INF] MessageQueue: PUT /api/v1/users/user_1355/profile completed in 23ms
+2025-11-22 07:13:19.280 [INF] Database: POST /api/v1/orders completed in 473ms
+2025-11-22 07:13:22.491 [INF] MessageQueue: POST /api/v1/orders completed in 88ms
+2025-11-22 07:13:24.788 [DBG] Cache: Connection pool status: 6/20 active
+2025-11-22 07:13:26.750 [INF] MessageQueue: DELETE /api/v1/sessions/a6eb376a completed in 3978ms
+2025-11-22 07:13:29.705 [INF] Auth: Cache hit for key cache:config:e828c98b
+2025-11-22 07:13:30.907 [INF] Auth: POST /api/v1/orders completed in 130ms
+2025-11-22 07:13:32.131 [INF] Scheduler: POST /api/v1/orders completed in 25ms
+2025-11-22 07:13:33.526 [INF] MessageQueue: PUT /api/v1/users/user_2054/profile completed in 238ms
+2025-11-22 07:13:35.033 [INF] FileProcessor: Cache hit for key cache:session:a529bb8a
+2025-11-22 07:13:39.347 [INF] Metrics: Health check passed
+2025-11-22 07:13:40.740 [INF] MessageQueue: PUT /api/v1/users/user_4719/profile completed in 718ms
+2025-11-22 07:13:43.488 [INF] Config: GET /api/v1/products?page=42 completed in 29ms
+2025-11-22 07:13:44.789 [INF] ApiGateway: Health check passed
+2025-11-22 07:13:46.984 [INF] ApiGateway: Cache hit for key cache:config:60bbc2dd
+2025-11-22 07:13:50.518 [INF] MessageQueue: Scheduled job CleanupJob completed in 609ms
+2025-11-22 07:13:51.187 [INF] Auth: Database query executed in 26ms
+2025-11-22 07:13:56.108 [INF] Scheduler: File import_37c6ecfd.csv processed, 8737 records
+2025-11-22 07:13:57.878 [WRN] MessageQueue: Memory usage at 94%
+2025-11-22 07:14:02.056 [DBG] Cache: Processing request a63a21b9
+2025-11-22 07:14:03.992 [DBG] Metrics: Connection pool status: 7/20 active
+2025-11-22 07:14:08.641 [INF] Cache: POST /api/v1/orders completed in 2725ms
+2025-11-22 07:14:10.843 [DBG] ApiGateway: Parsed configuration: {"timeout": 30, "retries": 3}
+2025-11-22 07:14:15.503 [INF] Config: Message published to events
+2025-11-22 07:14:17.887 [INF] HttpServer: Cache hit for key cache:session:f70ec796
+2025-11-22 07:14:21.451 [DBG] Config: Cache lookup for key cache:config:da6f04c9
+2025-11-22 07:14:22.149 [INF] ApiGateway: DELETE /api/v1/sessions/7d2cc589 completed in 572ms
+2025-11-22 07:14:26.338 [INF] ApiGateway: POST /api/v1/orders completed in 603ms
+2025-11-22 07:14:26.775 [INF] ApiGateway: Configuration reloaded
+2025-11-22 07:14:29.228 [INF] ApiGateway: Batch processing completed: 795/1026 items
+2025-11-22 07:14:32.490 [DBG] Database: Query execution plan generated
+2025-11-22 07:14:37.000 [WRN] FileProcessor: Memory usage at 75%
+2025-11-22 07:14:40.729 [DBG] Cache: Cache lookup for key cache:user:61a22c0a
+2025-11-22 07:14:41.170 [INF] Cache: Cache hit for key cache:user:1469a61e
+2025-11-22 07:14:44.286 [INF] HttpServer: Message consumed from events in 3205ms
+2025-11-22 07:14:46.892 [DBG] Database: Connection pool status: 4/20 active
+2025-11-22 07:14:51.857 [DBG] Cache: Processing request bf25af47
+2025-11-22 07:14:52.815 [INF] ApiGateway: Message published to events
+2025-11-22 07:14:54.266 [INF] MessageQueue: Cache hit for key cache:config:6fd2fdbe
+2025-11-22 07:14:58.225 [INF] Scheduler: Batch processing completed: 538/1044 items
+2025-11-22 07:14:58.314 [DBG] Auth: Parsed configuration: {"timeout": 30, "retries": 3}
+2025-11-22 07:15:01.510 [INF] MessageQueue: Configuration reloaded
+2025-11-22 07:15:04.289 [INF] Auth: Message consumed from events in 73ms
+2025-11-22 07:15:05.680 [WRN] HttpServer: Certificate expires in 18 days
+2025-11-22 07:15:07.141 [INF] Auth: Health check passed
+2025-11-22 07:15:11.032 [DBG] ApiGateway: Cache lookup for key cache:session:691ea27c
+2025-11-22 07:15:15.912 [DBG] ApiGateway: Cache lookup for key cache:session:f02bf615
+2025-11-22 07:15:16.565 [DBG] Metrics: Cache lookup for key cache:user:0e7a9a6f
+2025-11-22 07:15:21.064 [DBG] Config: Cache lookup for key cache:session:27c9efdb
+2025-11-22 07:15:25.255 [INF] ApiGateway: Database query executed in 270ms
+2025-11-22 07:15:28.841 [INF] Metrics: Outbound HTTP call to UserService completed in 3055ms
+2025-11-22 07:15:29.906 [DBG] Metrics: Connection pool status: 10/20 active
+2025-11-22 07:15:31.251 [INF] MessageQueue: Scheduled job ReportGenerator completed in 1236ms
+2025-11-22 07:15:32.354 [WRN] Cache: Slow query detected: 564ms for SELECT * FROM users WHERE...
+2025-11-22 07:15:37.253 [DBG] MessageQueue: Processing request f0850c59
+2025-11-22 07:15:38.956 [TRC] Scheduler: Entering method Transform with parameters {id: 123, type: "full"}
+2025-11-22 07:15:43.300 [INF] ApiGateway: Request 34a0a9a5 completed in 249ms
+2025-11-22 07:15:47.684 [INF] Scheduler: Database query executed in 40ms
+2025-11-22 07:15:51.439 [ERR] HttpServer: Authentication failed for user user_6443
+2025-11-22 07:15:53.933 [INF] HttpServer: Configuration reloaded
+2025-11-22 07:15:56.341 [INF] HttpServer: Batch processing completed: 520/1008 items
+2025-11-22 07:16:00.036 [INF] FileProcessor: Scheduled job CleanupJob started
+2025-11-22 07:16:00.272 [ERR] FileProcessor: Failed to process request ea2a7932: Connection refused
+2025-11-22 07:16:01.305 [INF] ApiGateway: Batch processing completed: 618/1100 items
+2025-11-22 07:16:01.540 [DBG] MessageQueue: Connection pool status: 11/20 active
+2025-11-22 07:16:01.667 [DBG] Metrics: Connection pool status: 13/20 active
+2025-11-22 07:16:03.172 [INF] Config: Scheduled job DataSync completed in 565ms
+2025-11-22 07:16:04.231 [DBG] FileProcessor: Processing request 84ad360b
+2025-11-22 07:16:05.487 [INF] MessageQueue: Outbound HTTP call to PaymentService completed in 2971ms
+2025-11-22 07:16:06.539 [DBG] FileProcessor: Processing request e9a8c8e4
+2025-11-22 07:16:11.188 [INF] Metrics: DELETE /api/v1/sessions/6eb9cead completed in 1362ms
+2025-11-22 07:16:12.442 [DBG] Database: Parsed configuration: {"timeout": 30, "retries": 3}
+2025-11-22 07:16:12.799 [INF] MessageQueue: Batch processing completed: 963/1063 items
+2025-11-22 07:16:15.754 [INF] Scheduler: Scheduled job DataSync completed in 75ms
+2025-11-22 07:16:19.638 [INF] Auth: POST /api/v1/orders completed in 192ms
+2025-11-22 07:16:21.661 [INF] Scheduler: File export_1cdca631.csv processed, 283 records
+2025-11-22 07:16:25.742 [INF] Config: GET /api/v1/users/user_4243 completed in 17ms
+2025-11-22 07:16:27.709 [FTL] Metrics: Application startup failed: Permission denied
+2025-11-22 07:16:28.975 [DBG] Auth: Processing request 06e46eb7
+2025-11-22 07:16:32.953 [INF] Auth: Connected to database postgres://db:5432/app
+2025-11-22 07:16:36.544 [INF] Cache: Scheduled job CleanupJob completed in 791ms
+2025-11-22 07:16:40.393 [INF] Metrics: Connected to database mysql://db:3306/app
+2025-11-22 07:16:45.126 [INF] Cache: Outbound HTTP call to NotificationService completed in 44ms
+2025-11-22 07:16:45.451 [INF] HttpServer: Scheduled job DataSync completed in 2929ms
+2025-11-22 07:16:46.539 [DBG] MessageQueue: Connection pool status: 8/20 active
+2025-11-22 07:16:51.082 [ERR] Cache: Failed to process request 00335fdd: Permission denied
+2025-11-22 07:16:55.375 [WRN] Database: Memory usage at 84%
+2025-11-22 07:16:58.410 [INF] HttpServer: Cache hit for key cache:config:e5d5aa8b
+2025-11-22 07:17:02.120 [INF] Cache: Batch processing completed: 413/1000 items
+2025-11-22 07:17:03.832 [INF] Auth: Request 59821a54 completed in 655ms
+2025-11-22 07:17:04.169 [ERR] Scheduler: Database connection failed: Invalid token
+2025-11-22 07:17:08.352 [WRN] Auth: Certificate expires in 8 days
+2025-11-22 07:17:11.770 [INF] MessageQueue: User user_2347 authenticated successfully
+2025-11-22 07:17:16.723 [INF] Cache: POST /api/v1/orders completed in 2687ms
+2025-11-22 07:17:20.956 [INF] Database: GET /api/v1/users/user_2099 completed in 906ms
+2025-11-22 07:17:25.505 [DBG] Config: Processing request b1819b01
+2025-11-22 07:17:26.867 [WRN] FileProcessor: Memory usage at 73%
+2025-11-22 07:17:29.614 [INF] Database: File export_0f92aa61.csv processed, 6351 records
+2025-11-22 07:17:32.388 [DBG] Scheduler: Parsed configuration: {"timeout": 30, "retries": 3}
+2025-11-22 07:17:33.377 [DBG] ApiGateway: Cache lookup for key cache:session:37ebb04f
+2025-11-22 07:17:36.058 [WRN] Cache: Certificate expires in 13 days
+2025-11-22 07:17:36.092 [INF] Config: GET /api/v1/products?page=100 completed in 171ms
+2025-11-22 07:17:36.206 [INF] Cache: User user_7147 authenticated successfully
+2025-11-22 07:17:40.203 [INF] Metrics: Database query executed in 61ms
+2025-11-22 07:17:40.838 [DBG] Scheduler: Query execution plan generated
+2025-11-22 07:17:44.492 [INF] Cache: GET /api/v1/users/user_5087 completed in 4333ms
+2025-11-22 07:17:45.508 [ERR] Auth: Authentication failed for user user_9612
+2025-11-22 07:17:47.607 [INF] Metrics: Outbound HTTP call to PaymentService completed in 153ms
+2025-11-22 07:17:49.019 [DBG] Scheduler: Query execution plan generated
+2025-11-22 07:17:51.961 [INF] HttpServer: Connected to database mysql://db:3306/app
+2025-11-22 07:17:56.748 [INF] ApiGateway: File report_0fce4fb0.csv processed, 2040 records
+2025-11-22 07:18:01.519 [INF] FileProcessor: Batch processing completed: 402/1014 items
+2025-11-22 07:18:06.024 [DBG] Metrics: Cache lookup for key cache:user:4ccb88f4
+2025-11-22 07:18:09.781 [TRC] MessageQueue: Loop iteration 26 of 1041
+2025-11-22 07:18:12.826 [DBG] MessageQueue: Parsed configuration: {"timeout": 30, "retries": 3}
+2025-11-22 07:18:16.496 [WRN] Metrics: Retry attempt 3 for operation SendEmail
+2025-11-22 07:18:16.692 [INF] Scheduler: Message published to orders
+2025-11-22 07:18:19.961 [INF] ApiGateway: Scheduled job DataSync completed in 3859ms
+2025-11-22 07:18:23.053 [INF] FileProcessor: Message consumed from orders in 5ms
+2025-11-22 07:18:25.318 [INF] ApiGateway: Scheduled job CleanupJob completed in 126ms
+2025-11-22 07:18:26.264 [INF] MessageQueue: GET /api/v1/users/user_7498 completed in 889ms
+2025-11-22 07:18:27.572 [WRN] ApiGateway: Deprecated API endpoint called: /api/v1/legacy
+2025-11-22 07:18:30.256 [INF] Cache: Message consumed from notifications in 618ms
+2025-11-22 07:18:33.097 [DBG] Scheduler: Connection pool status: 18/20 active
+2025-11-22 07:18:37.587 [INF] Metrics: Message published to notifications
+2025-11-22 07:18:38.271 [INF] Metrics: Connected to database postgres://db:5432/app
+2025-11-22 07:18:41.631 [INF] Config: Message consumed from events in 137ms
+2025-11-22 07:18:46.511 [ERR] MessageQueue: Database connection failed: Resource not found
+2025-11-22 07:18:49.120 [INF] Auth: DELETE /api/v1/sessions/6e91c8fd completed in 2ms
+2025-11-22 07:18:50.950 [DBG] Auth: Query execution plan generated
+2025-11-22 07:18:51.772 [DBG] ApiGateway: Parsed configuration: {"timeout": 30, "retries": 3}
+2025-11-22 07:18:54.153 [DBG] Auth: Processing request 23dcffca
+2025-11-22 07:18:55.201 [INF] Auth: Cache hit for key cache:session:26051a93
+2025-11-22 07:18:57.912 [FTL] FileProcessor: Critical resource unavailable: MessageBroker
+2025-11-22 07:19:02.506 [INF] Metrics: File export_7a6e0484.csv processed, 3009 records
+2025-11-22 07:19:07.383 [DBG] FileProcessor: Parsed configuration: {"timeout": 30, "retries": 3}
+2025-11-22 07:19:10.739 [DBG] Auth: Cache lookup for key cache:user:c7ec2aac
+2025-11-22 07:19:14.798 [WRN] HttpServer: Connection pool exhausted, waiting for available connection
+2025-11-22 07:19:17.063 [DBG] FileProcessor: Connection pool status: 12/20 active
+2025-11-22 07:19:21.790 [WRN] HttpServer: Retry attempt 4 for operation ProcessPayment
+2025-11-22 07:19:22.365 [INF] FileProcessor: Scheduled job DataSync started
+2025-11-22 07:19:26.232 [INF] HttpServer: GET /api/v1/products?page=9 completed in 4093ms
+2025-11-22 07:19:26.670 [INF] HttpServer: Scheduled job ReportGenerator completed in 129ms
+2025-11-22 07:19:26.998 [TRC] MessageQueue: Loop iteration 89 of 1029
+2025-11-22 07:19:29.801 [INF] MessageQueue: Scheduled job ReportGenerator started
+2025-11-22 07:19:32.148 [INF] Database: File export_0a7176a6.csv processed, 2756 records
+2025-11-22 07:19:36.037 [INF] MessageQueue: Scheduled job DataSync completed in 2011ms
+2025-11-22 07:19:40.962 [DBG] Config: Parsed configuration: {"timeout": 30, "retries": 3}
+2025-11-22 07:19:44.291 [DBG] ApiGateway: Parsed configuration: {"timeout": 30, "retries": 3}
+2025-11-22 07:19:47.802 [ERR] MessageQueue: Authentication failed for user user_9171
+2025-11-22 07:19:52.072 [INF] Auth: Batch processing completed: 481/1097 items
+2025-11-22 07:19:54.060 [DBG] HttpServer: Query execution plan generated
+2025-11-22 07:19:57.716 [DBG] Cache: Connection pool status: 14/20 active
+2025-11-22 07:19:58.160 [DBG] Database: Cache lookup for key cache:user:35022f25
+2025-11-22 07:20:00.373 [INF] Database: POST /api/v1/orders completed in 153ms
+2025-11-22 07:20:02.049 [DBG] Database: Parsed configuration: {"timeout": 30, "retries": 3}
+2025-11-22 07:20:04.253 [INF] Database: Service started on port 8080
+2025-11-22 07:20:05.286 [DBG] HttpServer: Processing request 63b5d2bc
+2025-11-22 07:20:06.800 [DBG] Config: Cache lookup for key cache:config:e404e00d
+2025-11-22 07:20:07.271 [INF] Database: User user_3128 authenticated successfully
+2025-11-22 07:20:10.560 [INF] Auth: POST /api/v1/orders completed in 4384ms
+2025-11-22 07:20:12.167 [DBG] Metrics: Query execution plan generated
+2025-11-22 07:20:12.191 [INF] Cache: Outbound HTTP call to UserService completed in 997ms
+2025-11-22 07:20:12.927 [INF] Metrics: File data_6204ccc7.csv processed, 362 records
+2025-11-22 07:20:16.401 [WRN] MessageQueue: Certificate expires in 2 days
+2025-11-22 07:20:21.169 [INF] MessageQueue: Service started on port 8080
+2025-11-22 07:20:21.206 [INF] Database: Health check passed
+2025-11-22 07:20:25.966 [INF] MessageQueue: Health check passed
+2025-11-22 07:20:27.103 [INF] Scheduler: Request 3ebf80ef completed in 3237ms
+2025-11-22 07:20:28.650 [INF] Database: Scheduled job CleanupJob completed in 212ms
+2025-11-22 07:20:29.988 [INF] HttpServer: Scheduled job DataSync completed in 4669ms
+2025-11-22 07:20:30.925 [INF] Config: Service started on port 8080
+2025-11-22 07:20:32.613 [DBG] MessageQueue: Processing request 33a09d8d
+2025-11-22 07:20:36.722 [DBG] ApiGateway: Query execution plan generated
+2025-11-22 07:20:40.004 [WRN] FileProcessor: Slow query detected: 148ms for SELECT * FROM users WHERE...
+2025-11-22 07:20:41.138 [INF] Cache: Scheduled job CleanupJob completed in 712ms
+2025-11-22 07:20:43.820 [INF] Scheduler: Database query executed in 43ms
+2025-11-22 07:20:44.801 [DBG] Scheduler: Connection pool status: 15/20 active
+2025-11-22 07:20:45.318 [INF] Cache: PUT /api/v1/users/user_4806/profile completed in 570ms
+2025-11-22 07:20:46.642 [INF] MessageQueue: Request a6437c3e completed in 92ms
+2025-11-22 07:20:49.198 [INF] ApiGateway: DELETE /api/v1/sessions/d8408176 completed in 195ms
+2025-11-22 07:20:51.537 [INF] Auth: DELETE /api/v1/sessions/0a0922f0 completed in 1366ms
+2025-11-22 07:20:54.330 [DBG] Scheduler: Query execution plan generated
+2025-11-22 07:20:54.439 [INF] Metrics: Message consumed from events in 35ms
+2025-11-22 07:20:55.952 [DBG] Database: Query execution plan generated
+2025-11-22 07:20:59.683 [INF] Auth: Service started on port 9000
+2025-11-22 07:21:00.951 [DBG] HttpServer: Processing request 674d1f0e
+2025-11-22 07:21:03.592 [INF] Auth: Request 6acfe64d completed in 979ms
+2025-11-22 07:21:06.478 [DBG] Metrics: Connection pool status: 17/20 active
+2025-11-22 07:21:09.978 [INF] ApiGateway: Request 1f381e96 completed in 2449ms
+2025-11-22 07:21:10.564 [INF] Auth: GET /api/v1/products?page=100 completed in 409ms
+2025-11-22 07:21:14.307 [WRN] HttpServer: Deprecated API endpoint called: /api/v1/users
+2025-11-22 07:21:18.615 [DBG] Metrics: Cache lookup for key cache:user:a7eb57ec
+2025-11-22 07:21:22.130 [INF] ApiGateway: Batch processing completed: 777/1028 items
+2025-11-22 07:21:25.186 [DBG] Auth: Cache lookup for key cache:session:c11507fe
+2025-11-22 07:21:28.651 [INF] Config: Connected to database postgres://db:5432/app
+2025-11-22 07:21:31.631 [DBG] FileProcessor: Parsed configuration: {"timeout": 30, "retries": 3}
+2025-11-22 07:21:32.502 [INF] Auth: Request 9df5d0bd completed in 177ms
+2025-11-22 07:21:34.583 [DBG] ApiGateway: Query execution plan generated
+2025-11-22 07:21:39.089 [INF] Auth: Message published to tasks
+2025-11-22 07:21:42.046 [DBG] HttpServer: Processing request 304e29fc
+2025-11-22 07:21:44.394 [INF] Config: PUT /api/v1/users/user_9636/profile completed in 39ms
+2025-11-22 07:21:44.934 [INF] Metrics: DELETE /api/v1/sessions/2bf2c5c2 completed in 24ms
+2025-11-22 07:21:45.455 [INF] ApiGateway: Health check passed
+2025-11-22 07:21:50.409 [DBG] Cache: Processing request 37fe131d
+2025-11-22 07:21:51.968 [INF] FileProcessor: User user_3830 authenticated successfully
+2025-11-22 07:21:53.333 [INF] MessageQueue: POST /api/v1/orders completed in 423ms
+2025-11-22 07:21:55.432 [ERR] ApiGateway: Failed to process request d9136871: Resource not found
+2025-11-22 07:21:55.615 [INF] Metrics: GET /api/v1/products?page=85 completed in 44ms
+2025-11-22 07:21:58.261 [INF] FileProcessor: User user_7884 authenticated successfully
+2025-11-22 07:22:02.420 [INF] Metrics: Configuration reloaded
+2025-11-22 07:22:06.109 [DBG] Scheduler: Parsed configuration: {"timeout": 30, "retries": 3}
+2025-11-22 07:22:10.580 [INF] HttpServer: File export_4cb97eef.csv processed, 1461 records
+2025-11-22 07:22:12.716 [INF] Cache: File report_f887bc8e.csv processed, 2736 records
+2025-11-22 07:22:17.695 [ERR] HttpServer: Invalid message format: Unexpected field "foo" at position 42
+2025-11-22 07:22:19.198 [ERR] Cache: Authentication failed for user user_3139
+2025-11-22 07:22:20.545 [DBG] Scheduler: Processing request e6b27ebd
+2025-11-22 07:22:21.256 [INF] Cache: DELETE /api/v1/sessions/c8643f27 completed in 75ms
+2025-11-22 07:22:25.433 [INF] Cache: Configuration reloaded
+2025-11-22 07:22:25.724 [INF] Config: Health check passed
+2025-11-22 07:22:26.787 [DBG] MessageQueue: Cache lookup for key cache:user:545b6085
+2025-11-22 07:22:29.528 [ERR] Scheduler: Timeout waiting for response from NotificationService
+2025-11-22 07:22:30.025 [DBG] ApiGateway: Connection pool status: 12/20 active
+2025-11-22 07:22:31.360 [INF] Cache: Health check passed
+2025-11-22 07:22:34.795 [INF] Auth: User user_8653 authenticated successfully
+2025-11-22 07:22:35.721 [INF] Database: File export_45b288ec.csv processed, 2140 records
+2025-11-22 07:22:39.937 [INF] FileProcessor: Batch processing completed: 519/1020 items
+2025-11-22 07:22:41.954 [INF] Config: User user_5108 authenticated successfully
+2025-11-22 07:22:43.686 [DBG] Database: Cache lookup for key cache:user:e5ff2d84
+2025-11-22 07:22:45.646 [INF] ApiGateway: Service started on port 3000
+2025-11-22 07:22:46.431 [DBG] MessageQueue: Parsed configuration: {"timeout": 30, "retries": 3}
+2025-11-22 07:22:47.757 [DBG] ApiGateway: Cache lookup for key cache:session:29e93f6d
+2025-11-22 07:22:50.902 [INF] MessageQueue: Configuration reloaded
+2025-11-22 07:22:53.186 [INF] Config: Scheduled job BackupJob completed in 81ms
+2025-11-22 07:22:57.629 [INF] HttpServer: File report_56370740.csv processed, 4450 records
+2025-11-22 07:23:02.445 [WRN] Auth: Deprecated API endpoint called: /api/v1/users
+2025-11-22 07:23:05.951 [INF] HttpServer: Configuration reloaded
+2025-11-22 07:23:10.486 [INF] FileProcessor: PUT /api/v1/users/user_5227/profile completed in 121ms
+2025-11-22 07:23:13.974 [TRC] Auth: Loop iteration 34 of 1088
+2025-11-22 07:23:15.880 [INF] Cache: Configuration reloaded
+2025-11-22 07:23:16.193 [INF] FileProcessor: Outbound HTTP call to UserService completed in 55ms
+2025-11-22 07:23:18.155 [WRN] Database: Certificate expires in 19 days
+2025-11-22 07:23:21.117 [DBG] Database: Processing request 97b6d453
+2025-11-22 07:23:21.197 [WRN] Metrics: Slow query detected: 193ms for SELECT * FROM users WHERE...
+2025-11-22 07:23:24.976 [INF] ApiGateway: File export_4551ddf9.csv processed, 5042 records
+2025-11-22 07:23:29.299 [INF] Database: DELETE /api/v1/sessions/d8d124ac completed in 2122ms
+2025-11-22 07:23:34.064 [DBG] Config: Processing request 334165af
+2025-11-22 07:23:38.075 [INF] Database: Service started on port 3000
+2025-11-22 07:23:38.287 [INF] Auth: Outbound HTTP call to PaymentService completed in 955ms
+2025-11-22 07:23:43.128 [FTL] FileProcessor: Unrecoverable error, shutting down
+2025-11-22 07:23:45.850 [DBG] Database: Connection pool status: 5/20 active
+2025-11-22 07:23:50.433 [INF] Metrics: DELETE /api/v1/sessions/1e3d83c2 completed in 3068ms
+2025-11-22 07:23:53.447 [FTL] ApiGateway: Application startup failed: Resource not found
+2025-11-22 07:23:54.879 [INF] Database: Scheduled job BackupJob started
+2025-11-22 07:23:56.242 [INF] FileProcessor: GET /api/v1/products?page=1 completed in 937ms
+2025-11-22 07:23:56.574 [INF] Config: Request 7f55b3ca completed in 175ms
+2025-11-22 07:23:59.775 [DBG] Database: Query execution plan generated
+2025-11-22 07:24:04.469 [DBG] ApiGateway: Parsed configuration: {"timeout": 30, "retries": 3}
+2025-11-22 07:24:09.140 [DBG] MessageQueue: Cache lookup for key cache:user:169dac40
+2025-11-22 07:24:11.596 [INF] Cache: DELETE /api/v1/sessions/9bb4c1a0 completed in 45ms
+2025-11-22 07:24:14.212 [FTL] Cache: Unrecoverable error, shutting down
+2025-11-22 07:24:17.009 [INF] Cache: User user_8091 authenticated successfully
+2025-11-22 07:24:19.667 [INF] Auth: Message consumed from orders in 878ms
+2025-11-22 07:24:24.446 [INF] Scheduler: Configuration reloaded
+2025-11-22 07:24:26.495 [INF] Metrics: DELETE /api/v1/sessions/bf0f8054 completed in 34ms
+2025-11-22 07:24:30.829 [TRC] HttpServer: Variable state: {counter: 42, flag: true}
+2025-11-22 07:24:34.769 [INF] ApiGateway: Configuration reloaded
+2025-11-22 07:24:36.949 [INF] Scheduler: Scheduled job ReportGenerator completed in 686ms
+2025-11-22 07:24:37.382 [DBG] Config: Query execution plan generated
+2025-11-22 07:24:38.006 [DBG] MessageQueue: Parsed configuration: {"timeout": 30, "retries": 3}
+2025-11-22 07:24:42.209 [INF] Metrics: Message published to orders
+2025-11-22 07:24:43.242 [INF] Cache: Request 5aeb54a1 completed in 46ms
+2025-11-22 07:24:47.106 [INF] MessageQueue: DELETE /api/v1/sessions/973e56b7 completed in 723ms
+2025-11-22 07:24:47.609 [INF] HttpServer: Health check passed
+2025-11-22 07:24:50.530 [INF] HttpServer: Cache hit for key cache:user:3cd64c31
+2025-11-22 07:24:55.450 [INF] Metrics: GET /api/v1/users/user_8884 completed in 107ms
+2025-11-22 07:24:57.406 [DBG] Database: Cache lookup for key cache:user:096a8714
+2025-11-22 07:25:00.391 [INF] Scheduler: DELETE /api/v1/sessions/34905742 completed in 4374ms
+2025-11-22 07:25:03.280 [WRN] HttpServer: Certificate expires in 23 days
+2025-11-22 07:25:03.381 [ERR] Auth: File not found: export_46c614ae.csv
+2025-11-22 07:25:06.732 [INF] MessageQueue: DELETE /api/v1/sessions/152e1f7a completed in 903ms
+2025-11-22 07:25:09.323 [INF] Cache: POST /api/v1/orders completed in 967ms
+2025-11-22 07:25:11.577 [INF] Config: User user_3230 authenticated successfully
+2025-11-22 07:25:13.684 [INF] FileProcessor: Message consumed from tasks in 171ms
+2025-11-22 07:25:14.523 [INF] Config: PUT /api/v1/users/user_6689/profile completed in 134ms
+2025-11-22 07:25:18.224 [DBG] Auth: Query execution plan generated
+2025-11-22 07:25:22.351 [INF] Cache: Service started on port 443
+2025-11-22 07:25:25.103 [DBG] Scheduler: Query execution plan generated
+2025-11-22 07:25:26.587 [INF] Config: File report_30856320.csv processed, 9881 records
+2025-11-22 07:25:28.768 [INF] FileProcessor: Health check passed
+2025-11-22 07:25:30.212 [INF] Auth: DELETE /api/v1/sessions/339e44c6 completed in 135ms
+2025-11-22 07:25:32.267 [INF] Config: Configuration reloaded
+2025-11-22 07:25:35.102 [ERR] FileProcessor: Database connection failed: Permission denied
+2025-11-22 07:25:38.174 [INF] Scheduler: POST /api/v1/orders completed in 319ms
+2025-11-22 07:25:40.573 [INF] Metrics: GET /api/v1/users/user_2117 completed in 700ms
+2025-11-22 07:25:45.215 [DBG] Config: Cache lookup for key cache:user:df768cf3
+2025-11-22 07:25:48.283 [INF] HttpServer: PUT /api/v1/users/user_4685/profile completed in 1524ms
+2025-11-22 07:25:52.509 [INF] FileProcessor: GET /api/v1/products?page=78 completed in 4321ms
+2025-11-22 07:25:53.339 [DBG] Cache: Query execution plan generated
+2025-11-22 07:25:56.221 [DBG] Scheduler: Query execution plan generated
+2025-11-22 07:25:57.531 [DBG] Metrics: Cache lookup for key cache:config:d036772f
+2025-11-22 07:25:59.516 [INF] Metrics: GET /api/v1/users/user_9599 completed in 774ms
+2025-11-22 07:26:04.027 [INF] ApiGateway: Outbound HTTP call to NotificationService completed in 185ms
+2025-11-22 07:26:06.969 [DBG] Config: Query execution plan generated
+2025-11-22 07:26:09.613 [INF] HttpServer: POST /api/v1/orders completed in 174ms
+2025-11-22 07:26:09.705 [DBG] Config: Connection pool status: 16/20 active
+2025-11-22 07:26:11.925 [INF] Cache: File report_f66f39b3.csv processed, 9216 records
+2025-11-22 07:26:14.249 [INF] Cache: Health check passed
+2025-11-22 07:26:17.524 [ERR] Cache: Failed to process request 5ead1484: Resource not found
+2025-11-22 07:26:21.737 [INF] Config: Database query executed in 281ms
+2025-11-22 07:26:24.486 [INF] ApiGateway: Cache hit for key cache:session:660e6f99
+2025-11-22 07:26:27.378 [INF] ApiGateway: Configuration reloaded
+2025-11-22 07:26:28.938 [INF] Auth: Service started on port 5000
+2025-11-22 07:26:30.781 [INF] Database: Batch processing completed: 667/1073 items
+2025-11-22 07:26:34.800 [INF] Cache: User user_2019 authenticated successfully
+2025-11-22 07:26:35.868 [DBG] Scheduler: Connection pool status: 11/20 active
+2025-11-22 07:26:37.385 [DBG] Scheduler: Query execution plan generated
+2025-11-22 07:26:37.698 [WRN] Cache: Connection pool exhausted, waiting for available connection
+2025-11-22 07:26:41.380 [INF] Metrics: Connected to database postgres://db:5432/app
+2025-11-22 07:26:43.255 [INF] Database: Database query executed in 994ms
+2025-11-22 07:26:47.202 [INF] HttpServer: Health check passed
+2025-11-22 07:26:48.902 [INF] MessageQueue: File export_94cc4864.csv processed, 8492 records
+2025-11-22 07:26:53.743 [INF] Scheduler: POST /api/v1/orders completed in 176ms
+2025-11-22 07:26:55.936 [FTL] MessageQueue: Application startup failed: Permission denied
+2025-11-22 07:26:59.802 [INF] Auth: Message published to tasks
+2025-11-22 07:27:02.844 [INF] HttpServer: POST /api/v1/orders completed in 805ms
+2025-11-22 07:27:03.001 [INF] Database: User user_6266 authenticated successfully
+2025-11-22 07:27:04.114 [DBG] HttpServer: Parsed configuration: {"timeout": 30, "retries": 3}
+2025-11-22 07:27:06.118 [ERR] Metrics: Database connection failed: Connection refused
+2025-11-22 07:27:06.163 [DBG] Auth: Query execution plan generated
+2025-11-22 07:27:06.440 [INF] Cache: Outbound HTTP call to NotificationService completed in 2060ms
+2025-11-22 07:27:08.497 [DBG] HttpServer: Cache lookup for key cache:user:3c37c07e
+2025-11-22 07:27:10.982 [INF] Cache: GET /api/v1/users/user_3643 completed in 1803ms
+2025-11-22 07:27:13.387 [INF] Scheduler: Service started on port 443
+2025-11-22 07:27:18.376 [INF] Auth: Configuration reloaded
+2025-11-22 07:27:22.495 [INF] Metrics: POST /api/v1/orders completed in 26ms
+2025-11-22 07:27:22.674 [INF] Database: Scheduled job ReportGenerator completed in 4444ms
+2025-11-22 07:27:25.863 [DBG] Scheduler: Processing request b68a0b97
+2025-11-22 07:27:27.500 [DBG] Scheduler: Processing request 58e170e9
+2025-11-22 07:27:28.822 [DBG] MessageQueue: Cache lookup for key cache:user:97b6bc3a
+2025-11-22 07:27:30.362 [INF] Cache: Scheduled job BackupJob started
+2025-11-22 07:27:31.567 [INF] FileProcessor: Health check passed
+2025-11-22 07:27:34.786 [DBG] Database: Query execution plan generated
+2025-11-22 07:27:39.163 [DBG] Cache: Parsed configuration: {"timeout": 30, "retries": 3}
+2025-11-22 07:27:40.056 [INF] Cache: GET /api/v1/users/user_7456 completed in 13ms
+2025-11-22 07:27:43.362 [INF] Config: Message consumed from notifications in 1467ms
+2025-11-22 07:27:46.235 [INF] MessageQueue: GET /api/v1/products?page=30 completed in 24ms
+2025-11-22 07:27:46.885 [INF] Scheduler: GET /api/v1/products?page=61 completed in 2011ms
+2025-11-22 07:27:48.503 [WRN] Auth: Memory usage at 85%
+2025-11-22 07:27:53.122 [INF] FileProcessor: Scheduled job BackupJob completed in 5ms
+2025-11-22 07:27:57.556 [INF] Auth: Scheduled job ReportGenerator completed in 140ms
+2025-11-22 07:27:58.466 [DBG] Database: Query execution plan generated
+2025-11-22 07:28:01.376 [INF] HttpServer: Message consumed from events in 1621ms
+2025-11-22 07:28:01.389 [INF] ApiGateway: GET /api/v1/products?page=52 completed in 199ms
+2025-11-22 07:28:05.158 [DBG] Metrics: Connection pool status: 12/20 active
+2025-11-22 07:28:06.003 [WRN] Auth: Rate limit approaching for client client_af6c2631
+2025-11-22 07:28:10.993 [INF] Cache: GET /api/v1/products?page=86 completed in 360ms
+2025-11-22 07:28:11.469 [DBG] Database: Connection pool status: 16/20 active
+2025-11-22 07:28:11.930 [DBG] Cache: Cache lookup for key cache:session:63e19a1d
+2025-11-22 07:28:12.244 [INF] Auth: File report_ad659733.csv processed, 6320 records
+2025-11-22 07:28:13.156 [INF] Cache: DELETE /api/v1/sessions/dbf15d17 completed in 117ms
+2025-11-22 07:28:17.984 [INF] Scheduler: POST /api/v1/orders completed in 127ms
+2025-11-22 07:28:21.904 [INF] Scheduler: Scheduled job ReportGenerator started
+2025-11-22 07:28:25.024 [INF] Metrics: PUT /api/v1/users/user_5692/profile completed in 166ms
+2025-11-22 07:28:28.573 [WRN] HttpServer: Connection pool exhausted, waiting for available connection
+2025-11-22 07:28:31.087 [INF] MessageQueue: Scheduled job DataSync completed in 151ms
+2025-11-22 07:28:31.947 [WRN] ApiGateway: Memory usage at 86%
+2025-11-22 07:28:34.524 [INF] Database: Batch processing completed: 872/1016 items
+2025-11-22 07:28:36.536 [ERR] ApiGateway: Authentication failed for user user_6390
+2025-11-22 07:28:39.866 [INF] MessageQueue: Connected to database mysql://db:3306/app
+2025-11-22 07:28:41.992 [INF] Database: Scheduled job BackupJob completed in 187ms
+2025-11-22 07:28:43.642 [INF] HttpServer: Configuration reloaded
+2025-11-22 07:28:44.773 [INF] ApiGateway: Request 33f09603 completed in 17ms
+2025-11-22 07:28:49.163 [INF] Metrics: Scheduled job ReportGenerator started
+2025-11-22 07:28:54.066 [DBG] ApiGateway: Connection pool status: 20/20 active
+2025-11-22 07:28:56.065 [INF] MessageQueue: Scheduled job DataSync started
+2025-11-22 07:28:57.990 [INF] Metrics: POST /api/v1/orders completed in 35ms
+2025-11-22 07:29:00.574 [FTL] Scheduler: Data corruption detected in transactions
+2025-11-22 07:29:02.142 [DBG] Config: Parsed configuration: {"timeout": 30, "retries": 3}
+2025-11-22 07:29:05.033 [DBG] ApiGateway: Connection pool status: 14/20 active
+2025-11-22 07:29:07.473 [INF] Cache: Cache hit for key cache:config:3c743a03
+2025-11-22 07:29:11.763 [INF] MessageQueue: Service started on port 9000
+2025-11-22 07:29:12.322 [DBG] Cache: Processing request e9aeb8eb
+2025-11-22 07:29:14.949 [INF] FileProcessor: Scheduled job CleanupJob started
+2025-11-22 07:29:19.063 [INF] FileProcessor: POST /api/v1/orders completed in 4376ms
+2025-11-22 07:29:22.471 [ERR] FileProcessor: Timeout waiting for response from NotificationService
+2025-11-22 07:29:24.251 [DBG] Database: Cache lookup for key cache:config:a468033f
+2025-11-22 07:29:26.684 [DBG] Metrics: Parsed configuration: {"timeout": 30, "retries": 3}
+2025-11-22 07:29:29.464 [DBG] Database: Cache lookup for key cache:session:46f25c0c
+2025-11-22 07:29:30.365 [INF] Scheduler: Health check passed
+2025-11-22 07:29:34.305 [INF] Scheduler: Outbound HTTP call to PaymentService completed in 73ms
+2025-11-22 07:29:35.005 [DBG] Config: Query execution plan generated
+2025-11-22 07:29:36.682 [DBG] Scheduler: Connection pool status: 7/20 active
+2025-11-22 07:29:40.019 [DBG] FileProcessor: Parsed configuration: {"timeout": 30, "retries": 3}
+2025-11-22 07:29:43.617 [INF] Database: Health check passed
+2025-11-22 07:29:46.537 [INF] Cache: PUT /api/v1/users/user_1423/profile completed in 22ms
+2025-11-22 07:29:48.898 [DBG] Metrics: Parsed configuration: {"timeout": 30, "retries": 3}
+2025-11-22 07:29:53.668 [INF] HttpServer: POST /api/v1/orders completed in 95ms
+2025-11-22 07:29:54.674 [WRN] MessageQueue: Retry attempt 3 for operation SyncData
+2025-11-22 07:29:55.568 [INF] HttpServer: Scheduled job ReportGenerator completed in 4944ms
+2025-11-22 07:29:58.341 [DBG] Scheduler: Connection pool status: 9/20 active
+2025-11-22 07:30:02.968 [INF] MessageQueue: Message published to tasks
+2025-11-22 07:30:07.815 [DBG] Metrics: Processing request 6f093e58
+2025-11-22 07:30:07.842 [INF] MessageQueue: Cache hit for key cache:user:7458754c
+2025-11-22 07:30:10.811 [INF] Metrics: Message published to tasks
+2025-11-22 07:30:14.706 [INF] Database: User user_3101 authenticated successfully
+2025-11-22 07:30:18.364 [INF] ApiGateway: Message consumed from orders in 188ms
+2025-11-22 07:30:20.065 [DBG] Database: Query execution plan generated
+2025-11-22 07:30:22.377 [DBG] MessageQueue: Query execution plan generated
+2025-11-22 07:30:25.323 [INF] MessageQueue: Cache hit for key cache:session:9e01ddec
+2025-11-22 07:30:25.689 [DBG] Scheduler: Query execution plan generated
+2025-11-22 07:30:27.957 [INF] Scheduler: Batch processing completed: 825/1032 items
+2025-11-22 07:30:32.025 [INF] Config: Message published to tasks
+2025-11-22 07:30:33.432 [DBG] Config: Cache lookup for key cache:session:86b63083
+2025-11-22 07:30:38.045 [INF] MessageQueue: Cache hit for key cache:session:8cb19849
+2025-11-22 07:30:41.997 [WRN] Database: Retry attempt 2 for operation SyncData
+2025-11-22 07:30:42.770 [INF] Config: Request 07768c89 completed in 199ms
+2025-11-22 07:30:46.039 [INF] FileProcessor: Outbound HTTP call to PaymentService completed in 296ms
+2025-11-22 07:30:47.055 [DBG] FileProcessor: Cache lookup for key cache:user:603a46bb
+2025-11-22 07:30:48.306 [INF] MessageQueue: File data_fa7b4254.csv processed, 560 records
+2025-11-22 07:30:51.107 [INF] FileProcessor: Request d6967dc2 completed in 2196ms
+2025-11-22 07:30:53.494 [ERR] Database: Timeout waiting for response from PaymentService
+2025-11-22 07:30:55.899 [WRN] FileProcessor: Certificate expires in 30 days
+2025-11-22 07:31:00.855 [INF] MessageQueue: User user_5931 authenticated successfully
+2025-11-22 07:31:02.661 [DBG] ApiGateway: Cache lookup for key cache:session:c3d623bf
+2025-11-22 07:31:04.777 [INF] MessageQueue: GET /api/v1/products?page=8 completed in 28ms
+2025-11-22 07:31:05.754 [INF] ApiGateway: PUT /api/v1/users/user_7174/profile completed in 101ms
+2025-11-22 07:31:10.279 [INF] Auth: Batch processing completed: 679/1088 items
+2025-11-22 07:31:14.159 [WRN] FileProcessor: Connection pool exhausted, waiting for available connection
+2025-11-22 07:31:18.155 [INF] Auth: POST /api/v1/orders completed in 792ms
+2025-11-22 07:31:22.880 [INF] HttpServer: POST /api/v1/orders completed in 4256ms
+2025-11-22 07:31:26.950 [ERR] Metrics: Timeout waiting for response from NotificationService
+2025-11-22 07:31:31.225 [INF] FileProcessor: Database query executed in 756ms
+2025-11-22 07:31:32.726 [INF] Metrics: Configuration reloaded
+2025-11-22 07:31:34.179 [INF] Auth: Configuration reloaded
+2025-11-22 07:31:36.124 [INF] Scheduler: PUT /api/v1/users/user_4531/profile completed in 27ms
+2025-11-22 07:31:39.990 [INF] Config: Connected to database postgres://db:5432/app
+2025-11-22 07:31:44.415 [INF] Cache: Database query executed in 39ms
+2025-11-22 07:31:47.946 [INF] Auth: Database query executed in 41ms
+2025-11-22 07:31:49.315 [INF] FileProcessor: Cache hit for key cache:session:4e0be324
+2025-11-22 07:31:53.486 [DBG] Cache: Query execution plan generated
+2025-11-22 07:31:54.713 [INF] Database: File export_a26d666d.csv processed, 3984 records
+2025-11-22 07:31:55.141 [INF] Cache: Scheduled job CleanupJob completed in 33ms
+2025-11-22 07:31:57.290 [DBG] Cache: Processing request 786c4c60
+2025-11-22 07:32:01.489 [INF] FileProcessor: GET /api/v1/products?page=78 completed in 2049ms
+2025-11-22 07:32:05.123 [DBG] FileProcessor: Cache lookup for key cache:session:45205659
+2025-11-22 07:32:06.266 [INF] Database: Outbound HTTP call to PaymentService completed in 2220ms
+2025-11-22 07:32:10.619 [INF] MessageQueue: Message published to orders
+2025-11-22 07:32:13.979 [INF] Config: Service started on port 5000
+2025-11-22 07:32:18.246 [INF] Config: DELETE /api/v1/sessions/b449fef6 completed in 193ms
+2025-11-22 07:32:23.070 [INF] ApiGateway: Connected to database mysql://db:3306/app
+2025-11-22 07:32:27.572 [DBG] Database: Query execution plan generated
+2025-11-22 07:32:27.606 [DBG] FileProcessor: Cache lookup for key cache:user:3e85b1fc
+2025-11-22 07:32:31.064 [INF] HttpServer: Scheduled job DataSync started
+2025-11-22 07:32:34.605 [WRN] MessageQueue: Slow query detected: 123ms for SELECT * FROM users WHERE...
+2025-11-22 07:32:36.069 [INF] MessageQueue: Connected to database postgres://db:5432/app
+2025-11-22 07:32:39.783 [ERR] Cache: Database connection failed: Permission denied
+2025-11-22 07:32:40.626 [DBG] Scheduler: Query execution plan generated
+2025-11-22 07:32:44.987 [INF] Auth: User user_8444 authenticated successfully
+2025-11-22 07:32:48.282 [INF] Metrics: User user_7936 authenticated successfully
+2025-11-22 07:32:48.995 [INF] HttpServer: Scheduled job BackupJob started
+2025-11-22 07:32:49.722 [INF] MessageQueue: DELETE /api/v1/sessions/fa2d2cd8 completed in 2ms
+2025-11-22 07:32:52.610 [INF] Scheduler: GET /api/v1/users/user_5780 completed in 4380ms
+2025-11-22 07:32:54.771 [INF] Database: Outbound HTTP call to UserService completed in 125ms
+2025-11-22 07:32:56.748 [INF] Cache: Scheduled job CleanupJob completed in 1630ms
+2025-11-22 07:33:01.379 [DBG] FileProcessor: Processing request cd894297
+2025-11-22 07:33:01.450 [DBG] Database: Parsed configuration: {"timeout": 30, "retries": 3}
+2025-11-22 07:33:01.957 [INF] Config: Service started on port 3000
+2025-11-22 07:33:03.414 [INF] HttpServer: Scheduled job ReportGenerator completed in 115ms
+2025-11-22 07:33:07.234 [INF] Config: Outbound HTTP call to PaymentService completed in 4513ms
+2025-11-22 07:33:11.749 [ERR] ApiGateway: Invalid message format: Unexpected field "foo" at position 42
+2025-11-22 07:33:12.781 [INF] Cache: POST /api/v1/orders completed in 3093ms
+2025-11-22 07:33:16.404 [DBG] ApiGateway: Parsed configuration: {"timeout": 30, "retries": 3}
+2025-11-22 07:33:17.246 [INF] MessageQueue: DELETE /api/v1/sessions/753097a9 completed in 3523ms
+2025-11-22 07:33:17.923 [DBG] Cache: Cache lookup for key cache:session:eda7a236
+2025-11-22 07:33:21.603 [INF] Scheduler: Scheduled job DataSync completed in 107ms
+2025-11-22 07:33:25.077 [INF] Cache: Message published to tasks
+2025-11-22 07:33:28.374 [INF] MessageQueue: Health check passed
+2025-11-22 07:33:33.284 [INF] Cache: Health check passed
+2025-11-22 07:33:34.672 [INF] Cache: Request ab90f043 completed in 3370ms
+2025-11-22 07:33:35.260 [INF] Cache: Message published to tasks
+2025-11-22 07:33:39.570 [FTL] MessageQueue: Application startup failed: Resource not found
+2025-11-22 07:33:44.205 [INF] Cache: GET /api/v1/users/user_1111 completed in 607ms
+2025-11-22 07:33:46.583 [INF] ApiGateway: Cache hit for key cache:config:0efe38b2
+2025-11-22 07:33:48.242 [INF] FileProcessor: Message consumed from orders in 32ms
+2025-11-22 07:33:51.988 [DBG] FileProcessor: Query execution plan generated
+2025-11-22 07:33:55.434 [INF] Database: File export_cf12894b.csv processed, 2581 records
+2025-11-22 07:33:55.880 [DBG] Scheduler: Processing request 74fb5547
+2025-11-22 07:33:59.669 [INF] Scheduler: GET /api/v1/users/user_5343 completed in 4689ms
+2025-11-22 07:33:59.922 [INF] Database: DELETE /api/v1/sessions/2cc74b05 completed in 42ms
+2025-11-22 07:34:03.717 [DBG] Scheduler: Query execution plan generated
+2025-11-22 07:34:07.264 [DBG] Database: Connection pool status: 13/20 active
+2025-11-22 07:34:08.946 [INF] Auth: Scheduled job CleanupJob started
+2025-11-22 07:34:11.481 [DBG] Scheduler: Connection pool status: 11/20 active
+2025-11-22 07:34:11.939 [DBG] FileProcessor: Connection pool status: 20/20 active
+2025-11-22 07:34:16.232 [DBG] Cache: Query execution plan generated
+2025-11-22 07:34:20.729 [INF] Scheduler: Batch processing completed: 902/1065 items
+2025-11-22 07:34:22.424 [INF] Scheduler: Health check passed
+2025-11-22 07:34:24.747 [WRN] Cache: Certificate expires in 7 days
+2025-11-22 07:34:28.580 [INF] HttpServer: Cache hit for key cache:user:b35079e9
+2025-11-22 07:34:28.591 [INF] Auth: Health check passed
+2025-11-22 07:34:31.495 [DBG] FileProcessor: Processing request f46f8ecf
+2025-11-22 07:34:33.957 [DBG] Database: Parsed configuration: {"timeout": 30, "retries": 3}
+2025-11-22 07:34:34.316 [DBG] MessageQueue: Parsed configuration: {"timeout": 30, "retries": 3}
+2025-11-22 07:34:36.867 [DBG] Config: Query execution plan generated
+2025-11-22 07:34:39.193 [INF] MessageQueue: Message published to orders
+2025-11-22 07:34:42.303 [DBG] Cache: Connection pool status: 6/20 active
+2025-11-22 07:34:44.679 [INF] Metrics: User user_5607 authenticated successfully
+2025-11-22 07:34:46.208 [DBG] Config: Processing request b0279d2e
+2025-11-22 07:34:47.266 [INF] Database: Configuration reloaded
+2025-11-22 07:34:49.429 [DBG] HttpServer: Parsed configuration: {"timeout": 30, "retries": 3}
+2025-11-22 07:34:53.508 [INF] Auth: Outbound HTTP call to PaymentService completed in 249ms
+2025-11-22 07:34:57.524 [INF] Cache: User user_5520 authenticated successfully
+2025-11-22 07:35:00.717 [DBG] MessageQueue: Cache lookup for key cache:session:4ad42a47
+2025-11-22 07:35:03.899 [INF] Database: File import_b5bece32.csv processed, 9277 records
+2025-11-22 07:35:07.368 [FTL] Metrics: Application startup failed: Resource not found
+2025-11-22 07:35:07.549 [INF] Scheduler: Cache hit for key cache:config:e01f5a36
+2025-11-22 07:35:09.147 [DBG] MessageQueue: Cache lookup for key cache:config:ae3489c6
+2025-11-22 07:35:12.731 [INF] MessageQueue: Batch processing completed: 947/1049 items
+2025-11-22 07:35:13.869 [DBG] FileProcessor: Query execution plan generated
+2025-11-22 07:35:16.433 [INF] Database: Message consumed from notifications in 330ms
+2025-11-22 07:35:21.078 [INF] Auth: Database query executed in 4047ms
+2025-11-22 07:35:21.951 [INF] Database: File import_30c68235.csv processed, 8395 records
+2025-11-22 07:35:24.942 [INF] HttpServer: Message consumed from events in 154ms
+2025-11-22 07:35:29.447 [INF] Metrics: Message published to tasks
+2025-11-22 07:35:32.306 [INF] Database: Scheduled job DataSync started
+2025-11-22 07:35:36.114 [DBG] MessageQueue: Parsed configuration: {"timeout": 30, "retries": 3}
+2025-11-22 07:35:36.855 [DBG] MessageQueue: Query execution plan generated
+2025-11-22 07:35:41.637 [DBG] Auth: Processing request 31f18ca2
+2025-11-22 07:35:41.815 [INF] Database: DELETE /api/v1/sessions/28dd7e15 completed in 10ms
+2025-11-22 07:35:42.389 [INF] Cache: Health check passed
+2025-11-22 07:35:42.450 [INF] FileProcessor: Database query executed in 125ms
+2025-11-22 07:35:43.990 [INF] HttpServer: DELETE /api/v1/sessions/d52c65b3 completed in 1ms
+2025-11-22 07:35:47.658 [DBG] Database: Query execution plan generated
+2025-11-22 07:35:51.787 [DBG] Database: Query execution plan generated
+2025-11-22 07:35:56.214 [INF] Auth: Scheduled job DataSync started
+2025-11-22 07:35:59.418 [INF] Metrics: Service started on port 3000
+2025-11-22 07:36:04.085 [INF] MessageQueue: Cache hit for key cache:config:3cefbe9b
+2025-11-22 07:36:08.937 [INF] Cache: Message published to tasks
+2025-11-22 07:36:11.608 [INF] Scheduler: GET /api/v1/users/user_2470 completed in 43ms
+2025-11-22 07:36:11.686 [INF] HttpServer: Scheduled job ReportGenerator started
+2025-11-22 07:36:15.473 [INF] ApiGateway: Scheduled job BackupJob completed in 23ms
+2025-11-22 07:36:19.446 [WRN] Config: Connection pool exhausted, waiting for available connection
+2025-11-22 07:36:24.348 [WRN] HttpServer: Slow query detected: 176ms for SELECT * FROM users WHERE...
+2025-11-22 07:36:25.515 [INF] MessageQueue: Message published to orders
+2025-11-22 07:36:25.922 [DBG] Cache: Processing request 4be90c64
+2025-11-22 07:36:29.907 [INF] Metrics: File report_4e1c711d.csv processed, 3632 records
+2025-11-22 07:36:31.285 [DBG] Scheduler: Processing request 41d4da11
+2025-11-22 07:36:33.166 [INF] Scheduler: PUT /api/v1/users/user_6979/profile completed in 752ms
+2025-11-22 07:36:36.042 [ERR] Database: Database connection failed: Resource not found
+2025-11-22 07:36:38.046 [INF] HttpServer: Configuration reloaded
+2025-11-22 07:36:42.491 [DBG] Auth: Processing request c68f460c
+2025-11-22 07:36:47.199 [INF] FileProcessor: GET /api/v1/products?page=9 completed in 999ms
+2025-11-22 07:36:48.777 [INF] MessageQueue: Database query executed in 4799ms
+2025-11-22 07:36:53.445 [INF] ApiGateway: Batch processing completed: 120/1022 items
+2025-11-22 07:36:55.565 [WRN] FileProcessor: Deprecated API endpoint called: /api/v1/users
+2025-11-22 07:36:56.392 [INF] MessageQueue: Cache hit for key cache:session:322ed05d
+2025-11-22 07:36:58.849 [WRN] Auth: Deprecated API endpoint called: /api/v1/orders
+2025-11-22 07:36:59.599 [DBG] Auth: Query execution plan generated
+2025-11-22 07:37:01.256 [DBG] Metrics: Cache lookup for key cache:user:d87a2b1b
+2025-11-22 07:37:04.937 [INF] Auth: Database query executed in 344ms
+2025-11-22 07:37:07.028 [INF] MessageQueue: Cache hit for key cache:session:1670656b
+2025-11-22 07:37:09.618 [INF] HttpServer: Scheduled job DataSync started
+2025-11-22 07:37:11.694 [FTL] Database: Critical resource unavailable: Redis
+2025-11-22 07:37:14.535 [WRN] Database: Retry attempt 2 for operation ProcessPayment
+2025-11-22 07:37:15.117 [INF] FileProcessor: GET /api/v1/users/user_1122 completed in 153ms
+2025-11-22 07:37:16.974 [DBG] HttpServer: Cache lookup for key cache:config:08b79fbe
+2025-11-22 07:37:20.532 [INF] Database: Scheduled job CleanupJob completed in 146ms
+2025-11-22 07:37:22.745 [DBG] Metrics: Query execution plan generated
+2025-11-22 07:37:26.375 [DBG] ApiGateway: Cache lookup for key cache:config:e6f8edcc
+2025-11-22 07:37:31.010 [WRN] FileProcessor: Connection pool exhausted, waiting for available connection
+2025-11-22 07:37:31.161 [DBG] HttpServer: Cache lookup for key cache:session:9f223eef
+2025-11-22 07:37:34.427 [INF] Config: Message consumed from notifications in 106ms
+2025-11-22 07:37:38.652 [INF] MessageQueue: PUT /api/v1/users/user_6692/profile completed in 172ms
+2025-11-22 07:37:41.277 [DBG] Config: Connection pool status: 2/20 active
+2025-11-22 07:37:44.424 [DBG] Cache: Processing request d749a510
+2025-11-22 07:37:46.645 [INF] Scheduler: File import_6749e4d2.csv processed, 128 records
+2025-11-22 07:37:48.315 [DBG] Scheduler: Query execution plan generated
+2025-11-22 07:37:52.095 [DBG] Scheduler: Connection pool status: 18/20 active
+2025-11-22 07:37:55.665 [INF] Database: Configuration reloaded
+2025-11-22 07:38:00.627 [INF] Metrics: DELETE /api/v1/sessions/f7666e75 completed in 188ms
+2025-11-22 07:38:02.577 [INF] Metrics: User user_1447 authenticated successfully
+2025-11-22 07:38:03.815 [WRN] HttpServer: Retry attempt 5 for operation ProcessPayment
+2025-11-22 07:38:08.300 [INF] Metrics: Scheduled job DataSync completed in 2494ms
+2025-11-22 07:38:08.579 [WRN] FileProcessor: Memory usage at 78%
+2025-11-22 07:38:11.894 [INF] Cache: Scheduled job BackupJob completed in 153ms
+2025-11-22 07:38:12.357 [INF] FileProcessor: Batch processing completed: 135/1006 items
+2025-11-22 07:38:13.690 [INF] Scheduler: Configuration reloaded
+2025-11-22 07:38:18.234 [INF] MessageQueue: Cache hit for key cache:config:81228b5e
+2025-11-22 07:38:21.010 [DBG] MessageQueue: Cache lookup for key cache:session:52a117f9
+2025-11-22 07:38:22.969 [DBG] Cache: Processing request f450f975
+2025-11-22 07:38:25.788 [INF] Cache: Outbound HTTP call to NotificationService completed in 147ms
+2025-11-22 07:38:27.481 [INF] Cache: Outbound HTTP call to UserService completed in 36ms
+2025-11-22 07:38:31.951 [INF] FileProcessor: File import_b7cc8919.csv processed, 7892 records
+2025-11-22 07:38:33.365 [INF] HttpServer: GET /api/v1/users/user_6560 completed in 829ms
+2025-11-22 07:38:34.452 [WRN] FileProcessor: Retry attempt 2 for operation SyncData
+2025-11-22 07:38:39.055 [FTL] Config: Unrecoverable error, shutting down
+2025-11-22 07:38:39.460 [INF] FileProcessor: User user_9560 authenticated successfully
+2025-11-22 07:38:40.112 [INF] Config: Configuration reloaded
+2025-11-22 07:38:43.801 [INF] MessageQueue: DELETE /api/v1/sessions/862eb9f5 completed in 16ms
+2025-11-22 07:38:45.990 [DBG] ApiGateway: Processing request bc90e38d
+2025-11-22 07:38:50.510 [INF] FileProcessor: Cache hit for key cache:session:775919f5
+2025-11-22 07:38:50.547 [DBG] Auth: Query execution plan generated
+2025-11-22 07:38:52.600 [INF] HttpServer: Service started on port 8080
+2025-11-22 07:38:55.835 [DBG] MessageQueue: Cache lookup for key cache:session:06779eff
+2025-11-22 07:38:57.223 [DBG] FileProcessor: Processing request b9a3b954
+2025-11-22 07:38:59.082 [DBG] Config: Query execution plan generated
+2025-11-22 07:39:00.624 [DBG] Cache: Processing request 8f231a28
+2025-11-22 07:39:04.558 [INF] FileProcessor: Request 91453b42 completed in 404ms
+2025-11-22 07:39:05.104 [INF] ApiGateway: Request 3b0a889c completed in 167ms
+2025-11-22 07:39:09.457 [INF] ApiGateway: Cache hit for key cache:config:0e183611
+2025-11-22 07:39:11.392 [DBG] Cache: Parsed configuration: {"timeout": 30, "retries": 3}
+2025-11-22 07:39:15.197 [INF] MessageQueue: Configuration reloaded
+2025-11-22 07:39:17.228 [TRC] Auth: Variable state: {counter: 42, flag: true}
+2025-11-22 07:39:19.467 [FTL] Database: Application startup failed: Invalid token
+2025-11-22 07:39:22.900 [INF] Cache: Request e3ddac0e completed in 170ms
+2025-11-22 07:39:26.587 [INF] Cache: Scheduled job DataSync completed in 41ms
+2025-11-22 07:39:30.183 [INF] FileProcessor: File data_5fb7dceb.csv processed, 5734 records
+2025-11-22 07:39:31.730 [INF] Metrics: File report_9359817d.csv processed, 3640 records
+2025-11-22 07:39:34.052 [WRN] Scheduler: Rate limit approaching for client client_f19d9691
+2025-11-22 07:39:38.174 [INF] Cache: User user_7528 authenticated successfully
+2025-11-22 07:39:40.602 [INF] Metrics: Connected to database postgres://db:5432/app
+2025-11-22 07:39:43.400 [INF] Metrics: POST /api/v1/orders completed in 3927ms
+2025-11-22 07:39:44.493 [INF] FileProcessor: GET /api/v1/users/user_9180 completed in 2572ms
+2025-11-22 07:39:45.157 [INF] Cache: Outbound HTTP call to UserService completed in 955ms
+2025-11-22 07:39:48.774 [DBG] FileProcessor: Parsed configuration: {"timeout": 30, "retries": 3}
+2025-11-22 07:39:51.133 [INF] Config: Scheduled job DataSync completed in 22ms
+2025-11-22 07:39:54.595 [INF] Metrics: DELETE /api/v1/sessions/7c1f171b completed in 925ms
+2025-11-22 07:39:54.880 [INF] HttpServer: Database query executed in 14ms
+2025-11-22 07:39:57.782 [WRN] Metrics: Rate limit approaching for client client_1486f628
+2025-11-22 07:39:58.290 [INF] Metrics: Scheduled job ReportGenerator completed in 2757ms
+2025-11-22 07:39:58.744 [INF] Cache: Configuration reloaded
+2025-11-22 07:39:59.397 [DBG] ApiGateway: Query execution plan generated
+2025-11-22 07:40:00.524 [INF] Metrics: GET /api/v1/users/user_9711 completed in 79ms
+2025-11-22 07:40:02.943 [INF] Database: Message consumed from notifications in 237ms
+2025-11-22 07:40:04.897 [INF] Scheduler: POST /api/v1/orders completed in 31ms
+2025-11-22 07:40:08.444 [INF] ApiGateway: Outbound HTTP call to PaymentService completed in 44ms
+2025-11-22 07:40:11.058 [INF] Auth: Connected to database postgres://db:5432/app
+2025-11-22 07:40:14.872 [TRC] Database: Loop iteration 82 of 1099
+2025-11-22 07:40:15.230 [INF] FileProcessor: Message consumed from orders in 122ms
+2025-11-22 07:40:19.581 [INF] FileProcessor: Message published to tasks
+2025-11-22 07:40:23.105 [ERR] Auth: Timeout waiting for response from PaymentService
+2025-11-22 07:40:23.517 [INF] MessageQueue: Message consumed from notifications in 3887ms
+2025-11-22 07:40:27.658 [TRC] Config: Entering method Transform with parameters {id: 123, type: "full"}
+2025-11-22 07:40:30.440 [WRN] Config: Memory usage at 85%
+2025-11-22 07:40:32.104 [INF] Auth: GET /api/v1/users/user_9533 completed in 2504ms
+2025-11-22 07:40:34.747 [INF] Scheduler: Service started on port 8080
+2025-11-22 07:40:38.721 [INF] HttpServer: Outbound HTTP call to NotificationService completed in 283ms
+2025-11-22 07:40:39.175 [WRN] Cache: Deprecated API endpoint called: /api/v1/users
+2025-11-22 07:40:41.236 [DBG] Config: Query execution plan generated
+2025-11-22 07:40:44.161 [DBG] Auth: Connection pool status: 13/20 active
+2025-11-22 07:40:45.815 [DBG] Metrics: Connection pool status: 10/20 active
+2025-11-22 07:40:48.246 [INF] ApiGateway: Request 55fd376c completed in 659ms
+2025-11-22 07:40:53.150 [INF] ApiGateway: Batch processing completed: 144/1051 items
+2025-11-22 07:40:54.024 [INF] Config: Outbound HTTP call to UserService completed in 651ms
+2025-11-22 07:40:57.567 [INF] MessageQueue: Batch processing completed: 890/1046 items
+2025-11-22 07:41:01.965 [INF] Cache: DELETE /api/v1/sessions/2a496b55 completed in 984ms
+2025-11-22 07:41:04.092 [INF] FileProcessor: POST /api/v1/orders completed in 14ms
+2025-11-22 07:41:06.174 [DBG] Scheduler: Processing request c88f6866
+2025-11-22 07:41:10.428 [INF] HttpServer: User user_8631 authenticated successfully
+2025-11-22 07:41:14.991 [WRN] Scheduler: Deprecated API endpoint called: /api/v1/users
+2025-11-22 07:41:15.817 [DBG] Config: Processing request 3e659a22
+2025-11-22 07:41:16.906 [INF] ApiGateway: Batch processing completed: 473/1001 items
+2025-11-22 07:41:18.127 [INF] Database: Connected to database mysql://db:3306/app
+2025-11-22 07:41:21.192 [ERR] Auth: Timeout waiting for response from NotificationService
+2025-11-22 07:41:21.954 [DBG] Cache: Query execution plan generated
+2025-11-22 07:41:25.476 [DBG] HttpServer: Parsed configuration: {"timeout": 30, "retries": 3}
+2025-11-22 07:41:28.455 [DBG] Database: Cache lookup for key cache:user:f90edf71
+2025-11-22 07:41:32.645 [INF] Cache: Configuration reloaded
+2025-11-22 07:41:34.657 [INF] Scheduler: GET /api/v1/users/user_6956 completed in 11ms
+2025-11-22 07:41:36.142 [INF] Metrics: Service started on port 9000
+2025-11-22 07:41:38.301 [INF] Database: User user_8886 authenticated successfully
+2025-11-22 07:41:41.109 [INF] HttpServer: Cache hit for key cache:user:1092e4b4
+2025-11-22 07:41:43.267 [INF] ApiGateway: Database query executed in 722ms
+2025-11-22 07:41:43.595 [DBG] Metrics: Query execution plan generated
+2025-11-22 07:41:46.762 [DBG] Metrics: Parsed configuration: {"timeout": 30, "retries": 3}
+2025-11-22 07:41:49.953 [INF] Auth: Service started on port 5000
+2025-11-22 07:41:51.750 [ERR] FileProcessor: Timeout waiting for response from NotificationService
+2025-11-22 07:41:52.454 [WRN] Auth: Rate limit approaching for client client_066bf683
+2025-11-22 07:41:55.327 [DBG] ApiGateway: Parsed configuration: {"timeout": 30, "retries": 3}
+2025-11-22 07:41:56.276 [INF] HttpServer: File report_66309df7.csv processed, 8283 records
+2025-11-22 07:42:00.779 [DBG] MessageQueue: Connection pool status: 15/20 active
+2025-11-22 07:42:04.284 [DBG] Metrics: Query execution plan generated
+2025-11-22 07:42:09.030 [DBG] FileProcessor: Processing request d4fc76e6
+2025-11-22 07:42:10.132 [ERR] Metrics: Invalid message format: Unexpected field "foo" at position 42
+2025-11-22 07:42:12.468 [INF] FileProcessor: Cache hit for key cache:user:548364ca
+2025-11-22 07:42:17.214 [INF] FileProcessor: PUT /api/v1/users/user_4075/profile completed in 856ms
+2025-11-22 07:42:22.167 [TRC] Database: Loop iteration 60 of 1081
+2025-11-22 07:42:26.334 [INF] Metrics: Service started on port 5000
+2025-11-22 07:42:30.645 [TRC] Metrics: Entering method ProcessOrder with parameters {id: 123, type: "full"}
+2025-11-22 07:42:31.694 [INF] Auth: User user_8457 authenticated successfully
+2025-11-22 07:42:34.145 [TRC] MessageQueue: Variable state: {counter: 42, flag: true}
+2025-11-22 07:42:35.127 [DBG] ApiGateway: Parsed configuration: {"timeout": 30, "retries": 3}
+2025-11-22 07:42:37.091 [ERR] Scheduler: Invalid message format: Unexpected field "foo" at position 42
+2025-11-22 07:42:37.234 [DBG] MessageQueue: Cache lookup for key cache:config:c05598c6
+2025-11-22 07:42:39.741 [DBG] FileProcessor: Connection pool status: 10/20 active
+2025-11-22 07:42:44.504 [INF] HttpServer: Database query executed in 157ms
+2025-11-22 07:42:44.556 [DBG] FileProcessor: Query execution plan generated
+2025-11-22 07:42:48.007 [INF] Scheduler: Configuration reloaded
+2025-11-22 07:42:52.109 [INF] Metrics: Database query executed in 2ms
+2025-11-22 07:42:53.647 [INF] HttpServer: Scheduled job CleanupJob completed in 49ms
+2025-11-22 07:42:56.740 [INF] Config: Request b667ceb2 completed in 529ms
+2025-11-22 07:43:01.366 [DBG] Scheduler: Query execution plan generated
+2025-11-22 07:43:03.693 [INF] MessageQueue: Message published to orders
+2025-11-22 07:43:04.059 [DBG] Cache: Connection pool status: 13/20 active
+2025-11-22 07:43:08.799 [INF] FileProcessor: Connected to database postgres://db:5432/app
+2025-11-22 07:43:13.016 [DBG] Auth: Cache lookup for key cache:config:c425d520
+2025-11-22 07:43:15.547 [DBG] ApiGateway: Cache lookup for key cache:session:c4519b73
+2025-11-22 07:43:19.260 [DBG] MessageQueue: Parsed configuration: {"timeout": 30, "retries": 3}
+2025-11-22 07:43:22.708 [INF] Database: Scheduled job CleanupJob completed in 61ms
+2025-11-22 07:43:25.698 [INF] HttpServer: Database query executed in 150ms
+2025-11-22 07:43:30.340 [INF] Database: GET /api/v1/users/user_7685 completed in 111ms
+2025-11-22 07:43:34.189 [INF] MessageQueue: PUT /api/v1/users/user_4081/profile completed in 804ms
+2025-11-22 07:43:37.868 [INF] MessageQueue: Health check passed
+2025-11-22 07:43:38.500 [DBG] Config: Processing request 90c1f129
+2025-11-22 07:43:38.696 [INF] FileProcessor: Service started on port 8080
+2025-11-22 07:43:40.963 [INF] Database: Configuration reloaded
+2025-11-22 07:43:41.484 [DBG] Auth: Processing request e0404a72
+2025-11-22 07:43:43.293 [INF] Scheduler: Health check passed
+2025-11-22 07:43:45.682 [INF] HttpServer: Service started on port 443
+2025-11-22 07:43:49.760 [INF] Metrics: File import_5f40bcf6.csv processed, 3533 records
+2025-11-22 07:43:50.030 [INF] Config: POST /api/v1/orders completed in 361ms
+2025-11-22 07:43:54.765 [INF] Metrics: User user_1994 authenticated successfully
+2025-11-22 07:43:56.814 [INF] Metrics: Service started on port 8080
+2025-11-22 07:43:59.582 [ERR] Scheduler: Timeout waiting for response from UserService
+2025-11-22 07:44:01.336 [INF] HttpServer: Message consumed from orders in 4156ms
+2025-11-22 07:44:06.079 [DBG] ApiGateway: Connection pool status: 18/20 active
+2025-11-22 07:44:10.572 [INF] Auth: Scheduled job CleanupJob started
+2025-11-22 07:44:12.207 [INF] FileProcessor: Service started on port 8080
+2025-11-22 07:44:14.215 [DBG] Auth: Query execution plan generated
+2025-11-22 07:44:18.500 [INF] Auth: Outbound HTTP call to PaymentService completed in 340ms
+2025-11-22 07:44:19.479 [DBG] HttpServer: Connection pool status: 19/20 active
+2025-11-22 07:44:23.950 [ERR] Scheduler: Invalid message format: Unexpected field "foo" at position 42
+2025-11-22 07:44:28.577 [WRN] ApiGateway: Retry attempt 1 for operation ProcessPayment
+2025-11-22 07:44:28.793 [INF] Database: Configuration reloaded
+2025-11-22 07:44:33.513 [INF] Metrics: Database query executed in 158ms
+2025-11-22 07:44:36.993 [DBG] FileProcessor: Processing request b8d445e0
+2025-11-22 07:44:40.305 [INF] ApiGateway: User user_3013 authenticated successfully
+2025-11-22 07:44:44.878 [ERR] MessageQueue: Authentication failed for user user_6944
+2025-11-22 07:44:46.038 [INF] MessageQueue: Health check passed
+2025-11-22 07:44:49.452 [INF] Config: Scheduled job DataSync started
+2025-11-22 07:44:49.900 [DBG] FileProcessor: Cache lookup for key cache:session:e1823afe
+2025-11-22 07:44:52.339 [FTL] Auth: Critical resource unavailable: Database
+2025-11-22 07:44:52.725 [INF] Auth: User user_7822 authenticated successfully
+2025-11-22 07:44:56.293 [DBG] Config: Processing request b3cbe2af
+2025-11-22 07:44:59.714 [INF] MessageQueue: Scheduled job DataSync completed in 121ms
+2025-11-22 07:45:02.692 [INF] HttpServer: Scheduled job BackupJob started
+2025-11-22 07:45:04.789 [INF] Scheduler: PUT /api/v1/users/user_4331/profile completed in 4231ms
+2025-11-22 07:45:07.217 [INF] ApiGateway: Batch processing completed: 730/1051 items
+2025-11-22 07:45:08.598 [ERR] Auth: Unhandled exception in Database: Invalid token
+2025-11-22 07:45:10.389 [DBG] Scheduler: Cache lookup for key cache:config:85e5009a
+2025-11-22 07:45:13.281 [INF] FileProcessor: Scheduled job DataSync started
+2025-11-22 07:45:14.740 [INF] Cache: Health check passed
+2025-11-22 07:45:18.769 [INF] Config: Health check passed
+2025-11-22 07:45:23.735 [INF] Config: DELETE /api/v1/sessions/3bfb9dce completed in 666ms
+2025-11-22 07:45:25.894 [DBG] FileProcessor: Connection pool status: 19/20 active
+2025-11-22 07:45:30.189 [INF] Config: Message published to orders
+2025-11-22 07:45:32.525 [INF] Metrics: Scheduled job BackupJob completed in 4102ms
+2025-11-22 07:45:34.267 [INF] Config: PUT /api/v1/users/user_5532/profile completed in 3778ms
+2025-11-22 07:45:36.468 [WRN] Config: Memory usage at 87%
+2025-11-22 07:45:40.298 [INF] Database: Health check passed
+2025-11-22 07:45:41.351 [DBG] Scheduler: Parsed configuration: {"timeout": 30, "retries": 3}
+2025-11-22 07:45:45.300 [DBG] MessageQueue: Cache lookup for key cache:session:c30434c6
+2025-11-22 07:45:49.823 [INF] HttpServer: GET /api/v1/products?page=42 completed in 728ms
+2025-11-22 07:45:52.814 [INF] MessageQueue: File export_d8cb5e03.csv processed, 453 records
+2025-11-22 07:45:56.731 [DBG] Auth: Cache lookup for key cache:session:53999c88
+2025-11-22 07:45:57.322 [INF] HttpServer: Batch processing completed: 103/1000 items
+2025-11-22 07:46:01.651 [INF] Metrics: File data_49735232.csv processed, 312 records
+2025-11-22 07:46:06.095 [INF] Cache: Message published to orders
+2025-11-22 07:46:07.256 [WRN] Auth: Memory usage at 82%
+2025-11-22 07:46:07.846 [WRN] HttpServer: Slow query detected: 28ms for SELECT * FROM users WHERE...
+2025-11-22 07:46:12.143 [INF] ApiGateway: Request 77d5f300 completed in 33ms
+2025-11-22 07:46:15.917 [INF] Auth: File report_21fbde5c.csv processed, 6514 records
+2025-11-22 07:46:19.505 [INF] Config: Scheduled job DataSync completed in 3ms
+2025-11-22 07:46:23.453 [INF] Metrics: Configuration reloaded
+2025-11-22 07:46:24.296 [DBG] Metrics: Processing request 1c6e8ef4
+2025-11-22 07:46:25.749 [DBG] ApiGateway: Cache lookup for key cache:session:38dc3c8d
+2025-11-22 07:46:29.423 [DBG] Auth: Query execution plan generated
+2025-11-22 07:46:30.016 [ERR] Cache: Timeout waiting for response from PaymentService
+2025-11-22 07:46:31.294 [WRN] MessageQueue: Memory usage at 81%
+2025-11-22 07:46:32.058 [DBG] Cache: Query execution plan generated
+2025-11-22 07:46:36.041 [DBG] Auth: Parsed configuration: {"timeout": 30, "retries": 3}
+2025-11-22 07:46:36.920 [INF] MessageQueue: Outbound HTTP call to PaymentService completed in 269ms
+2025-11-22 07:46:40.567 [FTL] Config: Application startup failed: Resource not found
+2025-11-22 07:46:42.272 [INF] HttpServer: PUT /api/v1/users/user_2097/profile completed in 940ms
+2025-11-22 07:46:46.623 [INF] Auth: Service started on port 443
+2025-11-22 07:46:50.456 [INF] Auth: Request 980d083a completed in 211ms
+2025-11-22 07:46:53.553 [INF] Config: Scheduled job ReportGenerator started
+2025-11-22 07:46:58.101 [INF] MessageQueue: Connected to database mysql://db:3306/app
+2025-11-22 07:47:02.450 [INF] HttpServer: POST /api/v1/orders completed in 4ms
+2025-11-22 07:47:05.955 [INF] Config: Batch processing completed: 507/1079 items
+2025-11-22 07:47:06.446 [ERR] MessageQueue: Authentication failed for user user_9559
+2025-11-22 07:47:09.771 [DBG] Scheduler: Connection pool status: 5/20 active
+2025-11-22 07:47:13.129 [INF] FileProcessor: Configuration reloaded
+2025-11-22 07:47:14.395 [INF] HttpServer: Outbound HTTP call to PaymentService completed in 1799ms
+2025-11-22 07:47:18.688 [DBG] MessageQueue: Cache lookup for key cache:session:d265a3b9
+2025-11-22 07:47:22.925 [INF] Scheduler: GET /api/v1/products?page=52 completed in 223ms
+2025-11-22 07:47:25.623 [DBG] Metrics: Processing request 49173a45
+2025-11-22 07:47:26.052 [ERR] Scheduler: Failed to process request 71e580d3: Connection refused
+2025-11-22 07:47:27.620 [DBG] Scheduler: Connection pool status: 7/20 active
+2025-11-22 07:47:29.592 [INF] Scheduler: DELETE /api/v1/sessions/e70c14c6 completed in 460ms
+2025-11-22 07:47:31.699 [INF] Cache: File data_68263e04.csv processed, 5868 records
+2025-11-22 07:47:35.206 [INF] ApiGateway: Message published to orders
+2025-11-22 07:47:39.274 [INF] FileProcessor: Health check passed
+2025-11-22 07:47:41.588 [ERR] FileProcessor: Timeout waiting for response from PaymentService
+2025-11-22 07:47:46.463 [INF] Metrics: DELETE /api/v1/sessions/335e8d0b completed in 106ms
+2025-11-22 07:47:46.492 [INF] Auth: PUT /api/v1/users/user_6974/profile completed in 1782ms
+2025-11-22 07:47:47.193 [INF] ApiGateway: Connected to database postgres://db:5432/app
+2025-11-22 07:47:47.912 [DBG] Cache: Processing request a09b7c68
+2025-11-22 07:47:50.427 [INF] Cache: File report_fa345920.csv processed, 8794 records
+2025-11-22 07:47:51.059 [INF] Auth: Service started on port 9000
+2025-11-22 07:47:53.259 [DBG] Auth: Connection pool status: 12/20 active
+2025-11-22 07:47:54.248 [DBG] ApiGateway: Query execution plan generated
+2025-11-22 07:47:54.420 [FTL] Database: Data corruption detected in orders
+2025-11-22 07:47:56.630 [DBG] Cache: Query execution plan generated
+2025-11-22 07:47:56.677 [DBG] Cache: Parsed configuration: {"timeout": 30, "retries": 3}
+2025-11-22 07:47:57.026 [ERR] MessageQueue: Authentication failed for user user_6807
+2025-11-22 07:47:58.107 [INF] HttpServer: Scheduled job BackupJob completed in 1271ms
+2025-11-22 07:47:58.554 [ERR] Scheduler: Unhandled exception in MessageQueue: Permission denied
+2025-11-22 07:48:03.363 [INF] Config: Request 53e9b27d completed in 25ms
+2025-11-22 07:48:04.362 [INF] Database: Scheduled job DataSync completed in 1800ms
+2025-11-22 07:48:08.975 [INF] Metrics: Scheduled job DataSync completed in 833ms
+2025-11-22 07:48:12.991 [INF] ApiGateway: GET /api/v1/users/user_3812 completed in 18ms
+2025-11-22 07:48:15.063 [INF] ApiGateway: Cache hit for key cache:config:121de851
+2025-11-22 07:48:16.598 [INF] FileProcessor: Health check passed
+2025-11-22 07:48:18.013 [INF] Scheduler: GET /api/v1/users/user_4022 completed in 317ms
+2025-11-22 07:48:19.635 [INF] Auth: Message consumed from events in 341ms
+2025-11-22 07:48:24.213 [INF] Database: Scheduled job CleanupJob started
+2025-11-22 07:48:28.500 [DBG] Metrics: Cache lookup for key cache:config:1a087719
+2025-11-22 07:48:29.277 [INF] Database: DELETE /api/v1/sessions/3aa29dab completed in 79ms
+2025-11-22 07:48:34.244 [INF] Database: Database query executed in 129ms
+2025-11-22 07:48:36.268 [INF] ApiGateway: Health check passed
+2025-11-22 07:48:36.416 [INF] Config: User user_4296 authenticated successfully
+2025-11-22 07:48:38.541 [INF] Metrics: Database query executed in 133ms
+2025-11-22 07:48:43.038 [INF] Cache: Connected to database postgres://db:5432/app
+2025-11-22 07:48:47.451 [INF] Config: Scheduled job BackupJob completed in 107ms
+2025-11-22 07:48:52.161 [DBG] Auth: Cache lookup for key cache:session:ac8170a0
+2025-11-22 07:48:52.746 [ERR] ApiGateway: Database connection failed: Permission denied
+2025-11-22 07:48:57.618 [DBG] Metrics: Parsed configuration: {"timeout": 30, "retries": 3}
+2025-11-22 07:49:00.561 [INF] HttpServer: Health check passed
+2025-11-22 07:49:04.619 [INF] Metrics: Configuration reloaded
+2025-11-22 07:49:09.139 [WRN] HttpServer: Retry attempt 4 for operation SendEmail
+2025-11-22 07:49:09.439 [DBG] Database: Connection pool status: 13/20 active
+2025-11-22 07:49:13.716 [WRN] Auth: Rate limit approaching for client client_901c35f1
+2025-11-22 07:49:18.136 [DBG] Auth: Connection pool status: 1/20 active
+2025-11-22 07:49:19.335 [ERR] MessageQueue: Failed to process request 60ac1d59: Resource not found
+2025-11-22 07:49:23.529 [INF] Config: PUT /api/v1/users/user_3165/profile completed in 3368ms
+2025-11-22 07:49:26.816 [DBG] FileProcessor: Parsed configuration: {"timeout": 30, "retries": 3}
+2025-11-22 07:49:29.767 [INF] Scheduler: Health check passed
+2025-11-22 07:49:34.206 [DBG] HttpServer: Query execution plan generated
+2025-11-22 07:49:39.045 [DBG] HttpServer: Query execution plan generated
+2025-11-22 07:49:39.078 [INF] Metrics: Health check passed
+2025-11-22 07:49:39.417 [INF] Database: Cache hit for key cache:config:2acb66a7
+2025-11-22 07:49:43.090 [DBG] Cache: Parsed configuration: {"timeout": 30, "retries": 3}
+2025-11-22 07:49:44.346 [INF] MessageQueue: PUT /api/v1/users/user_3549/profile completed in 127ms
+2025-11-22 07:49:44.481 [DBG] HttpServer: Query execution plan generated
+2025-11-22 07:49:48.776 [WRN] Metrics: Deprecated API endpoint called: /api/v1/legacy
+2025-11-22 07:49:51.840 [INF] Metrics: User user_9725 authenticated successfully
+2025-11-22 07:49:53.016 [TRC] ApiGateway: Entering method ProcessOrder with parameters {id: 123, type: "full"}
+2025-11-22 07:49:57.337 [INF] HttpServer: Request fada611b completed in 179ms
+2025-11-22 07:50:00.816 [DBG] Metrics: Cache lookup for key cache:session:8cacfdce
+2025-11-22 07:50:03.708 [DBG] MessageQueue: Cache lookup for key cache:session:256d0d4d
+2025-11-22 07:50:08.656 [FTL] FileProcessor: Critical resource unavailable: Redis
+2025-11-22 07:50:09.855 [INF] Scheduler: DELETE /api/v1/sessions/438fa0f1 completed in 1ms
+2025-11-22 07:50:13.517 [INF] MessageQueue: PUT /api/v1/users/user_5549/profile completed in 3305ms
+2025-11-22 07:50:17.628 [INF] Metrics: Scheduled job DataSync completed in 4758ms
+2025-11-22 07:50:21.260 [DBG] ApiGateway: Connection pool status: 11/20 active
+2025-11-22 07:50:25.368 [INF] Scheduler: Outbound HTTP call to PaymentService completed in 69ms
+2025-11-22 07:50:25.705 [TRC] Auth: Variable state: {counter: 42, flag: true}
+2025-11-22 07:50:26.742 [INF] ApiGateway: Outbound HTTP call to UserService completed in 874ms
+2025-11-22 07:50:29.392 [ERR] MessageQueue: File not found: report_ce5159a6.csv
+2025-11-22 07:50:29.730 [INF] Scheduler: Scheduled job ReportGenerator started
+2025-11-22 07:50:30.656 [DBG] Scheduler: Cache lookup for key cache:user:0d1b5a9f
+2025-11-22 07:50:33.095 [INF] ApiGateway: Message consumed from events in 548ms
+2025-11-22 07:50:33.878 [INF] Scheduler: Service started on port 3000
+2025-11-22 07:50:36.820 [DBG] Auth: Query execution plan generated
+2025-11-22 07:50:37.035 [INF] Config: Health check passed
+2025-11-22 07:50:37.575 [INF] ApiGateway: Health check passed
+2025-11-22 07:50:38.753 [INF] Scheduler: GET /api/v1/products?page=44 completed in 32ms
+2025-11-22 07:50:40.101 [INF] Scheduler: Cache hit for key cache:session:373c67b9
+2025-11-22 07:50:40.970 [INF] Config: Outbound HTTP call to NotificationService completed in 7ms
+2025-11-22 07:50:44.011 [INF] Metrics: Cache hit for key cache:user:d3ec806c
+2025-11-22 07:50:47.476 [INF] Scheduler: Service started on port 8080
+2025-11-22 07:50:51.187 [INF] MessageQueue: Scheduled job CleanupJob started
+2025-11-22 07:50:52.364 [INF] Auth: Health check passed
+2025-11-22 07:50:55.212 [INF] ApiGateway: Scheduled job BackupJob completed in 982ms
+2025-11-22 07:50:58.622 [INF] MessageQueue: Health check passed
+2025-11-22 07:51:00.510 [INF] FileProcessor: Request 4550939e completed in 35ms
+2025-11-22 07:51:02.302 [DBG] Metrics: Query execution plan generated
+2025-11-22 07:51:02.672 [DBG] Auth: Connection pool status: 12/20 active
+2025-11-22 07:51:07.474 [INF] Database: Scheduled job DataSync started
+2025-11-22 07:51:10.036 [WRN] Metrics: Memory usage at 91%
+2025-11-22 07:51:14.470 [DBG] HttpServer: Processing request 193086c6
+2025-11-22 07:51:15.026 [DBG] Cache: Parsed configuration: {"timeout": 30, "retries": 3}
+2025-11-22 07:51:18.777 [INF] Scheduler: Service started on port 443
+2025-11-22 07:51:19.291 [INF] Config: Message consumed from notifications in 165ms
+2025-11-22 07:51:20.127 [INF] Database: GET /api/v1/users/user_1570 completed in 2912ms
+2025-11-22 07:51:21.545 [WRN] Auth: Deprecated API endpoint called: /api/v1/users
+2025-11-22 07:51:23.893 [INF] Scheduler: Scheduled job BackupJob started
+2025-11-22 07:51:24.034 [TRC] Config: Variable state: {counter: 42, flag: true}
+2025-11-22 07:51:27.269 [INF] ApiGateway: File data_3aea6296.csv processed, 7639 records
+2025-11-22 07:51:32.127 [DBG] HttpServer: Query execution plan generated
+2025-11-22 07:51:36.952 [DBG] FileProcessor: Parsed configuration: {"timeout": 30, "retries": 3}
+2025-11-22 07:51:37.213 [INF] Metrics: Request 5aec93ea completed in 2815ms
+2025-11-22 07:51:40.521 [INF] FileProcessor: Health check passed
+2025-11-22 07:51:44.553 [DBG] Metrics: Query execution plan generated
+2025-11-22 07:51:49.512 [INF] Config: Service started on port 9000
+2025-11-22 07:51:52.219 [INF] Config: Health check passed
+2025-11-22 07:51:54.337 [DBG] Cache: Query execution plan generated
+2025-11-22 07:51:54.542 [DBG] Config: Parsed configuration: {"timeout": 30, "retries": 3}
+2025-11-22 07:51:56.737 [INF] HttpServer: Message consumed from notifications in 4606ms
+2025-11-22 07:52:00.743 [INF] Config: Database query executed in 91ms
+2025-11-22 07:52:03.036 [INF] Cache: Cache hit for key cache:user:37af05a2
+2025-11-22 07:52:06.388 [DBG] Config: Query execution plan generated
+2025-11-22 07:52:10.252 [DBG] FileProcessor: Cache lookup for key cache:config:fd5e142a
+2025-11-22 07:52:11.594 [DBG] Metrics: Cache lookup for key cache:session:886951da
+2025-11-22 07:52:11.686 [INF] HttpServer: GET /api/v1/products?page=58 completed in 7ms
+2025-11-22 07:52:13.267 [INF] Cache: DELETE /api/v1/sessions/31c454dc completed in 103ms
+2025-11-22 07:52:17.803 [INF] Cache: Configuration reloaded
+2025-11-22 07:52:22.015 [INF] Database: Request b09b78c1 completed in 92ms
+2025-11-22 07:52:24.782 [INF] ApiGateway: Outbound HTTP call to UserService completed in 9ms
+2025-11-22 07:52:29.279 [INF] MessageQueue: Cache hit for key cache:user:798a9331
+2025-11-22 07:52:34.134 [INF] FileProcessor: Configuration reloaded
+2025-11-22 07:52:38.941 [INF] FileProcessor: POST /api/v1/orders completed in 2962ms
+2025-11-22 07:52:42.109 [INF] Scheduler: Request f6e1362e completed in 4012ms
+2025-11-22 07:52:44.357 [INF] Metrics: DELETE /api/v1/sessions/7abc19ea completed in 6ms
+2025-11-22 07:52:45.401 [INF] Metrics: Message published to events
+2025-11-22 07:52:46.789 [DBG] MessageQueue: Query execution plan generated
+2025-11-22 07:52:48.258 [TRC] MessageQueue: Loop iteration 74 of 1054
+2025-11-22 07:52:49.709 [INF] Auth: GET /api/v1/products?page=94 completed in 66ms
+2025-11-22 07:52:50.690 [DBG] Cache: Processing request bb669f18
+2025-11-22 07:52:52.708 [INF] Cache: PUT /api/v1/users/user_5876/profile completed in 362ms
+2025-11-22 07:52:54.802 [DBG] HttpServer: Processing request 3a95c9ab
+2025-11-22 07:52:55.870 [INF] Cache: File export_7e8bf56b.csv processed, 2295 records
+2025-11-22 07:52:58.544 [INF] Database: Cache hit for key cache:config:f44c417d
+2025-11-22 07:53:00.827 [TRC] Config: Loop iteration 5 of 1043
+2025-11-22 07:53:03.779 [INF] Config: Configuration reloaded
+2025-11-22 07:53:07.144 [INF] Auth: Batch processing completed: 824/1095 items
+2025-11-22 07:53:11.150 [DBG] Auth: Parsed configuration: {"timeout": 30, "retries": 3}
+2025-11-22 07:53:12.375 [DBG] Cache: Query execution plan generated
+2025-11-22 07:53:14.873 [DBG] Database: Query execution plan generated
+2025-11-22 07:53:17.246 [INF] Cache: Message consumed from orders in 771ms
+2025-11-22 07:53:19.648 [INF] Cache: File data_69035607.csv processed, 1958 records
+2025-11-22 07:53:21.458 [INF] HttpServer: Connected to database mysql://db:3306/app
+2025-11-22 07:53:26.111 [INF] Auth: Message published to orders
+2025-11-22 07:53:29.663 [INF] FileProcessor: User user_7305 authenticated successfully
+2025-11-22 07:53:30.224 [INF] Database: Scheduled job DataSync started
+2025-11-22 07:53:31.003 [ERR] Cache: Authentication failed for user user_8641
+2025-11-22 07:53:31.031 [FTL] Auth: Unrecoverable error, shutting down
+2025-11-22 07:53:35.655 [INF] Scheduler: DELETE /api/v1/sessions/3a36ecb3 completed in 193ms
+2025-11-22 07:53:38.047 [DBG] MessageQueue: Cache lookup for key cache:session:53a993e6
+2025-11-22 07:53:38.434 [WRN] HttpServer: Slow query detected: 4535ms for SELECT * FROM users WHERE...
+2025-11-22 07:53:38.703 [ERR] Cache: Invalid message format: Unexpected field "foo" at position 42
+2025-11-22 07:53:41.237 [INF] Metrics: GET /api/v1/products?page=9 completed in 739ms
+2025-11-22 07:53:44.483 [DBG] HttpServer: Query execution plan generated
+2025-11-22 07:53:46.643 [INF] Database: Connected to database postgres://db:5432/app
+2025-11-22 07:53:48.455 [INF] Auth: File report_2bf0d777.csv processed, 1843 records
+2025-11-22 07:53:51.562 [DBG] Cache: Processing request 7956a72f
+2025-11-22 07:53:53.986 [TRC] HttpServer: Loop iteration 74 of 1054
+2025-11-22 07:53:55.312 [TRC] FileProcessor: Variable state: {counter: 42, flag: true}
+2025-11-22 07:53:56.675 [DBG] MessageQueue: Processing request 4bd214ee
+2025-11-22 07:53:57.983 [DBG] FileProcessor: Processing request 7a935129
+2025-11-22 07:54:00.579 [INF] Cache: DELETE /api/v1/sessions/7b52bc20 completed in 15ms
+2025-11-22 07:54:02.465 [ERR] MessageQueue: Database connection failed: Invalid token
+2025-11-22 07:54:02.835 [DBG] Auth: Cache lookup for key cache:config:d12d98d8
+2025-11-22 07:54:05.202 [INF] Metrics: Configuration reloaded
+2025-11-22 07:54:09.988 [INF] Cache: Request a40e0add completed in 20ms
+2025-11-22 07:54:11.926 [INF] ApiGateway: Health check passed
+2025-11-22 07:54:14.711 [INF] MessageQueue: Database query executed in 345ms
+2025-11-22 07:54:19.298 [WRN] Cache: Certificate expires in 28 days
+2025-11-22 07:54:22.382 [INF] Metrics: Batch processing completed: 655/1007 items
+2025-11-22 07:54:26.641 [INF] ApiGateway: Configuration reloaded
+2025-11-22 07:54:29.149 [INF] FileProcessor: GET /api/v1/users/user_9749 completed in 754ms
+2025-11-22 07:54:31.793 [INF] Cache: DELETE /api/v1/sessions/2743d872 completed in 45ms
+2025-11-22 07:54:36.753 [DBG] Metrics: Connection pool status: 13/20 active
+2025-11-22 07:54:38.517 [DBG] Database: Parsed configuration: {"timeout": 30, "retries": 3}
+2025-11-22 07:54:39.194 [INF] FileProcessor: Outbound HTTP call to UserService completed in 945ms
+2025-11-22 07:54:43.188 [INF] HttpServer: Health check passed
+2025-11-22 07:54:44.158 [DBG] Scheduler: Processing request 175c08bc
+2025-11-22 07:54:48.312 [INF] ApiGateway: Health check passed
+2025-11-22 07:54:48.659 [INF] Scheduler: File report_2be88505.csv processed, 3166 records
+2025-11-22 07:54:52.877 [INF] Cache: Scheduled job DataSync completed in 519ms
+2025-11-22 07:54:57.506 [TRC] Metrics: Entering method Transform with parameters {id: 123, type: "full"}
+2025-11-22 07:55:00.664 [TRC] Config: Variable state: {counter: 42, flag: true}
+2025-11-22 07:55:01.737 [INF] MessageQueue: Database query executed in 2139ms
+2025-11-22 07:55:05.346 [DBG] FileProcessor: Cache lookup for key cache:config:5a4481c4
+2025-11-22 07:55:09.162 [INF] Metrics: DELETE /api/v1/sessions/cd895715 completed in 682ms
+2025-11-22 07:55:10.665 [INF] ApiGateway: Configuration reloaded
+2025-11-22 07:55:10.775 [INF] Database: PUT /api/v1/users/user_3044/profile completed in 1797ms
+2025-11-22 07:55:12.129 [WRN] MessageQueue: Rate limit approaching for client client_af5a2ed8
+2025-11-22 07:55:16.160 [DBG] FileProcessor: Connection pool status: 8/20 active
+2025-11-22 07:55:19.200 [INF] ApiGateway: Message consumed from orders in 43ms
+2025-11-22 07:55:19.771 [INF] HttpServer: DELETE /api/v1/sessions/1a5f3cc1 completed in 648ms
+2025-11-22 07:55:23.676 [WRN] Auth: Memory usage at 91%
+2025-11-22 07:55:26.534 [INF] HttpServer: Database query executed in 48ms
+2025-11-22 07:55:30.366 [INF] FileProcessor: DELETE /api/v1/sessions/e487ce1f completed in 150ms
+2025-11-22 07:55:33.565 [INF] HttpServer: POST /api/v1/orders completed in 16ms
+2025-11-22 07:55:34.762 [INF] Config: Batch processing completed: 987/1037 items
+2025-11-22 07:55:36.456 [INF] Database: User user_4364 authenticated successfully
+2025-11-22 07:55:41.371 [INF] MessageQueue: GET /api/v1/users/user_9047 completed in 3236ms
+2025-11-22 07:55:42.048 [INF] FileProcessor: Batch processing completed: 385/1048 items
+2025-11-22 07:55:46.642 [INF] Auth: DELETE /api/v1/sessions/8b7c489a completed in 689ms
+2025-11-22 07:55:46.708 [INF] FileProcessor: Health check passed
+2025-11-22 07:55:50.973 [INF] Config: Request ce911a3a completed in 1128ms
+2025-11-22 07:55:52.835 [INF] MessageQueue: File export_9cf46bcb.csv processed, 3990 records
+2025-11-22 07:55:54.449 [INF] Auth: Configuration reloaded
+2025-11-22 07:55:58.980 [DBG] ApiGateway: Connection pool status: 13/20 active
+2025-11-22 07:56:00.537 [WRN] Auth: Connection pool exhausted, waiting for available connection
+2025-11-22 07:56:04.400 [INF] HttpServer: Message published to events
+2025-11-22 07:56:05.380 [DBG] Database: Parsed configuration: {"timeout": 30, "retries": 3}
+2025-11-22 07:56:09.381 [DBG] Database: Parsed configuration: {"timeout": 30, "retries": 3}
+2025-11-22 07:56:12.089 [INF] Metrics: Message published to events
+2025-11-22 07:56:16.422 [DBG] ApiGateway: Cache lookup for key cache:session:90edc5c1
+2025-11-22 07:56:18.593 [WRN] MessageQueue: Memory usage at 84%
+2025-11-22 07:56:20.487 [INF] Database: File data_a74f8f0b.csv processed, 9803 records
+2025-11-22 07:56:24.089 [INF] HttpServer: GET /api/v1/users/user_7694 completed in 1850ms
+2025-11-22 07:56:24.425 [INF] HttpServer: Database query executed in 16ms
+2025-11-22 07:56:26.645 [DBG] Cache: Parsed configuration: {"timeout": 30, "retries": 3}
+2025-11-22 07:56:29.421 [DBG] Database: Processing request 9306eb77
+2025-11-22 07:56:30.459 [INF] HttpServer: Configuration reloaded
+2025-11-22 07:56:33.968 [WRN] HttpServer: Memory usage at 93%
+2025-11-22 07:56:36.679 [INF] HttpServer: DELETE /api/v1/sessions/1d6bd020 completed in 3991ms
+2025-11-22 07:56:37.217 [WRN] Cache: Certificate expires in 4 days
+2025-11-22 07:56:38.690 [FTL] Cache: Application startup failed: Permission denied
+2025-11-22 07:56:39.659 [INF] Config: Outbound HTTP call to NotificationService completed in 200ms
+2025-11-22 07:56:44.302 [INF] FileProcessor: Health check passed
+2025-11-22 07:56:46.179 [INF] HttpServer: PUT /api/v1/users/user_9547/profile completed in 210ms
+2025-11-22 07:56:47.988 [DBG] ApiGateway: Connection pool status: 2/20 active
+2025-11-22 07:56:48.812 [TRC] Metrics: Loop iteration 14 of 1076
+2025-11-22 07:56:53.043 [INF] FileProcessor: Cache hit for key cache:config:2b81c28d
+2025-11-22 07:56:57.727 [INF] Metrics: POST /api/v1/orders completed in 4702ms
+2025-11-22 07:56:58.149 [INF] Auth: Database query executed in 45ms
+2025-11-22 07:57:02.264 [ERR] Auth: Database connection failed: Resource not found
+2025-11-22 07:57:04.416 [INF] Cache: Outbound HTTP call to NotificationService completed in 592ms
+2025-11-22 07:57:07.279 [INF] HttpServer: Request 07b5c642 completed in 4419ms
+2025-11-22 07:57:11.483 [INF] Database: Service started on port 8080
+2025-11-22 07:57:13.138 [INF] Database: Outbound HTTP call to PaymentService completed in 50ms
+2025-11-22 07:57:13.615 [DBG] MessageQueue: Processing request ef7a23de
+2025-11-22 07:57:16.289 [INF] Database: Connected to database mysql://db:3306/app
+2025-11-22 07:57:19.105 [INF] HttpServer: Batch processing completed: 121/1040 items
+2025-11-22 07:57:23.161 [INF] Cache: Scheduled job CleanupJob started
+2025-11-22 07:57:25.361 [INF] Metrics: GET /api/v1/products?page=96 completed in 181ms
+2025-11-22 07:57:26.762 [INF] Cache: Scheduled job ReportGenerator started
+2025-11-22 07:57:29.411 [INF] Config: User user_8553 authenticated successfully
+2025-11-22 07:57:31.670 [INF] MessageQueue: File report_832e2be8.csv processed, 5161 records
+2025-11-22 07:57:32.477 [INF] Auth: Configuration reloaded
+2025-11-22 07:57:36.290 [INF] Config: Health check passed
+2025-11-22 07:57:37.677 [INF] Scheduler: POST /api/v1/orders completed in 37ms
+2025-11-22 07:57:42.670 [WRN] HttpServer: Connection pool exhausted, waiting for available connection
+2025-11-22 07:57:45.926 [FTL] HttpServer: Unrecoverable error, shutting down
+2025-11-22 07:57:49.140 [INF] Cache: POST /api/v1/orders completed in 217ms
+2025-11-22 07:57:51.987 [INF] MessageQueue: POST /api/v1/orders completed in 1068ms
+2025-11-22 07:57:55.218 [INF] FileProcessor: Request 7fad90a3 completed in 81ms
+2025-11-22 07:57:56.581 [WRN] HttpServer: Slow query detected: 2ms for SELECT * FROM users WHERE...
+2025-11-22 07:58:00.418 [INF] Metrics: Outbound HTTP call to PaymentService completed in 1128ms
+2025-11-22 07:58:00.518 [DBG] Auth: Query execution plan generated
+2025-11-22 07:58:04.542 [INF] Auth: Database query executed in 51ms
+2025-11-22 07:58:09.297 [INF] Auth: Cache hit for key cache:user:3b6839f9
+2025-11-22 07:58:12.040 [INF] ApiGateway: Outbound HTTP call to UserService completed in 37ms
+2025-11-22 07:58:13.745 [INF] FileProcessor: DELETE /api/v1/sessions/5c9465c2 completed in 2063ms
+2025-11-22 07:58:18.189 [INF] ApiGateway: Connected to database mysql://db:3306/app
+2025-11-22 07:58:19.539 [DBG] ApiGateway: Processing request 0de8927b
+2025-11-22 07:58:22.482 [INF] Scheduler: Service started on port 443
+2025-11-22 07:58:24.743 [DBG] ApiGateway: Processing request 877f80f4
+2025-11-22 07:58:24.869 [INF] HttpServer: Batch processing completed: 548/1088 items
+2025-11-22 07:58:27.753 [INF] Auth: User user_6372 authenticated successfully
+2025-11-22 07:58:31.428 [INF] Metrics: Database query executed in 34ms
+2025-11-22 07:58:35.786 [INF] Auth: DELETE /api/v1/sessions/9c7057f8 completed in 430ms
+2025-11-22 07:58:39.148 [DBG] Auth: Parsed configuration: {"timeout": 30, "retries": 3}
+2025-11-22 07:58:41.040 [INF] MessageQueue: Request 0b1afc01 completed in 452ms
+2025-11-22 07:58:43.288 [INF] ApiGateway: File import_124928d4.csv processed, 7888 records
+2025-11-22 07:58:46.754 [DBG] Auth: Query execution plan generated
+2025-11-22 07:58:49.701 [INF] Metrics: Message published to notifications
+2025-11-22 07:58:53.584 [ERR] Scheduler: Failed to process request 0adb8880: Timeout exceeded
+2025-11-22 07:58:57.640 [INF] Config: Service started on port 9000
+2025-11-22 07:58:57.834 [INF] HttpServer: Configuration reloaded
+2025-11-22 07:58:59.519 [DBG] Config: Cache lookup for key cache:config:943a3fa7
+2025-11-22 07:59:02.372 [INF] Cache: Request adeafbc8 completed in 9ms
+2025-11-22 07:59:06.847 [INF] Scheduler: Message consumed from orders in 115ms
+2025-11-22 07:59:09.742 [INF] Config: DELETE /api/v1/sessions/c2074597 completed in 871ms
+2025-11-22 07:59:10.708 [DBG] Config: Cache lookup for key cache:user:9475d483
+2025-11-22 07:59:13.071 [ERR] Auth: Timeout waiting for response from NotificationService
+2025-11-22 07:59:14.333 [INF] Config: File data_464201c4.csv processed, 8385 records
+2025-11-22 07:59:19.205 [INF] Metrics: Request e140f94d completed in 209ms
+2025-11-22 07:59:20.602 [INF] FileProcessor: Batch processing completed: 882/1026 items
+2025-11-22 07:59:22.936 [INF] Cache: Request 68ed7107 completed in 802ms
+2025-11-22 07:59:26.216 [TRC] Cache: Variable state: {counter: 42, flag: true}
+2025-11-22 07:59:30.520 [INF] Cache: DELETE /api/v1/sessions/04eb4b44 completed in 2921ms
+2025-11-22 07:59:32.664 [DBG] ApiGateway: Query execution plan generated
+2025-11-22 07:59:37.039 [INF] Metrics: GET /api/v1/products?page=29 completed in 200ms
+2025-11-22 07:59:41.627 [INF] Config: Message published to tasks
+2025-11-22 07:59:46.267 [DBG] Auth: Processing request e7e8af8f
+2025-11-22 07:59:50.347 [DBG] Config: Cache lookup for key cache:session:faf10de7
+2025-11-22 07:59:51.437 [DBG] FileProcessor: Parsed configuration: {"timeout": 30, "retries": 3}
+2025-11-22 07:59:55.468 [INF] Scheduler: Service started on port 443
+2025-11-22 07:59:55.928 [INF] Config: DELETE /api/v1/sessions/5a10653e completed in 128ms
+2025-11-22 07:59:57.336 [DBG] FileProcessor: Query execution plan generated
+2025-11-22 08:00:01.699 [DBG] Cache: Cache lookup for key cache:user:24bf6603
+2025-11-22 08:00:04.115 [INF] HttpServer: Configuration reloaded
+2025-11-22 08:00:06.498 [DBG] Cache: Connection pool status: 2/20 active
+2025-11-22 08:00:11.164 [INF] Auth: Message consumed from tasks in 4592ms
+2025-11-22 08:00:15.165 [DBG] ApiGateway: Parsed configuration: {"timeout": 30, "retries": 3}
+2025-11-22 08:00:15.201 [DBG] Auth: Query execution plan generated
+2025-11-22 08:00:16.627 [INF] Database: Scheduled job BackupJob started
+2025-11-22 08:00:17.441 [INF] Cache: Request 27722255 completed in 50ms
+2025-11-22 08:00:21.349 [INF] Auth: PUT /api/v1/users/user_1921/profile completed in 27ms
+2025-11-22 08:00:23.551 [INF] HttpServer: Message consumed from orders in 451ms
+2025-11-22 08:00:27.683 [INF] FileProcessor: Configuration reloaded
+2025-11-22 08:00:27.940 [DBG] Config: Parsed configuration: {"timeout": 30, "retries": 3}
+2025-11-22 08:00:30.990 [WRN] FileProcessor: Certificate expires in 19 days
+2025-11-22 08:00:33.958 [INF] ApiGateway: Health check passed
+2025-11-22 08:00:36.033 [DBG] Metrics: Cache lookup for key cache:session:47414127
+2025-11-22 08:00:40.636 [DBG] Scheduler: Parsed configuration: {"timeout": 30, "retries": 3}
+2025-11-22 08:00:44.569 [INF] Database: DELETE /api/v1/sessions/3cab90a9 completed in 43ms
+2025-11-22 08:00:44.816 [DBG] Scheduler: Processing request 22539b2a
+2025-11-22 08:00:49.167 [ERR] Config: Unhandled exception in Auth: Timeout exceeded
+2025-11-22 08:00:49.320 [DBG] Scheduler: Query execution plan generated
+2025-11-22 08:00:53.501 [INF] FileProcessor: Scheduled job CleanupJob completed in 48ms
+2025-11-22 08:00:55.683 [INF] Auth: GET /api/v1/products?page=57 completed in 1942ms
+2025-11-22 08:00:59.394 [DBG] Cache: Connection pool status: 6/20 active
+2025-11-22 08:01:03.488 [DBG] Scheduler: Cache lookup for key cache:user:e53c4dcb
+2025-11-22 08:01:07.925 [DBG] Scheduler: Connection pool status: 13/20 active
+2025-11-22 08:01:08.273 [INF] Metrics: Scheduled job ReportGenerator started
+2025-11-22 08:01:12.289 [DBG] Database: Parsed configuration: {"timeout": 30, "retries": 3}
+2025-11-22 08:01:16.908 [INF] Database: Health check passed
+2025-11-22 08:01:18.795 [INF] Auth: Database query executed in 4202ms
+2025-11-22 08:01:20.252 [INF] MessageQueue: Cache hit for key cache:config:98162e5a
+2025-11-22 08:01:22.850 [INF] HttpServer: Cache hit for key cache:config:654c17cf
+2025-11-22 08:01:27.329 [ERR] ApiGateway: Invalid message format: Unexpected field "foo" at position 42
+2025-11-22 08:01:28.824 [ERR] FileProcessor: Invalid message format: Unexpected field "foo" at position 42
+2025-11-22 08:01:32.560 [INF] FileProcessor: Service started on port 9000
+2025-11-22 08:01:34.553 [INF] Cache: PUT /api/v1/users/user_9509/profile completed in 1375ms
+2025-11-22 08:01:36.198 [INF] Cache: GET /api/v1/users/user_7697 completed in 4596ms
+2025-11-22 08:01:40.709 [WRN] FileProcessor: Retry attempt 1 for operation ProcessPayment
+2025-11-22 08:01:41.129 [DBG] MessageQueue: Cache lookup for key cache:user:0365d412
+2025-11-22 08:01:41.157 [INF] Config: Configuration reloaded
+2025-11-22 08:01:44.641 [WRN] FileProcessor: Retry attempt 5 for operation ProcessPayment
+2025-11-22 08:01:45.681 [INF] ApiGateway: GET /api/v1/products?page=28 completed in 479ms
+2025-11-22 08:01:47.635 [INF] ApiGateway: DELETE /api/v1/sessions/183bfaa8 completed in 49ms
+2025-11-22 08:01:51.232 [INF] HttpServer: DELETE /api/v1/sessions/64fdc7d1 completed in 837ms
+2025-11-22 08:01:55.165 [INF] Database: User user_7100 authenticated successfully
+2025-11-22 08:01:56.162 [INF] Scheduler: Configuration reloaded
+2025-11-22 08:02:01.137 [INF] MessageQueue: Cache hit for key cache:config:762835ab
+2025-11-22 08:02:01.215 [INF] Cache: Configuration reloaded
+2025-11-22 08:02:04.796 [INF] ApiGateway: Connected to database postgres://db:5432/app
+2025-11-22 08:02:07.229 [DBG] MessageQueue: Processing request 8a448760
+2025-11-22 08:02:10.689 [ERR] HttpServer: Database connection failed: Permission denied
+2025-11-22 08:02:15.277 [INF] MessageQueue: Message consumed from tasks in 5ms
+2025-11-22 08:02:15.975 [DBG] ApiGateway: Connection pool status: 4/20 active
+2025-11-22 08:02:20.375 [WRN] Cache: Deprecated API endpoint called: /api/v1/users
+2025-11-22 08:02:21.683 [INF] Auth: Batch processing completed: 970/1098 items
+2025-11-22 08:02:23.908 [DBG] ApiGateway: Connection pool status: 4/20 active
+2025-11-22 08:02:24.571 [INF] Scheduler: Health check passed
+2025-11-22 08:02:28.061 [ERR] Metrics: Unhandled exception in FileProcessor: Connection refused
+2025-11-22 08:02:32.202 [INF] FileProcessor: Batch processing completed: 768/1095 items
+2025-11-22 08:02:35.950 [DBG] FileProcessor: Processing request 59abe6de
+2025-11-22 08:02:40.128 [DBG] Scheduler: Cache lookup for key cache:user:31a4d682
+2025-11-22 08:02:40.632 [INF] MessageQueue: PUT /api/v1/users/user_2220/profile completed in 2084ms
+2025-11-22 08:02:45.391 [INF] Database: Health check passed
+2025-11-22 08:02:48.808 [INF] Database: Outbound HTTP call to PaymentService completed in 2634ms
+2025-11-22 08:02:50.508 [INF] Metrics: Service started on port 3000
+2025-11-22 08:02:53.413 [INF] Cache: Service started on port 3000
+2025-11-22 08:02:56.496 [INF] Config: POST /api/v1/orders completed in 919ms
+2025-11-22 08:02:57.594 [INF] Metrics: File data_ffefd072.csv processed, 7713 records
+2025-11-22 08:03:00.185 [DBG] Metrics: Query execution plan generated
+2025-11-22 08:03:00.627 [INF] ApiGateway: GET /api/v1/users/user_5163 completed in 24ms
+2025-11-22 08:03:04.357 [INF] Cache: Scheduled job ReportGenerator started
+2025-11-22 08:03:09.055 [INF] Scheduler: GET /api/v1/users/user_5222 completed in 44ms
+2025-11-22 08:03:12.898 [DBG] Database: Parsed configuration: {"timeout": 30, "retries": 3}
+2025-11-22 08:03:14.308 [WRN] Metrics: Memory usage at 79%
+2025-11-22 08:03:19.147 [INF] Database: Batch processing completed: 539/1051 items
+2025-11-22 08:03:22.745 [INF] FileProcessor: Connected to database postgres://db:5432/app
+2025-11-22 08:03:27.145 [DBG] HttpServer: Connection pool status: 5/20 active
+2025-11-22 08:03:31.885 [WRN] HttpServer: Retry attempt 3 for operation SendEmail
+2025-11-22 08:03:32.320 [INF] FileProcessor: PUT /api/v1/users/user_4591/profile completed in 349ms
+2025-11-22 08:03:33.291 [INF] ApiGateway: File data_a648b6ff.csv processed, 3333 records
+2025-11-22 08:03:33.767 [INF] Auth: Request 51eb4201 completed in 173ms
+2025-11-22 08:03:35.351 [WRN] Scheduler: Rate limit approaching for client client_95c588c8
+2025-11-22 08:03:35.886 [INF] MessageQueue: Scheduled job BackupJob started
+2025-11-22 08:03:39.784 [INF] Auth: PUT /api/v1/users/user_7919/profile completed in 624ms
+2025-11-22 08:03:43.025 [INF] Config: Configuration reloaded
+2025-11-22 08:03:48.002 [INF] Metrics: Scheduled job BackupJob started
+2025-11-22 08:03:50.332 [INF] Scheduler: Configuration reloaded
+2025-11-22 08:03:52.335 [DBG] MessageQueue: Parsed configuration: {"timeout": 30, "retries": 3}
+2025-11-22 08:03:52.448 [INF] Auth: Connected to database mysql://db:3306/app
+2025-11-22 08:03:54.312 [INF] MessageQueue: Connected to database mysql://db:3306/app
+2025-11-22 08:03:55.522 [WRN] FileProcessor: Certificate expires in 26 days
+2025-11-22 08:03:55.915 [DBG] HttpServer: Query execution plan generated
+2025-11-22 08:03:57.565 [INF] HttpServer: Message consumed from notifications in 1145ms
+2025-11-22 08:04:02.153 [DBG] FileProcessor: Cache lookup for key cache:user:1b48c453
+2025-11-22 08:04:03.083 [INF] Database: PUT /api/v1/users/user_5033/profile completed in 4079ms
+2025-11-22 08:04:05.624 [INF] ApiGateway: Batch processing completed: 921/1090 items
+2025-11-22 08:04:09.757 [INF] MessageQueue: Scheduled job DataSync completed in 3ms
+2025-11-22 08:04:13.161 [WRN] Scheduler: Certificate expires in 5 days
+2025-11-22 08:04:14.476 [DBG] Database: Cache lookup for key cache:config:ca63cfac
+2025-11-22 08:04:16.994 [WRN] Scheduler: Deprecated API endpoint called: /api/v1/legacy
+2025-11-22 08:04:17.863 [INF] Auth: Connected to database postgres://db:5432/app
+2025-11-22 08:04:18.340 [INF] Config: Configuration reloaded
+2025-11-22 08:04:20.041 [INF] Scheduler: Message consumed from notifications in 33ms
+2025-11-22 08:04:20.405 [DBG] MessageQueue: Cache lookup for key cache:config:3df97b9b
+2025-11-22 08:04:22.733 [INF] Scheduler: GET /api/v1/products?page=57 completed in 10ms
+2025-11-22 08:04:27.631 [ERR] Cache: Invalid message format: Unexpected field "foo" at position 42
+2025-11-22 08:04:29.977 [DBG] ApiGateway: Connection pool status: 10/20 active
+2025-11-22 08:04:33.593 [ERR] Database: Database connection failed: Invalid token
+2025-11-22 08:04:36.206 [INF] Cache: Service started on port 3000
+2025-11-22 08:04:38.690 [INF] Cache: POST /api/v1/orders completed in 871ms
+2025-11-22 08:04:43.497 [INF] Database: Service started on port 443
+2025-11-22 08:04:45.342 [INF] Auth: Outbound HTTP call to PaymentService completed in 103ms
+2025-11-22 08:04:46.665 [INF] Cache: PUT /api/v1/users/user_9784/profile completed in 4506ms
+2025-11-22 08:04:49.956 [INF] Database: Message consumed from notifications in 155ms
+2025-11-22 08:04:50.669 [INF] Database: Message published to orders
+2025-11-22 08:04:55.317 [WRN] Auth: Slow query detected: 1436ms for SELECT * FROM users WHERE...
+2025-11-22 08:04:58.732 [INF] FileProcessor: Scheduled job BackupJob completed in 2ms
+2025-11-22 08:04:59.513 [DBG] ApiGateway: Connection pool status: 16/20 active
+2025-11-22 08:05:01.146 [INF] Scheduler: Service started on port 9000
+2025-11-22 08:05:03.166 [INF] FileProcessor: Scheduled job BackupJob completed in 432ms
+2025-11-22 08:05:04.456 [DBG] Config: Query execution plan generated
+2025-11-22 08:05:04.770 [INF] Config: File data_eebc46f4.csv processed, 4286 records
+2025-11-22 08:05:06.710 [INF] Metrics: Scheduled job DataSync completed in 1200ms
+2025-11-22 08:05:09.586 [INF] HttpServer: Configuration reloaded
+2025-11-22 08:05:12.546 [WRN] ApiGateway: Slow query detected: 124ms for SELECT * FROM users WHERE...
+2025-11-22 08:05:14.894 [DBG] Config: Processing request 69a7b6bf
+2025-11-22 08:05:15.386 [INF] Metrics: Scheduled job DataSync started
+2025-11-22 08:05:16.317 [WRN] Database: Certificate expires in 1 days
+2025-11-22 08:05:16.894 [INF] Auth: Cache hit for key cache:user:98e91d4b
+2025-11-22 08:05:17.964 [INF] Metrics: File report_e90216f6.csv processed, 4964 records
+2025-11-22 08:05:18.897 [WRN] FileProcessor: Rate limit approaching for client client_a2a9fda8
+2025-11-22 08:05:23.628 [ERR] ApiGateway: Authentication failed for user user_2361
+2025-11-22 08:05:28.365 [INF] Metrics: Batch processing completed: 430/1004 items
+2025-11-22 08:05:28.612 [INF] ApiGateway: GET /api/v1/products?page=57 completed in 140ms
+2025-11-22 08:05:28.780 [DBG] HttpServer: Cache lookup for key cache:session:32e3e67a
+2025-11-22 08:05:31.181 [INF] Config: Request e18832e6 completed in 680ms
+2025-11-22 08:05:34.190 [TRC] HttpServer: Variable state: {counter: 42, flag: true}
+2025-11-22 08:05:38.617 [INF] ApiGateway: Service started on port 5000
+2025-11-22 08:05:42.709 [WRN] Cache: Slow query detected: 116ms for SELECT * FROM users WHERE...
+2025-11-22 08:05:43.233 [INF] Auth: Message consumed from orders in 1724ms
+2025-11-22 08:05:45.672 [DBG] Cache: Query execution plan generated
+2025-11-22 08:05:46.201 [INF] Scheduler: Outbound HTTP call to UserService completed in 378ms
+2025-11-22 08:05:47.226 [FTL] HttpServer: Unrecoverable error, shutting down
+2025-11-22 08:05:50.071 [DBG] FileProcessor: Connection pool status: 17/20 active
+2025-11-22 08:05:50.708 [INF] Scheduler: Connected to database mysql://db:3306/app
+2025-11-22 08:05:50.775 [DBG] Metrics: Cache lookup for key cache:config:f3e8c398
+2025-11-22 08:05:54.240 [DBG] Cache: Processing request 3f42b507
+2025-11-22 08:05:57.960 [INF] MessageQueue: POST /api/v1/orders completed in 18ms
+2025-11-22 08:06:02.744 [WRN] MessageQueue: Certificate expires in 25 days
+2025-11-22 08:06:04.800 [INF] MessageQueue: Message published to orders
+2025-11-22 08:06:08.315 [DBG] Database: Parsed configuration: {"timeout": 30, "retries": 3}
+2025-11-22 08:06:12.357 [INF] Cache: Cache hit for key cache:session:f1b80167
+2025-11-22 08:06:13.026 [INF] ApiGateway: Connected to database mysql://db:3306/app
+2025-11-22 08:06:14.485 [DBG] HttpServer: Connection pool status: 12/20 active
+2025-11-22 08:06:14.500 [INF] FileProcessor: Health check passed
+2025-11-22 08:06:17.995 [INF] Metrics: Health check passed
+2025-11-22 08:06:19.675 [DBG] ApiGateway: Query execution plan generated
+2025-11-22 08:06:22.883 [INF] FileProcessor: Batch processing completed: 840/1060 items
+2025-11-22 08:06:23.599 [INF] ApiGateway: Database query executed in 167ms
+2025-11-22 08:06:26.738 [INF] HttpServer: File export_1f1a6fc2.csv processed, 1383 records
+2025-11-22 08:06:29.720 [WRN] Auth: Retry attempt 2 for operation SendEmail
+2025-11-22 08:06:32.133 [INF] MessageQueue: User user_2034 authenticated successfully
+2025-11-22 08:06:33.398 [DBG] Scheduler: Query execution plan generated
+2025-11-22 08:06:36.760 [INF] Config: Health check passed
+2025-11-22 08:06:40.100 [INF] Cache: Service started on port 3000
+2025-11-22 08:06:44.551 [DBG] Config: Processing request 2965f935
+2025-11-22 08:06:45.604 [DBG] Metrics: Parsed configuration: {"timeout": 30, "retries": 3}
+2025-11-22 08:06:47.192 [INF] HttpServer: Request 348c62a0 completed in 3794ms
+2025-11-22 08:06:47.453 [DBG] FileProcessor: Query execution plan generated
+2025-11-22 08:06:48.199 [INF] HttpServer: Outbound HTTP call to UserService completed in 197ms
+2025-11-22 08:06:50.298 [INF] Database: Scheduled job DataSync started
+2025-11-22 08:06:54.243 [DBG] Config: Connection pool status: 10/20 active
+2025-11-22 08:06:56.165 [INF] ApiGateway: GET /api/v1/products?page=60 completed in 41ms
+2025-11-22 08:07:00.915 [WRN] HttpServer: Rate limit approaching for client client_df30992b
+2025-11-22 08:07:02.510 [INF] FileProcessor: GET /api/v1/products?page=18 completed in 32ms
+2025-11-22 08:07:05.078 [ERR] HttpServer: File not found: data_fac1119b.csv
+2025-11-22 08:07:07.188 [INF] Config: Configuration reloaded
+2025-11-22 08:07:10.714 [DBG] FileProcessor: Connection pool status: 20/20 active
+2025-11-22 08:07:14.871 [DBG] MessageQueue: Parsed configuration: {"timeout": 30, "retries": 3}
+2025-11-22 08:07:15.901 [TRC] Scheduler: Variable state: {counter: 42, flag: true}
+2025-11-22 08:07:17.766 [INF] ApiGateway: Cache hit for key cache:session:2576a860
+2025-11-22 08:07:18.702 [DBG] Config: Connection pool status: 10/20 active
+2025-11-22 08:07:23.362 [WRN] Auth: Retry attempt 3 for operation ProcessPayment
+2025-11-22 08:07:28.245 [INF] Auth: Connected to database postgres://db:5432/app
+2025-11-22 08:07:32.258 [DBG] MessageQueue: Connection pool status: 10/20 active
+2025-11-22 08:07:35.838 [WRN] Database: Slow query detected: 38ms for SELECT * FROM users WHERE...
+2025-11-22 08:07:40.814 [WRN] Auth: Certificate expires in 13 days
+2025-11-22 08:07:42.499 [TRC] FileProcessor: Loop iteration 87 of 1073
+2025-11-22 08:07:42.948 [INF] Scheduler: PUT /api/v1/users/user_8591/profile completed in 109ms
+2025-11-22 08:07:46.947 [INF] ApiGateway: User user_7143 authenticated successfully
+2025-11-22 08:07:48.245 [INF] Database: Scheduled job CleanupJob started
+2025-11-22 08:07:50.673 [INF] Cache: Request 1c8d9515 completed in 65ms
+2025-11-22 08:07:53.156 [INF] Auth: PUT /api/v1/users/user_1965/profile completed in 14ms
+2025-11-22 08:07:57.171 [FTL] Config: Unrecoverable error, shutting down
+2025-11-22 08:07:57.601 [DBG] HttpServer: Cache lookup for key cache:user:4c75cbc1
+2025-11-22 08:07:58.253 [DBG] Config: Cache lookup for key cache:config:a2d415e2
+2025-11-22 08:08:02.979 [WRN] ApiGateway: Memory usage at 87%
+2025-11-22 08:08:03.025 [WRN] Auth: Connection pool exhausted, waiting for available connection
+2025-11-22 08:08:07.701 [ERR] MessageQueue: Invalid message format: Unexpected field "foo" at position 42
+2025-11-22 08:08:08.933 [ERR] Database: Unhandled exception in Scheduler: Permission denied
+2025-11-22 08:08:09.407 [INF] Config: File report_96c4da3c.csv processed, 7637 records
+2025-11-22 08:08:11.695 [INF] MessageQueue: PUT /api/v1/users/user_4232/profile completed in 555ms
+2025-11-22 08:08:15.853 [INF] Auth: Scheduled job DataSync completed in 3000ms
+2025-11-22 08:08:18.022 [INF] Auth: Outbound HTTP call to UserService completed in 466ms
+2025-11-22 08:08:18.445 [DBG] Cache: Cache lookup for key cache:user:d9115422
+2025-11-22 08:08:20.162 [INF] FileProcessor: POST /api/v1/orders completed in 526ms
+2025-11-22 08:08:21.339 [INF] Database: Connected to database mysql://db:3306/app
+2025-11-22 08:08:24.152 [ERR] ApiGateway: Authentication failed for user user_8801
+2025-11-22 08:08:27.003 [INF] Metrics: Database query executed in 855ms
+2025-11-22 08:08:28.321 [WRN] Auth: Deprecated API endpoint called: /api/v1/orders
+2025-11-22 08:08:29.200 [INF] Scheduler: DELETE /api/v1/sessions/1cb036fa completed in 113ms
+2025-11-22 08:08:33.380 [INF] FileProcessor: Connected to database postgres://db:5432/app
+2025-11-22 08:08:37.916 [DBG] FileProcessor: Query execution plan generated
+2025-11-22 08:08:41.832 [INF] Metrics: User user_9513 authenticated successfully
+2025-11-22 08:08:42.774 [DBG] Cache: Cache lookup for key cache:config:5b15a192
+2025-11-22 08:08:47.005 [INF] Config: Message published to notifications
+2025-11-22 08:08:51.456 [INF] Config: Outbound HTTP call to UserService completed in 396ms
+2025-11-22 08:08:53.129 [INF] Metrics: User user_3253 authenticated successfully
+2025-11-22 08:08:56.736 [INF] Config: Scheduled job CleanupJob completed in 802ms
+2025-11-22 08:09:00.011 [WRN] Database: Connection pool exhausted, waiting for available connection
+2025-11-22 08:09:01.939 [INF] Database: User user_3058 authenticated successfully
+2025-11-22 08:09:05.284 [INF] Database: Configuration reloaded
+2025-11-22 08:09:08.676 [INF] Cache: GET /api/v1/products?page=73 completed in 322ms
+2025-11-22 08:09:13.660 [INF] MessageQueue: Message published to notifications
+2025-11-22 08:09:18.430 [INF] FileProcessor: File import_33694213.csv processed, 1027 records
+2025-11-22 08:09:20.478 [ERR] FileProcessor: Failed to process request 1d0309a9: Resource not found
+2025-11-22 08:09:21.662 [WRN] Config: Slow query detected: 282ms for SELECT * FROM users WHERE...
+2025-11-22 08:09:23.971 [INF] Cache: Connected to database mysql://db:3306/app
+2025-11-22 08:09:28.937 [INF] MessageQueue: Service started on port 3000
+2025-11-22 08:09:29.925 [INF] FileProcessor: Configuration reloaded
+2025-11-22 08:09:31.555 [ERR] Metrics: Invalid message format: Unexpected field "foo" at position 42
+2025-11-22 08:09:35.539 [WRN] HttpServer: Memory usage at 86%
+2025-11-22 08:09:36.729 [INF] HttpServer: DELETE /api/v1/sessions/34d3c5aa completed in 94ms
+2025-11-22 08:09:37.945 [INF] Config: Message consumed from notifications in 501ms
+2025-11-22 08:09:42.289 [DBG] Config: Parsed configuration: {"timeout": 30, "retries": 3}
+2025-11-22 08:09:47.147 [INF] Metrics: Outbound HTTP call to UserService completed in 1222ms
+2025-11-22 08:09:51.629 [DBG] Metrics: Processing request cbf56415
+2025-11-22 08:09:51.723 [INF] MessageQueue: GET /api/v1/users/user_2434 completed in 151ms
+2025-11-22 08:09:54.390 [INF] Database: Scheduled job ReportGenerator started
+2025-11-22 08:09:59.183 [DBG] Cache: Cache lookup for key cache:config:6e9dc668
+2025-11-22 08:10:02.283 [INF] Metrics: Service started on port 5000
+2025-11-22 08:10:03.960 [INF] FileProcessor: File export_0b7eb656.csv processed, 9967 records
+2025-11-22 08:10:06.165 [DBG] Auth: Processing request 16abe8d8
+2025-11-22 08:10:08.345 [INF] Scheduler: Outbound HTTP call to NotificationService completed in 42ms
+2025-11-22 08:10:08.737 [INF] HttpServer: GET /api/v1/users/user_3624 completed in 28ms
+2025-11-22 08:10:12.283 [INF] Auth: PUT /api/v1/users/user_4351/profile completed in 792ms
+2025-11-22 08:10:16.818 [INF] Scheduler: PUT /api/v1/users/user_7449/profile completed in 770ms
+2025-11-22 08:10:20.072 [INF] Cache: File import_1d8a946a.csv processed, 509 records
+2025-11-22 08:10:21.014 [INF] Auth: User user_5245 authenticated successfully
+2025-11-22 08:10:25.623 [DBG] Cache: Processing request af21f768
+2025-11-22 08:10:26.299 [INF] Config: Cache hit for key cache:config:efed8811
+2025-11-22 08:10:31.290 [DBG] Scheduler: Query execution plan generated
+2025-11-22 08:10:32.622 [WRN] Database: Connection pool exhausted, waiting for available connection
+2025-11-22 08:10:36.645 [WRN] HttpServer: Memory usage at 83%
+2025-11-22 08:10:36.943 [INF] Metrics: PUT /api/v1/users/user_4783/profile completed in 2559ms
+2025-11-22 08:10:40.499 [DBG] Config: Query execution plan generated
+2025-11-22 08:10:41.917 [INF] ApiGateway: File report_5f42bdb7.csv processed, 4769 records
+2025-11-22 08:10:45.263 [INF] ApiGateway: GET /api/v1/products?page=14 completed in 315ms
+2025-11-22 08:10:45.534 [WRN] ApiGateway: Certificate expires in 1 days
+2025-11-22 08:10:46.996 [DBG] ApiGateway: Parsed configuration: {"timeout": 30, "retries": 3}
+2025-11-22 08:10:51.456 [INF] Auth: Cache hit for key cache:session:80711b89
+2025-11-22 08:10:53.117 [DBG] Auth: Processing request cad86c60
+2025-11-22 08:10:57.764 [DBG] HttpServer: Parsed configuration: {"timeout": 30, "retries": 3}
+2025-11-22 08:11:01.981 [INF] HttpServer: Outbound HTTP call to UserService completed in 69ms
+2025-11-22 08:11:02.939 [INF] HttpServer: GET /api/v1/users/user_9498 completed in 63ms
+2025-11-22 08:11:04.538 [ERR] HttpServer: Authentication failed for user user_6091
+2025-11-22 08:11:07.096 [TRC] Database: Variable state: {counter: 42, flag: true}
+2025-11-22 08:11:08.246 [DBG] FileProcessor: Cache lookup for key cache:user:55171171
+2025-11-22 08:11:09.063 [FTL] Auth: Data corruption detected in users
+2025-11-22 08:11:09.895 [INF] HttpServer: Cache hit for key cache:user:a1ea5d32
+2025-11-22 08:11:11.284 [INF] Scheduler: User user_1601 authenticated successfully
+2025-11-22 08:11:11.856 [DBG] Cache: Connection pool status: 7/20 active
+2025-11-22 08:11:12.149 [INF] Cache: Batch processing completed: 150/1007 items
+2025-11-22 08:11:16.953 [INF] Auth: File import_c0964d1a.csv processed, 4997 records
+2025-11-22 08:11:20.798 [INF] Database: PUT /api/v1/users/user_1915/profile completed in 18ms
+2025-11-22 08:11:23.415 [DBG] Scheduler: Parsed configuration: {"timeout": 30, "retries": 3}
+2025-11-22 08:11:28.382 [INF] Metrics: GET /api/v1/products?page=33 completed in 54ms
+2025-11-22 08:11:29.386 [ERR] Database: Database connection failed: Invalid token
+2025-11-22 08:11:32.533 [WRN] Scheduler: Retry attempt 2 for operation SendEmail
+2025-11-22 08:11:37.376 [WRN] Auth: Retry attempt 1 for operation SendEmail
+2025-11-22 08:11:39.153 [DBG] HttpServer: Connection pool status: 14/20 active
+2025-11-22 08:11:43.761 [INF] Cache: GET /api/v1/users/user_6257 completed in 17ms
+2025-11-22 08:11:46.147 [DBG] Auth: Cache lookup for key cache:session:ce49eb3a
+2025-11-22 08:11:50.509 [DBG] Cache: Cache lookup for key cache:config:7af0dc53
+2025-11-22 08:11:53.569 [DBG] Database: Processing request 32002fa0
+2025-11-22 08:11:56.400 [INF] ApiGateway: Database query executed in 2745ms
+2025-11-22 08:11:58.771 [DBG] MessageQueue: Connection pool status: 17/20 active
+2025-11-22 08:12:00.680 [DBG] Auth: Query execution plan generated
+2025-11-22 08:12:02.661 [ERR] HttpServer: Unhandled exception in HttpServer: Resource not found
+2025-11-22 08:12:05.115 [WRN] Scheduler: Slow query detected: 82ms for SELECT * FROM users WHERE...
+2025-11-22 08:12:05.210 [INF] Scheduler: POST /api/v1/orders completed in 2832ms
+2025-11-22 08:12:05.269 [DBG] Cache: Connection pool status: 12/20 active
+2025-11-22 08:12:07.652 [INF] Metrics: Message consumed from tasks in 9ms
+2025-11-22 08:12:10.431 [INF] Auth: Request e7678a6c completed in 50ms
+2025-11-22 08:12:14.842 [DBG] ApiGateway: Parsed configuration: {"timeout": 30, "retries": 3}
+2025-11-22 08:12:17.075 [INF] MessageQueue: Database query executed in 2738ms
+2025-11-22 08:12:21.534 [INF] FileProcessor: Connected to database mysql://db:3306/app
+2025-11-22 08:12:24.125 [TRC] Metrics: Variable state: {counter: 42, flag: true}
+2025-11-22 08:12:28.810 [INF] Config: Configuration reloaded
+2025-11-22 08:12:30.734 [INF] Scheduler: Configuration reloaded
+2025-11-22 08:12:35.517 [INF] Metrics: Message published to events
+2025-11-22 08:12:36.306 [WRN] MessageQueue: Memory usage at 89%
+2025-11-22 08:12:39.058 [INF] Scheduler: User user_8297 authenticated successfully
+2025-11-22 08:12:43.039 [INF] MessageQueue: Message published to orders
+2025-11-22 08:12:43.463 [INF] Auth: GET /api/v1/users/user_4426 completed in 129ms
+2025-11-22 08:12:47.328 [INF] FileProcessor: POST /api/v1/orders completed in 164ms
+2025-11-22 08:12:52.257 [INF] FileProcessor: Scheduled job CleanupJob completed in 185ms
+2025-11-22 08:12:54.983 [WRN] ApiGateway: Deprecated API endpoint called: /api/v1/legacy
+2025-11-22 08:12:56.022 [DBG] Scheduler: Processing request 8052ed1d
+2025-11-22 08:12:56.899 [INF] Config: GET /api/v1/products?page=95 completed in 5ms
+2025-11-22 08:12:59.804 [DBG] HttpServer: Processing request b888c6ae
+2025-11-22 08:13:02.686 [INF] Config: Database query executed in 3928ms
+2025-11-22 08:13:05.882 [WRN] Database: Slow query detected: 2060ms for SELECT * FROM users WHERE...
+2025-11-22 08:13:08.593 [INF] HttpServer: Connected to database mysql://db:3306/app
+2025-11-22 08:13:10.245 [INF] Cache: Configuration reloaded
+2025-11-22 08:13:13.097 [INF] Auth: Request fcac91b9 completed in 55ms
+2025-11-22 08:13:17.648 [INF] Config: GET /api/v1/users/user_6113 completed in 2103ms
+2025-11-22 08:13:18.732 [INF] Database: GET /api/v1/products?page=56 completed in 85ms
+2025-11-22 08:13:20.251 [DBG] Cache: Query execution plan generated
+2025-11-22 08:13:20.627 [INF] Database: Batch processing completed: 961/1047 items
+2025-11-22 08:13:20.758 [INF] MessageQueue: Connected to database postgres://db:5432/app
+2025-11-22 08:13:22.223 [WRN] Scheduler: Retry attempt 3 for operation SendEmail
+2025-11-22 08:13:23.664 [INF] HttpServer: GET /api/v1/users/user_3329 completed in 1ms
+2025-11-22 08:13:25.897 [INF] FileProcessor: PUT /api/v1/users/user_3852/profile completed in 752ms
+2025-11-22 08:13:28.540 [TRC] HttpServer: Variable state: {counter: 42, flag: true}
+2025-11-22 08:13:32.722 [INF] Database: Database query executed in 102ms
+2025-11-22 08:13:35.478 [INF] HttpServer: Scheduled job DataSync completed in 19ms
+2025-11-22 08:13:36.299 [INF] Cache: Connected to database postgres://db:5432/app
+2025-11-22 08:13:40.299 [DBG] Metrics: Cache lookup for key cache:session:c2ffb311
+2025-11-22 08:13:41.317 [WRN] FileProcessor: Deprecated API endpoint called: /api/v1/legacy
+2025-11-22 08:13:42.729 [DBG] Database: Parsed configuration: {"timeout": 30, "retries": 3}
+2025-11-22 08:13:47.466 [DBG] Auth: Query execution plan generated
+2025-11-22 08:13:50.361 [INF] Config: Scheduled job BackupJob completed in 2972ms
+2025-11-22 08:13:54.334 [INF] MessageQueue: GET /api/v1/users/user_1223 completed in 45ms
+2025-11-22 08:13:56.586 [INF] Database: Health check passed
+2025-11-22 08:13:57.293 [DBG] Config: Cache lookup for key cache:session:b061adc7
+2025-11-22 08:13:57.933 [WRN] Config: Rate limit approaching for client client_8bef3659
+2025-11-22 08:14:02.784 [TRC] Metrics: Loop iteration 69 of 1058
+2025-11-22 08:14:03.434 [WRN] Config: Deprecated API endpoint called: /api/v1/users
+2025-11-22 08:14:05.902 [DBG] HttpServer: Connection pool status: 3/20 active
+2025-11-22 08:14:07.942 [DBG] HttpServer: Parsed configuration: {"timeout": 30, "retries": 3}
+2025-11-22 08:14:08.142 [INF] Config: User user_5367 authenticated successfully
+2025-11-22 08:14:10.040 [DBG] Config: Cache lookup for key cache:user:b130ca29
+2025-11-22 08:14:11.226 [INF] ApiGateway: Scheduled job CleanupJob started
+2025-11-22 08:14:16.115 [INF] Scheduler: Scheduled job CleanupJob started
+2025-11-22 08:14:17.218 [DBG] Auth: Connection pool status: 2/20 active
+2025-11-22 08:14:19.851 [INF] Database: Health check passed
+2025-11-22 08:14:24.751 [DBG] MessageQueue: Cache lookup for key cache:user:74d3bc90
+2025-11-22 08:14:25.537 [INF] HttpServer: Message published to events
+2025-11-22 08:14:29.153 [INF] ApiGateway: GET /api/v1/products?page=40 completed in 42ms
+2025-11-22 08:14:32.878 [DBG] Config: Query execution plan generated
+2025-11-22 08:14:37.006 [DBG] Config: Query execution plan generated
+2025-11-22 08:14:39.753 [INF] FileProcessor: Request 6fcf2ee2 completed in 321ms
+2025-11-22 08:14:41.753 [INF] MessageQueue: File export_27b0188a.csv processed, 3148 records
+2025-11-22 08:14:45.330 [DBG] FileProcessor: Parsed configuration: {"timeout": 30, "retries": 3}
+2025-11-22 08:14:47.440 [INF] Database: GET /api/v1/products?page=50 completed in 507ms
+2025-11-22 08:14:47.670 [DBG] ApiGateway: Processing request f45d1876
+2025-11-22 08:14:50.689 [TRC] FileProcessor: Loop iteration 95 of 1023
+2025-11-22 08:14:53.592 [INF] Database: Request 7397860b completed in 595ms
+2025-11-22 08:14:56.585 [DBG] FileProcessor: Cache lookup for key cache:session:a7dcc324
+2025-11-22 08:14:58.490 [DBG] HttpServer: Cache lookup for key cache:user:ea8febe3
+2025-11-22 08:15:02.547 [INF] Database: Service started on port 3000
+2025-11-22 08:15:04.252 [INF] Database: Request bbe647f9 completed in 341ms
+2025-11-22 08:15:07.040 [INF] Cache: GET /api/v1/users/user_9124 completed in 30ms
+2025-11-22 08:15:11.507 [INF] HttpServer: POST /api/v1/orders completed in 4802ms
+2025-11-22 08:15:11.744 [INF] FileProcessor: Message consumed from notifications in 31ms
+2025-11-22 08:15:14.673 [WRN] Config: Memory usage at 71%
+2025-11-22 08:15:14.828 [INF] Metrics: Message consumed from orders in 2598ms
+2025-11-22 08:15:16.676 [INF] Metrics: Request d488fa32 completed in 4619ms
+2025-11-22 08:15:17.954 [INF] FileProcessor: POST /api/v1/orders completed in 44ms
+2025-11-22 08:15:21.684 [DBG] Config: Parsed configuration: {"timeout": 30, "retries": 3}
+2025-11-22 08:15:23.209 [INF] FileProcessor: File export_85e49226.csv processed, 9913 records
+2025-11-22 08:15:27.313 [INF] Auth: Connected to database postgres://db:5432/app
+2025-11-22 08:15:28.158 [INF] Scheduler: Health check passed
+2025-11-22 08:15:31.381 [INF] Auth: GET /api/v1/products?page=36 completed in 40ms
+2025-11-22 08:15:36.133 [DBG] MessageQueue: Query execution plan generated
+2025-11-22 08:15:40.982 [INF] Cache: Outbound HTTP call to UserService completed in 37ms
+2025-11-22 08:15:45.553 [INF] HttpServer: PUT /api/v1/users/user_2604/profile completed in 1042ms
+2025-11-22 08:15:47.057 [INF] Config: GET /api/v1/products?page=86 completed in 2ms
+2025-11-22 08:15:49.926 [INF] MessageQueue: Request 74aa97e6 completed in 35ms
+2025-11-22 08:15:53.376 [INF] MessageQueue: Configuration reloaded
+2025-11-22 08:15:54.270 [INF] Scheduler: GET /api/v1/users/user_7023 completed in 127ms
+2025-11-22 08:15:59.085 [DBG] Metrics: Parsed configuration: {"timeout": 30, "retries": 3}
+2025-11-22 08:16:00.165 [INF] HttpServer: Service started on port 9000
+2025-11-22 08:16:02.570 [DBG] ApiGateway: Query execution plan generated
+2025-11-22 08:16:02.615 [WRN] FileProcessor: Memory usage at 83%
+2025-11-22 08:16:05.883 [INF] Metrics: Scheduled job CleanupJob started
+2025-11-22 08:16:05.926 [INF] MessageQueue: Message consumed from events in 22ms
+2025-11-22 08:16:08.809 [INF] Config: GET /api/v1/users/user_9554 completed in 4995ms
+2025-11-22 08:16:11.106 [INF] Auth: Database query executed in 3ms
+2025-11-22 08:16:11.712 [INF] FileProcessor: Message published to orders
+2025-11-22 08:16:16.680 [INF] Cache: POST /api/v1/orders completed in 46ms
+2025-11-22 08:16:17.377 [INF] ApiGateway: GET /api/v1/products?page=93 completed in 3972ms
+2025-11-22 08:16:22.182 [INF] Database: Message consumed from notifications in 704ms
+2025-11-22 08:16:23.959 [INF] ApiGateway: Cache hit for key cache:session:93ca4cf9
+2025-11-22 08:16:28.717 [INF] FileProcessor: Scheduled job ReportGenerator started
+2025-11-22 08:16:29.456 [INF] HttpServer: Request 2eb7122f completed in 130ms
+2025-11-22 08:16:34.331 [INF] Database: DELETE /api/v1/sessions/8a1980c8 completed in 552ms
+2025-11-22 08:16:38.533 [WRN] Database: Slow query detected: 793ms for SELECT * FROM users WHERE...
+2025-11-22 08:16:41.317 [INF] Config: Outbound HTTP call to NotificationService completed in 779ms
+2025-11-22 08:16:45.825 [DBG] Scheduler: Connection pool status: 14/20 active
+2025-11-22 08:16:47.181 [INF] Database: GET /api/v1/products?page=53 completed in 147ms
+2025-11-22 08:16:51.722 [INF] Metrics: Message published to events
+2025-11-22 08:16:52.881 [WRN] Auth: Rate limit approaching for client client_17f9ba48
+2025-11-22 08:16:53.062 [WRN] Auth: Slow query detected: 18ms for SELECT * FROM users WHERE...
+2025-11-22 08:16:55.678 [ERR] MessageQueue: Database connection failed: Connection refused
+2025-11-22 08:16:56.598 [INF] FileProcessor: Outbound HTTP call to NotificationService completed in 639ms
+2025-11-22 08:16:59.421 [DBG] Database: Parsed configuration: {"timeout": 30, "retries": 3}
+2025-11-22 08:17:01.234 [INF] Auth: Message consumed from orders in 47ms
+2025-11-22 08:17:05.348 [WRN] FileProcessor: Certificate expires in 29 days
+2025-11-22 08:17:06.293 [INF] Config: Cache hit for key cache:user:f7e2c29c
+2025-11-22 08:17:07.809 [DBG] Auth: Cache lookup for key cache:user:ab82621e
+2025-11-22 08:17:08.622 [INF] Cache: Message consumed from orders in 4080ms
+2025-11-22 08:17:09.260 [INF] Metrics: Message published to events
+2025-11-22 08:17:13.814 [INF] Auth: Configuration reloaded
+2025-11-22 08:17:17.371 [INF] Config: Scheduled job ReportGenerator started
+2025-11-22 08:17:22.080 [INF] FileProcessor: Message consumed from orders in 16ms
+2025-11-22 08:17:22.809 [WRN] Auth: Retry attempt 3 for operation ProcessPayment
+2025-11-22 08:17:26.601 [INF] Config: Scheduled job CleanupJob completed in 28ms
+2025-11-22 08:17:27.216 [INF] HttpServer: POST /api/v1/orders completed in 214ms
+2025-11-22 08:17:31.113 [INF] Cache: Cache hit for key cache:config:f8142959
+2025-11-22 08:17:31.465 [INF] MessageQueue: Configuration reloaded
+2025-11-22 08:17:32.896 [DBG] Database: Connection pool status: 14/20 active
+2025-11-22 08:17:37.157 [INF] Database: Message published to notifications
+2025-11-22 08:17:41.008 [INF] MessageQueue: Outbound HTTP call to NotificationService completed in 1997ms
+2025-11-22 08:17:45.331 [INF] FileProcessor: Batch processing completed: 716/1082 items
+2025-11-22 08:17:46.693 [INF] Scheduler: GET /api/v1/users/user_9176 completed in 3ms
+2025-11-22 08:17:50.837 [DBG] Config: Cache lookup for key cache:user:c4c9acce
+2025-11-22 08:17:51.539 [DBG] MessageQueue: Cache lookup for key cache:config:93ea94f8
+2025-11-22 08:17:52.208 [DBG] Auth: Connection pool status: 17/20 active
+2025-11-22 08:17:52.457 [INF] Auth: Database query executed in 3690ms
+2025-11-22 08:17:55.685 [INF] FileProcessor: POST /api/v1/orders completed in 3445ms
+2025-11-22 08:17:56.677 [INF] Config: DELETE /api/v1/sessions/a677c777 completed in 39ms
+2025-11-22 08:17:58.945 [INF] Cache: Outbound HTTP call to UserService completed in 3163ms
+2025-11-22 08:18:02.016 [INF] FileProcessor: Service started on port 443
+2025-11-22 08:18:05.213 [INF] HttpServer: Service started on port 9000
+2025-11-22 08:18:10.113 [INF] Cache: Health check passed
+2025-11-22 08:18:12.571 [DBG] ApiGateway: Cache lookup for key cache:session:4b2b074f
+2025-11-22 08:18:13.687 [INF] Scheduler: GET /api/v1/users/user_3667 completed in 2901ms
+2025-11-22 08:18:17.241 [INF] Metrics: Request a0275d6f completed in 17ms
+2025-11-22 08:18:18.211 [DBG] Database: Processing request 186e7c52
+2025-11-22 08:18:20.326 [DBG] Config: Cache lookup for key cache:config:daf6fd50
+2025-11-22 08:18:25.012 [INF] Scheduler: Scheduled job BackupJob completed in 9ms
+2025-11-22 08:18:27.421 [INF] FileProcessor: GET /api/v1/products?page=33 completed in 3679ms
+2025-11-22 08:18:29.797 [ERR] Cache: Failed to process request f3cbbfb6: Timeout exceeded
+2025-11-22 08:18:34.170 [DBG] FileProcessor: Query execution plan generated
+2025-11-22 08:18:38.249 [INF] Database: PUT /api/v1/users/user_4833/profile completed in 147ms
+2025-11-22 08:18:38.294 [DBG] Auth: Cache lookup for key cache:user:df928f8d
+2025-11-22 08:18:38.445 [FTL] Auth: Critical resource unavailable: MessageBroker
+2025-11-22 08:18:39.974 [DBG] Cache: Connection pool status: 6/20 active
+2025-11-22 08:18:40.094 [INF] Scheduler: Database query executed in 91ms
+2025-11-22 08:18:45.053 [DBG] Database: Cache lookup for key cache:config:d2fa1bbe
+2025-11-22 08:18:46.730 [ERR] ApiGateway: File not found: data_33ecd887.csv
+2025-11-22 08:18:51.296 [WRN] Auth: Slow query detected: 258ms for SELECT * FROM users WHERE...
+2025-11-22 08:18:54.121 [DBG] Cache: Parsed configuration: {"timeout": 30, "retries": 3}
+2025-11-22 08:18:57.795 [INF] Cache: Message consumed from events in 580ms
+2025-11-22 08:19:02.172 [ERR] Auth: Invalid message format: Unexpected field "foo" at position 42
+2025-11-22 08:19:02.799 [INF] Database: Message published to tasks
+2025-11-22 08:19:06.650 [INF] MessageQueue: Connected to database postgres://db:5432/app
+2025-11-22 08:19:09.202 [INF] FileProcessor: Cache hit for key cache:config:72931b67
+2025-11-22 08:19:11.595 [DBG] Auth: Parsed configuration: {"timeout": 30, "retries": 3}
+2025-11-22 08:19:14.187 [WRN] FileProcessor: Retry attempt 4 for operation SendEmail
+2025-11-22 08:19:17.192 [DBG] FileProcessor: Parsed configuration: {"timeout": 30, "retries": 3}
+2025-11-22 08:19:19.893 [INF] Scheduler: Configuration reloaded
+2025-11-22 08:19:20.978 [INF] Scheduler: GET /api/v1/products?page=71 completed in 115ms
+2025-11-22 08:19:23.662 [INF] FileProcessor: GET /api/v1/products?page=53 completed in 2221ms
+2025-11-22 08:19:27.745 [INF] Cache: User user_5617 authenticated successfully
+2025-11-22 08:19:30.309 [DBG] FileProcessor: Connection pool status: 11/20 active
+2025-11-22 08:19:32.734 [DBG] Config: Connection pool status: 1/20 active
+2025-11-22 08:19:37.372 [DBG] ApiGateway: Cache lookup for key cache:config:cc4844e3
+2025-11-22 08:19:38.191 [INF] Cache: User user_1653 authenticated successfully
+2025-11-22 08:19:42.563 [INF] FileProcessor: Connected to database mysql://db:3306/app
+2025-11-22 08:19:43.220 [DBG] Cache: Connection pool status: 16/20 active
+2025-11-22 08:19:45.764 [INF] Metrics: Connected to database postgres://db:5432/app
+2025-11-22 08:19:46.420 [INF] Scheduler: POST /api/v1/orders completed in 3ms
+2025-11-22 08:19:46.714 [DBG] Metrics: Cache lookup for key cache:config:958a76a1
+2025-11-22 08:19:47.253 [DBG] FileProcessor: Parsed configuration: {"timeout": 30, "retries": 3}
+2025-11-22 08:19:48.902 [DBG] Database: Query execution plan generated
+2025-11-22 08:19:53.155 [INF] Config: PUT /api/v1/users/user_6364/profile completed in 127ms
+2025-11-22 08:19:57.916 [INF] Cache: Database query executed in 4537ms
+2025-11-22 08:20:00.820 [DBG] Auth: Query execution plan generated
+2025-11-22 08:20:02.527 [INF] FileProcessor: Scheduled job ReportGenerator completed in 3472ms
+2025-11-22 08:20:03.856 [INF] HttpServer: Connected to database postgres://db:5432/app
+2025-11-22 08:20:08.116 [INF] HttpServer: Request b76cfa39 completed in 17ms
+2025-11-22 08:20:09.328 [INF] Auth: Configuration reloaded
+2025-11-22 08:20:12.184 [DBG] Auth: Cache lookup for key cache:config:d162a53d
+2025-11-22 08:20:13.672 [INF] Cache: Outbound HTTP call to NotificationService completed in 764ms
+2025-11-22 08:20:15.671 [INF] ApiGateway: Service started on port 9000
+2025-11-22 08:20:17.631 [INF] Metrics: Message consumed from notifications in 33ms
+2025-11-22 08:20:22.008 [DBG] Scheduler: Query execution plan generated
+2025-11-22 08:20:26.216 [DBG] Cache: Parsed configuration: {"timeout": 30, "retries": 3}
+2025-11-22 08:20:27.630 [WRN] Cache: Rate limit approaching for client client_cd5ee164
+2025-11-22 08:20:30.619 [TRC] HttpServer: Variable state: {counter: 42, flag: true}
+2025-11-22 08:20:35.203 [DBG] FileProcessor: Query execution plan generated
+2025-11-22 08:20:39.106 [WRN] Database: Connection pool exhausted, waiting for available connection
+2025-11-22 08:20:41.724 [INF] Scheduler: Batch processing completed: 921/1100 items
+2025-11-22 08:20:44.169 [INF] MessageQueue: Connected to database postgres://db:5432/app
+2025-11-22 08:20:46.964 [DBG] FileProcessor: Cache lookup for key cache:config:2afb7fec
+2025-11-22 08:20:49.778 [INF] Scheduler: DELETE /api/v1/sessions/6542d41a completed in 60ms
+2025-11-22 08:20:50.238 [INF] Scheduler: Connected to database mysql://db:3306/app
+2025-11-22 08:20:54.073 [DBG] Cache: Query execution plan generated
+2025-11-22 08:20:54.963 [INF] Scheduler: Database query executed in 36ms
+2025-11-22 08:20:56.097 [INF] Database: Database query executed in 3362ms
+2025-11-22 08:20:57.680 [DBG] HttpServer: Query execution plan generated
+2025-11-22 08:21:00.983 [INF] FileProcessor: Scheduled job DataSync completed in 4337ms
+2025-11-22 08:21:03.380 [INF] FileProcessor: File data_8978987f.csv processed, 3337 records
+2025-11-22 08:21:05.263 [ERR] Auth: Unhandled exception in MessageQueue: Timeout exceeded
+2025-11-22 08:21:09.280 [INF] Config: Message consumed from events in 190ms
+2025-11-22 08:21:11.057 [INF] Scheduler: Service started on port 9000
+2025-11-22 08:21:11.301 [DBG] HttpServer: Connection pool status: 20/20 active
+2025-11-22 08:21:11.844 [INF] Config: User user_2667 authenticated successfully
+2025-11-22 08:21:13.755 [DBG] ApiGateway: Cache lookup for key cache:config:0197f21b
+2025-11-22 08:21:17.442 [INF] Auth: PUT /api/v1/users/user_2406/profile completed in 35ms
+2025-11-22 08:21:19.769 [INF] Metrics: Message published to orders
+2025-11-22 08:21:24.107 [INF] HttpServer: Scheduled job CleanupJob started
+2025-11-22 08:21:29.046 [INF] MessageQueue: Health check passed
+2025-11-22 08:21:33.567 [INF] Scheduler: Message published to notifications
+2025-11-22 08:21:37.045 [INF] Metrics: Scheduled job ReportGenerator completed in 161ms
+2025-11-22 08:21:37.513 [INF] FileProcessor: Database query executed in 38ms
+2025-11-22 08:21:38.996 [DBG] Auth: Processing request 5f10e36b
+2025-11-22 08:21:40.475 [WRN] HttpServer: Connection pool exhausted, waiting for available connection
+2025-11-22 08:21:44.933 [ERR] Scheduler: Database connection failed: Resource not found
+2025-11-22 08:21:47.795 [INF] Auth: DELETE /api/v1/sessions/efd71237 completed in 20ms
+2025-11-22 08:21:49.358 [DBG] Auth: Parsed configuration: {"timeout": 30, "retries": 3}
+2025-11-22 08:21:50.785 [INF] Auth: Request cabd0247 completed in 934ms
+2025-11-22 08:21:54.987 [INF] Metrics: Cache hit for key cache:session:b6e6bcc8
+2025-11-22 08:21:59.781 [INF] Database: User user_5651 authenticated successfully
+2025-11-22 08:22:03.649 [DBG] Config: Query execution plan generated
+2025-11-22 08:22:05.615 [INF] Metrics: Request 695a2fb1 completed in 4933ms
+2025-11-22 08:22:07.206 [DBG] HttpServer: Query execution plan generated
+2025-11-22 08:22:11.288 [DBG] Scheduler: Connection pool status: 4/20 active
+2025-11-22 08:22:15.284 [ERR] Config: File not found: report_62e07df6.csv
+2025-11-22 08:22:19.285 [INF] MessageQueue: Outbound HTTP call to NotificationService completed in 453ms
+2025-11-22 08:22:23.819 [ERR] Config: Timeout waiting for response from NotificationService
+2025-11-22 08:22:27.082 [WRN] FileProcessor: Slow query detected: 58ms for SELECT * FROM users WHERE...
+2025-11-22 08:22:28.434 [DBG] MessageQueue: Processing request 792126b5
+2025-11-22 08:22:29.741 [INF] MessageQueue: Request d799fff6 completed in 19ms
+2025-11-22 08:22:34.592 [DBG] Config: Connection pool status: 7/20 active
+2025-11-22 08:22:37.914 [INF] FileProcessor: Scheduled job ReportGenerator completed in 3572ms
+2025-11-22 08:22:38.090 [ERR] ApiGateway: Authentication failed for user user_5723
+2025-11-22 08:22:41.970 [INF] MessageQueue: PUT /api/v1/users/user_4956/profile completed in 206ms
+2025-11-22 08:22:44.479 [DBG] Scheduler: Query execution plan generated
+2025-11-22 08:22:45.881 [INF] Metrics: Outbound HTTP call to PaymentService completed in 1ms
+2025-11-22 08:22:49.538 [INF] Scheduler: Configuration reloaded
+2025-11-22 08:22:50.982 [INF] HttpServer: File data_e7d5de37.csv processed, 7086 records
+2025-11-22 08:22:53.546 [WRN] Config: Certificate expires in 24 days
+2025-11-22 08:22:54.905 [INF] Cache: DELETE /api/v1/sessions/5728d10b completed in 223ms
+2025-11-22 08:22:57.036 [INF] Scheduler: Request 39f47f50 completed in 140ms
+2025-11-22 08:23:00.683 [DBG] Scheduler: Parsed configuration: {"timeout": 30, "retries": 3}
+2025-11-22 08:23:03.618 [DBG] FileProcessor: Cache lookup for key cache:session:7513dc4b
+2025-11-22 08:23:04.781 [INF] Cache: DELETE /api/v1/sessions/8e1ef69b completed in 4523ms
+2025-11-22 08:23:08.349 [INF] Auth: Message published to events
+2025-11-22 08:23:09.431 [INF] Cache: Scheduled job BackupJob completed in 174ms
+2025-11-22 08:23:11.639 [WRN] Database: Memory usage at 83%
+2025-11-22 08:23:14.676 [TRC] ApiGateway: Loop iteration 51 of 1069
+2025-11-22 08:23:18.145 [DBG] Config: Parsed configuration: {"timeout": 30, "retries": 3}
+2025-11-22 08:23:21.837 [INF] ApiGateway: File import_d9977166.csv processed, 1381 records
+2025-11-22 08:23:23.722 [INF] FileProcessor: Scheduled job ReportGenerator completed in 133ms
+2025-11-22 08:23:25.590 [INF] Database: Cache hit for key cache:session:227d2c3d
+2025-11-22 08:23:29.616 [DBG] FileProcessor: Parsed configuration: {"timeout": 30, "retries": 3}
+2025-11-22 08:23:31.696 [WRN] Cache: Memory usage at 88%
+2025-11-22 08:23:31.990 [INF] FileProcessor: Batch processing completed: 905/1073 items
+2025-11-22 08:23:35.248 [DBG] Cache: Processing request 4d83c876
+2025-11-22 08:23:37.664 [DBG] Database: Query execution plan generated
+2025-11-22 08:23:38.881 [INF] Database: Message published to orders
+2025-11-22 08:23:40.056 [INF] Config: Message published to events
+2025-11-22 08:23:43.955 [INF] Scheduler: Cache hit for key cache:config:5ba4f9b7
+2025-11-22 08:23:44.227 [INF] Cache: Message consumed from orders in 680ms
+2025-11-22 08:23:48.190 [INF] MessageQueue: File data_fe3e19e2.csv processed, 6751 records
+2025-11-22 08:23:51.130 [INF] Cache: User user_4758 authenticated successfully
+2025-11-22 08:23:51.960 [DBG] HttpServer: Cache lookup for key cache:user:33135384
+2025-11-22 08:23:55.634 [INF] Auth: Message published to events
+2025-11-22 08:23:56.770 [INF] Config: Cache hit for key cache:config:5518f625
+2025-11-22 08:23:58.685 [DBG] ApiGateway: Connection pool status: 5/20 active
+2025-11-22 08:24:03.450 [INF] Scheduler: Request 8e9ecd7a completed in 74ms
+2025-11-22 08:24:05.137 [INF] Cache: GET /api/v1/users/user_7632 completed in 3052ms
+2025-11-22 08:24:09.918 [DBG] Auth: Connection pool status: 12/20 active
+2025-11-22 08:24:13.970 [INF] Config: DELETE /api/v1/sessions/7c3ac9fd completed in 331ms
+2025-11-22 08:24:16.972 [INF] Scheduler: GET /api/v1/users/user_8301 completed in 1513ms
+2025-11-22 08:24:19.802 [DBG] HttpServer: Connection pool status: 1/20 active
+2025-11-22 08:24:23.964 [WRN] FileProcessor: Memory usage at 71%
+2025-11-22 08:24:24.041 [INF] ApiGateway: Scheduled job CleanupJob started
+2025-11-22 08:24:25.419 [INF] MessageQueue: Request 7969bb62 completed in 168ms
+2025-11-22 08:24:25.633 [ERR] Scheduler: Failed to process request cfc5bf70: Permission denied
+2025-11-22 08:24:26.773 [INF] Scheduler: DELETE /api/v1/sessions/55562a01 completed in 71ms
+2025-11-22 08:24:28.162 [INF] Auth: Database query executed in 1762ms
+2025-11-22 08:24:30.259 [DBG] MessageQueue: Processing request f6d710b4
+2025-11-22 08:24:32.589 [INF] HttpServer: POST /api/v1/orders completed in 933ms
+2025-11-22 08:24:36.725 [INF] HttpServer: Configuration reloaded
+2025-11-22 08:24:40.645 [DBG] Auth: Connection pool status: 10/20 active
+2025-11-22 08:24:44.431 [INF] MessageQueue: Database query executed in 482ms
+2025-11-22 08:24:49.053 [INF] Cache: Cache hit for key cache:session:fa51a8e9
+2025-11-22 08:24:49.483 [INF] FileProcessor: Scheduled job CleanupJob started
+2025-11-22 08:24:53.554 [INF] Metrics: Scheduled job CleanupJob completed in 160ms
+2025-11-22 08:24:55.783 [TRC] Auth: Loop iteration 87 of 1028
+2025-11-22 08:24:56.145 [INF] FileProcessor: Database query executed in 4073ms
+2025-11-22 08:24:56.728 [INF] ApiGateway: File report_e278c989.csv processed, 9475 records
+2025-11-22 08:24:57.218 [DBG] ApiGateway: Processing request 42167390
+2025-11-22 08:25:01.719 [DBG] Scheduler: Processing request c3618727
+2025-11-22 08:25:06.259 [INF] Scheduler: Health check passed
+2025-11-22 08:25:06.425 [DBG] Cache: Processing request d8b88d29
+2025-11-22 08:25:06.650 [INF] Config: Batch processing completed: 540/1082 items
+2025-11-22 08:25:08.289 [INF] Config: User user_9858 authenticated successfully
+2025-11-22 08:25:09.590 [INF] Auth: Request f4c86036 completed in 163ms
+2025-11-22 08:25:12.828 [INF] HttpServer: Cache hit for key cache:user:6d94d240
+2025-11-22 08:25:15.644 [WRN] Scheduler: Retry attempt 5 for operation ProcessPayment
+2025-11-22 08:25:15.712 [INF] HttpServer: Request 4fbb78b9 completed in 48ms
+2025-11-22 08:25:15.953 [INF] Auth: User user_9997 authenticated successfully
+2025-11-22 08:25:16.649 [WRN] HttpServer: Retry attempt 5 for operation SyncData
+2025-11-22 08:25:19.267 [INF] HttpServer: DELETE /api/v1/sessions/3e2174d5 completed in 33ms
+2025-11-22 08:25:22.707 [DBG] Database: Connection pool status: 9/20 active
+2025-11-22 08:25:22.931 [DBG] Config: Processing request cb626913
+2025-11-22 08:25:25.584 [WRN] Database: Deprecated API endpoint called: /api/v1/orders
+2025-11-22 08:25:26.117 [DBG] Database: Processing request 3c47ffc3
+2025-11-22 08:25:26.160 [DBG] MessageQueue: Cache lookup for key cache:user:a43052a1
+2025-11-22 08:25:28.474 [INF] Auth: Service started on port 3000
+2025-11-22 08:25:30.803 [WRN] Config: Memory usage at 90%
+2025-11-22 08:25:34.927 [TRC] FileProcessor: Variable state: {counter: 42, flag: true}
+2025-11-22 08:25:35.593 [DBG] Database: Connection pool status: 4/20 active
+2025-11-22 08:25:40.240 [INF] Auth: DELETE /api/v1/sessions/26d5e3fc completed in 27ms
+2025-11-22 08:25:42.426 [INF] Database: PUT /api/v1/users/user_4017/profile completed in 2ms
+2025-11-22 08:25:46.391 [INF] Database: Batch processing completed: 724/1044 items
+2025-11-22 08:25:50.290 [INF] Scheduler: Connected to database postgres://db:5432/app
+2025-11-22 08:25:52.366 [WRN] Scheduler: Certificate expires in 22 days
+2025-11-22 08:25:53.378 [INF] ApiGateway: GET /api/v1/products?page=75 completed in 30ms
+2025-11-22 08:25:57.973 [INF] Scheduler: Cache hit for key cache:user:7f3f91b3
+2025-11-22 08:25:59.739 [INF] HttpServer: Configuration reloaded
+2025-11-22 08:26:02.423 [INF] HttpServer: Message consumed from notifications in 47ms
+2025-11-22 08:26:06.885 [INF] Database: Health check passed
+2025-11-22 08:26:08.918 [INF] Metrics: GET /api/v1/users/user_5927 completed in 23ms
+2025-11-22 08:26:11.337 [INF] Auth: Configuration reloaded
+2025-11-22 08:26:12.753 [DBG] Scheduler: Connection pool status: 7/20 active
+2025-11-22 08:26:13.100 [WRN] HttpServer: Certificate expires in 10 days
+2025-11-22 08:26:17.034 [DBG] Scheduler: Connection pool status: 7/20 active
+2025-11-22 08:26:21.879 [DBG] HttpServer: Cache lookup for key cache:config:59602510
+2025-11-22 08:26:23.088 [WRN] Database: Certificate expires in 20 days
+2025-11-22 08:26:27.976 [DBG] Scheduler: Cache lookup for key cache:user:b3c0c28d
+2025-11-22 08:26:28.058 [INF] Metrics: PUT /api/v1/users/user_6754/profile completed in 1508ms
+2025-11-22 08:26:31.879 [INF] HttpServer: User user_4795 authenticated successfully
+2025-11-22 08:26:32.224 [INF] Cache: Configuration reloaded
+2025-11-22 08:26:33.813 [WRN] Metrics: Retry attempt 3 for operation SendEmail
+2025-11-22 08:26:36.233 [WRN] Auth: Certificate expires in 12 days
+2025-11-22 08:26:40.468 [FTL] Metrics: Critical resource unavailable: MessageBroker
+2025-11-22 08:26:41.400 [INF] Cache: Connected to database postgres://db:5432/app
+2025-11-22 08:26:41.977 [INF] Auth: Batch processing completed: 650/1037 items
+2025-11-22 08:26:43.155 [INF] Cache: Message consumed from notifications in 361ms
+2025-11-22 08:26:45.232 [INF] Database: File export_2c083c0a.csv processed, 5979 records
+2025-11-22 08:26:46.033 [DBG] Config: Query execution plan generated
+2025-11-22 08:26:48.123 [WRN] Config: Deprecated API endpoint called: /api/v1/users
+2025-11-22 08:26:52.165 [DBG] HttpServer: Connection pool status: 14/20 active
+2025-11-22 08:26:54.586 [INF] Scheduler: User user_7167 authenticated successfully
+2025-11-22 08:26:57.127 [INF] ApiGateway: POST /api/v1/orders completed in 4517ms
+2025-11-22 08:26:57.811 [ERR] Cache: Authentication failed for user user_7424
+2025-11-22 08:26:58.747 [INF] HttpServer: Batch processing completed: 107/1057 items
+2025-11-22 08:27:01.283 [INF] Metrics: GET /api/v1/users/user_4057 completed in 698ms
+2025-11-22 08:27:06.025 [INF] Database: Message published to orders
+2025-11-22 08:27:10.217 [INF] MessageQueue: Database query executed in 1711ms
+2025-11-22 08:27:14.293 [TRC] Cache: Entering method Transform with parameters {id: 123, type: "full"}
+2025-11-22 08:27:19.098 [DBG] Database: Processing request 043310e9
+2025-11-22 08:27:19.945 [INF] HttpServer: Request 95742955 completed in 903ms
+2025-11-22 08:27:23.868 [FTL] ApiGateway: Data corruption detected in orders
+2025-11-22 08:27:26.480 [INF] MessageQueue: GET /api/v1/products?page=3 completed in 4979ms
+2025-11-22 08:27:26.830 [DBG] Auth: Cache lookup for key cache:config:514bf6c5
+2025-11-22 08:27:30.746 [INF] ApiGateway: GET /api/v1/users/user_4497 completed in 413ms
+2025-11-22 08:27:35.244 [WRN] MessageQueue: Slow query detected: 41ms for SELECT * FROM users WHERE...
+2025-11-22 08:27:35.574 [DBG] Config: Parsed configuration: {"timeout": 30, "retries": 3}
+2025-11-22 08:27:35.776 [INF] Cache: Service started on port 9000
+2025-11-22 08:27:38.412 [INF] Database: Database query executed in 759ms
+2025-11-22 08:27:40.964 [INF] Metrics: Scheduled job DataSync completed in 102ms
+2025-11-22 08:27:44.329 [INF] Scheduler: GET /api/v1/users/user_5640 completed in 134ms
+2025-11-22 08:27:46.506 [ERR] Auth: Timeout waiting for response from UserService
+2025-11-22 08:27:50.177 [DBG] MessageQueue: Processing request cfcf8033
+2025-11-22 08:27:51.240 [INF] MessageQueue: Configuration reloaded
+2025-11-22 08:27:55.712 [DBG] MessageQueue: Query execution plan generated
+2025-11-22 08:27:56.511 [DBG] ApiGateway: Query execution plan generated
+2025-11-22 08:28:00.845 [INF] Config: POST /api/v1/orders completed in 2529ms
+2025-11-22 08:28:01.156 [INF] Database: Scheduled job BackupJob started
+2025-11-22 08:28:02.112 [INF] MessageQueue: Database query executed in 4330ms
+2025-11-22 08:28:06.265 [DBG] HttpServer: Processing request cfa42ee5
+2025-11-22 08:28:07.273 [DBG] Config: Connection pool status: 4/20 active
+2025-11-22 08:28:11.099 [INF] Scheduler: Scheduled job ReportGenerator completed in 913ms
+2025-11-22 08:28:12.831 [ERR] Auth: File not found: import_956c1dec.csv
+2025-11-22 08:28:16.321 [WRN] HttpServer: Rate limit approaching for client client_edbcbf3c
+2025-11-22 08:28:20.338 [DBG] HttpServer: Connection pool status: 16/20 active
+2025-11-22 08:28:21.880 [INF] HttpServer: DELETE /api/v1/sessions/d4cd71fb completed in 685ms
+2025-11-22 08:28:25.676 [INF] Cache: Outbound HTTP call to PaymentService completed in 121ms
+2025-11-22 08:28:27.011 [DBG] Metrics: Cache lookup for key cache:config:eaf0b1f9
+2025-11-22 08:28:27.881 [DBG] Config: Connection pool status: 17/20 active
+2025-11-22 08:28:30.546 [INF] ApiGateway: POST /api/v1/orders completed in 1952ms
+2025-11-22 08:28:31.229 [DBG] Scheduler: Processing request 4bd88f9b
+2025-11-22 08:28:34.704 [DBG] Metrics: Processing request 747472a6
+2025-11-22 08:28:37.199 [INF] Cache: Connected to database mysql://db:3306/app
+2025-11-22 08:28:38.635 [INF] MessageQueue: Cache hit for key cache:config:fb7ef765
+2025-11-22 08:28:40.610 [INF] MessageQueue: GET /api/v1/users/user_6556 completed in 693ms
+2025-11-22 08:28:45.362 [INF] Cache: Configuration reloaded
+2025-11-22 08:28:46.092 [TRC] Metrics: Variable state: {counter: 42, flag: true}
+2025-11-22 08:28:48.888 [WRN] MessageQueue: Connection pool exhausted, waiting for available connection
+2025-11-22 08:28:52.277 [INF] Config: Service started on port 5000
+2025-11-22 08:28:53.663 [DBG] FileProcessor: Query execution plan generated
+2025-11-22 08:28:58.150 [WRN] Database: Connection pool exhausted, waiting for available connection
+2025-11-22 08:28:58.773 [INF] Metrics: Request f8deb432 completed in 57ms
+2025-11-22 08:29:03.635 [INF] ApiGateway: Health check passed
+2025-11-22 08:29:07.687 [INF] MessageQueue: GET /api/v1/products?page=86 completed in 971ms
+2025-11-22 08:29:08.707 [INF] Cache: Outbound HTTP call to NotificationService completed in 174ms
+2025-11-22 08:29:13.403 [DBG] Metrics: Parsed configuration: {"timeout": 30, "retries": 3}
+2025-11-22 08:29:15.100 [INF] Auth: POST /api/v1/orders completed in 2114ms
+2025-11-22 08:29:18.648 [WRN] Scheduler: Deprecated API endpoint called: /api/v1/legacy
+2025-11-22 08:29:19.495 [INF] Config: Message consumed from tasks in 29ms
+2025-11-22 08:29:19.769 [INF] Config: Scheduled job ReportGenerator completed in 4236ms
+2025-11-22 08:29:21.921 [INF] Metrics: GET /api/v1/users/user_8933 completed in 1828ms
+2025-11-22 08:29:24.768 [INF] HttpServer: Batch processing completed: 731/1057 items
+2025-11-22 08:29:28.323 [DBG] FileProcessor: Parsed configuration: {"timeout": 30, "retries": 3}
+2025-11-22 08:29:31.334 [INF] MessageQueue: Outbound HTTP call to PaymentService completed in 183ms
+2025-11-22 08:29:35.100 [DBG] Scheduler: Connection pool status: 2/20 active
+2025-11-22 08:29:35.909 [INF] Database: Scheduled job CleanupJob completed in 118ms
+2025-11-22 08:29:39.150 [INF] Config: Configuration reloaded
+2025-11-22 08:29:44.079 [WRN] Scheduler: Deprecated API endpoint called: /api/v1/legacy
+2025-11-22 08:29:47.550 [DBG] Metrics: Parsed configuration: {"timeout": 30, "retries": 3}
+2025-11-22 08:29:50.001 [INF] FileProcessor: Message consumed from notifications in 30ms
+2025-11-22 08:29:50.290 [INF] Database: PUT /api/v1/users/user_3990/profile completed in 4674ms
+2025-11-22 08:29:50.530 [INF] Database: File report_de9ec4fb.csv processed, 5246 records
+2025-11-22 08:29:55.372 [INF] Database: Message published to notifications
+2025-11-22 08:29:59.953 [TRC] Metrics: Variable state: {counter: 42, flag: true}
+2025-11-22 08:30:00.437 [INF] Scheduler: GET /api/v1/products?page=53 completed in 11ms
+2025-11-22 08:30:04.958 [INF] Metrics: Message published to tasks
+2025-11-22 08:30:08.727 [ERR] FileProcessor: Authentication failed for user user_3051
+2025-11-22 08:30:10.712 [INF] Auth: Message consumed from notifications in 1674ms
+2025-11-22 08:30:10.868 [INF] ApiGateway: Health check passed
+2025-11-22 08:30:13.580 [WRN] Auth: Retry attempt 1 for operation SyncData
+2025-11-22 08:30:16.485 [INF] Scheduler: File report_93635666.csv processed, 5745 records
+2025-11-22 08:30:19.751 [DBG] Metrics: Query execution plan generated
+2025-11-22 08:30:20.141 [INF] Auth: DELETE /api/v1/sessions/ea8b39fd completed in 857ms
+2025-11-22 08:30:20.356 [INF] Scheduler: Message published to notifications
+2025-11-22 08:30:22.174 [INF] MessageQueue: Service started on port 5000
+2025-11-22 08:30:25.588 [INF] Auth: Request 700789d8 completed in 58ms
+2025-11-22 08:30:25.712 [WRN] MessageQueue: Certificate expires in 20 days
+2025-11-22 08:30:29.670 [INF] FileProcessor: Service started on port 9000
+2025-11-22 08:30:30.288 [INF] Scheduler: POST /api/v1/orders completed in 3902ms
+2025-11-22 08:30:30.653 [INF] Metrics: Scheduled job ReportGenerator started
+2025-11-22 08:30:30.700 [INF] Cache: Connected to database postgres://db:5432/app
+2025-11-22 08:30:33.138 [INF] ApiGateway: POST /api/v1/orders completed in 368ms
+2025-11-22 08:30:34.892 [INF] Metrics: PUT /api/v1/users/user_3491/profile completed in 772ms
+2025-11-22 08:30:36.950 [DBG] FileProcessor: Processing request 5ac07733
+2025-11-22 08:30:40.447 [WRN] Auth: Connection pool exhausted, waiting for available connection
+2025-11-22 08:30:44.546 [INF] ApiGateway: Message published to orders
+2025-11-22 08:30:45.999 [DBG] Auth: Processing request 21c9708d
+2025-11-22 08:30:46.791 [INF] Auth: User user_9904 authenticated successfully
+2025-11-22 08:30:50.534 [INF] Config: POST /api/v1/orders completed in 4388ms
+2025-11-22 08:30:51.701 [INF] MessageQueue: Batch processing completed: 245/1056 items
+2025-11-22 08:30:56.564 [DBG] ApiGateway: Cache lookup for key cache:session:dacb15bb
+2025-11-22 08:30:57.746 [DBG] ApiGateway: Query execution plan generated
+2025-11-22 08:30:58.313 [DBG] Cache: Parsed configuration: {"timeout": 30, "retries": 3}
+2025-11-22 08:30:58.570 [INF] HttpServer: Connected to database postgres://db:5432/app
+2025-11-22 08:30:58.793 [INF] FileProcessor: DELETE /api/v1/sessions/c9a05c17 completed in 4151ms
+2025-11-22 08:31:01.608 [INF] Scheduler: Configuration reloaded
+2025-11-22 08:31:03.122 [DBG] FileProcessor: Query execution plan generated
+2025-11-22 08:31:06.406 [DBG] HttpServer: Query execution plan generated
+2025-11-22 08:31:07.186 [TRC] FileProcessor: Variable state: {counter: 42, flag: true}
+2025-11-22 08:31:10.259 [WRN] Metrics: Certificate expires in 23 days
+2025-11-22 08:31:12.123 [ERR] FileProcessor: Database connection failed: Timeout exceeded
+2025-11-22 08:31:14.708 [INF] HttpServer: POST /api/v1/orders completed in 776ms
+2025-11-22 08:31:15.752 [ERR] Cache: Unhandled exception in HttpServer: Timeout exceeded
+2025-11-22 08:31:16.987 [INF] Auth: User user_5957 authenticated successfully
+2025-11-22 08:31:21.041 [INF] Metrics: Batch processing completed: 878/1044 items
+2025-11-22 08:31:22.221 [DBG] Auth: Processing request 0542415d
+2025-11-22 08:31:23.134 [INF] Database: Batch processing completed: 435/1073 items
+2025-11-22 08:31:23.669 [INF] FileProcessor: Service started on port 443
+2025-11-22 08:31:26.993 [INF] Scheduler: GET /api/v1/products?page=50 completed in 448ms
+2025-11-22 08:31:28.811 [DBG] HttpServer: Query execution plan generated
+2025-11-22 08:31:31.182 [INF] FileProcessor: Request 7171dc61 completed in 165ms
+2025-11-22 08:31:32.994 [INF] FileProcessor: PUT /api/v1/users/user_6425/profile completed in 130ms
+2025-11-22 08:31:34.572 [INF] Scheduler: Service started on port 8080
+2025-11-22 08:31:36.769 [WRN] Database: Connection pool exhausted, waiting for available connection
+2025-11-22 08:31:37.353 [ERR] ApiGateway: File not found: data_f9c3cef6.csv
+2025-11-22 08:31:41.926 [INF] FileProcessor: Configuration reloaded
+2025-11-22 08:31:43.329 [INF] MessageQueue: Configuration reloaded
+2025-11-22 08:31:46.177 [ERR] Auth: Failed to process request 7be57a1a: Timeout exceeded
+2025-11-22 08:31:46.285 [INF] FileProcessor: DELETE /api/v1/sessions/01f3233d completed in 32ms
+2025-11-22 08:31:51.147 [WRN] HttpServer: Slow query detected: 14ms for SELECT * FROM users WHERE...
+2025-11-22 08:31:53.412 [DBG] Database: Processing request 2635a1e0
+2025-11-22 08:31:55.720 [WRN] Auth: Deprecated API endpoint called: /api/v1/orders
+2025-11-22 08:31:58.547 [DBG] Scheduler: Connection pool status: 2/20 active
+2025-11-22 08:32:01.035 [INF] Auth: Service started on port 443
+2025-11-22 08:32:04.381 [DBG] Metrics: Connection pool status: 6/20 active
+2025-11-22 08:32:05.571 [DBG] Metrics: Connection pool status: 10/20 active
+2025-11-22 08:32:08.047 [DBG] Config: Connection pool status: 7/20 active
+2025-11-22 08:32:13.003 [INF] Cache: Cache hit for key cache:session:20e256c7
+2025-11-22 08:32:16.141 [INF] Cache: User user_2907 authenticated successfully
+2025-11-22 08:32:20.682 [INF] Auth: User user_8077 authenticated successfully
+2025-11-22 08:32:22.106 [DBG] ApiGateway: Connection pool status: 6/20 active
+2025-11-22 08:32:22.623 [TRC] HttpServer: Loop iteration 80 of 1014
+2025-11-22 08:32:23.850 [WRN] ApiGateway: Certificate expires in 27 days
+2025-11-22 08:32:24.848 [INF] ApiGateway: Message published to orders
+2025-11-22 08:32:25.321 [INF] HttpServer: Message published to orders
+2025-11-22 08:32:28.309 [INF] HttpServer: Connected to database mysql://db:3306/app
+2025-11-22 08:32:33.051 [DBG] Config: Connection pool status: 14/20 active
+2025-11-22 08:32:36.594 [INF] Scheduler: Outbound HTTP call to NotificationService completed in 813ms
+2025-11-22 08:32:37.273 [DBG] Auth: Connection pool status: 13/20 active
+2025-11-22 08:32:38.342 [INF] MessageQueue: GET /api/v1/products?page=76 completed in 3485ms
+2025-11-22 08:32:41.174 [INF] FileProcessor: Configuration reloaded
+2025-11-22 08:32:42.738 [ERR] ApiGateway: Invalid message format: Unexpected field "foo" at position 42
+2025-11-22 08:32:44.441 [INF] Auth: Request db862151 completed in 184ms
+2025-11-22 08:32:48.362 [TRC] FileProcessor: Entering method Transform with parameters {id: 123, type: "full"}
+2025-11-22 08:32:52.533 [INF] ApiGateway: Database query executed in 192ms
+2025-11-22 08:32:54.552 [DBG] FileProcessor: Connection pool status: 3/20 active
+2025-11-22 08:32:54.664 [WRN] Metrics: Slow query detected: 29ms for SELECT * FROM users WHERE...
+2025-11-22 08:32:58.875 [DBG] Metrics: Processing request 9b49dfc2
+2025-11-22 08:33:00.956 [INF] HttpServer: Batch processing completed: 490/1058 items
+2025-11-22 08:33:02.294 [INF] Cache: Connected to database mysql://db:3306/app
+2025-11-22 08:33:03.055 [INF] Database: Scheduled job ReportGenerator started
+2025-11-22 08:33:06.459 [INF] HttpServer: Scheduled job ReportGenerator started
+2025-11-22 08:33:09.182 [INF] Auth: Database query executed in 1582ms
+2025-11-22 08:33:09.672 [INF] Cache: Scheduled job ReportGenerator completed in 4ms
+2025-11-22 08:33:09.765 [INF] ApiGateway: Service started on port 5000
+2025-11-22 08:33:09.948 [INF] Scheduler: User user_5512 authenticated successfully
+2025-11-22 08:33:13.269 [DBG] Scheduler: Parsed configuration: {"timeout": 30, "retries": 3}
+2025-11-22 08:33:15.474 [DBG] Auth: Cache lookup for key cache:session:9a1472ce
+2025-11-22 08:33:18.260 [DBG] Config: Query execution plan generated
+2025-11-22 08:33:21.497 [DBG] Auth: Query execution plan generated
+2025-11-22 08:33:23.586 [INF] Metrics: GET /api/v1/users/user_9180 completed in 248ms
+2025-11-22 08:33:28.392 [INF] Database: Connected to database postgres://db:5432/app
+2025-11-22 08:33:31.972 [DBG] Config: Query execution plan generated
+2025-11-22 08:33:32.772 [INF] Database: Request 5531a060 completed in 621ms
+2025-11-22 08:33:34.056 [DBG] Auth: Parsed configuration: {"timeout": 30, "retries": 3}
+2025-11-22 08:33:37.985 [INF] Cache: User user_2317 authenticated successfully
+2025-11-22 08:33:41.087 [INF] Database: Configuration reloaded
+2025-11-22 08:33:41.808 [INF] ApiGateway: Configuration reloaded
+2025-11-22 08:33:44.610 [INF] Cache: File export_361a7c05.csv processed, 7237 records
+2025-11-22 08:33:48.371 [INF] Auth: GET /api/v1/users/user_1098 completed in 1582ms
+2025-11-22 08:33:49.524 [DBG] FileProcessor: Cache lookup for key cache:config:2b229c3d
+2025-11-22 08:33:50.919 [DBG] HttpServer: Parsed configuration: {"timeout": 30, "retries": 3}
+2025-11-22 08:33:51.105 [INF] ApiGateway: GET /api/v1/users/user_5455 completed in 170ms
+2025-11-22 08:33:53.972 [INF] Metrics: Service started on port 443
+2025-11-22 08:33:57.409 [INF] Auth: Service started on port 5000
+2025-11-22 08:33:57.970 [INF] Auth: Request 9ef4b84f completed in 2730ms
+2025-11-22 08:33:58.645 [WRN] ApiGateway: Slow query detected: 40ms for SELECT * FROM users WHERE...
+2025-11-22 08:34:03.055 [DBG] Cache: Query execution plan generated
+2025-11-22 08:34:04.672 [INF] Database: Service started on port 5000
+2025-11-22 08:34:08.051 [INF] ApiGateway: Connected to database postgres://db:5432/app
+2025-11-22 08:34:09.035 [DBG] ApiGateway: Processing request 7aa21c0a
+2025-11-22 08:34:13.398 [INF] Metrics: PUT /api/v1/users/user_2147/profile completed in 799ms
+2025-11-22 08:34:18.073 [DBG] FileProcessor: Cache lookup for key cache:config:820251e5
+2025-11-22 08:34:20.412 [INF] Scheduler: DELETE /api/v1/sessions/5c45a668 completed in 16ms
+2025-11-22 08:34:23.253 [INF] Scheduler: Configuration reloaded
+2025-11-22 08:34:26.181 [INF] Metrics: Batch processing completed: 574/1086 items
+2025-11-22 08:34:27.704 [INF] Cache: Service started on port 8080
+2025-11-22 08:34:29.571 [INF] Scheduler: Batch processing completed: 463/1051 items
+2025-11-22 08:34:30.671 [INF] Cache: POST /api/v1/orders completed in 9ms
+2025-11-22 08:34:31.057 [INF] Config: POST /api/v1/orders completed in 149ms
+2025-11-22 08:34:33.452 [WRN] Database: Rate limit approaching for client client_edf89973
+2025-11-22 08:34:34.564 [DBG] FileProcessor: Cache lookup for key cache:config:f3681b87
+2025-11-22 08:34:36.636 [INF] FileProcessor: Database query executed in 62ms
+2025-11-22 08:34:39.543 [FTL] Database: Application startup failed: Connection refused
+2025-11-22 08:34:43.033 [WRN] Scheduler: Certificate expires in 16 days
+2025-11-22 08:34:47.899 [INF] Auth: Configuration reloaded
+2025-11-22 08:34:49.962 [DBG] Cache: Cache lookup for key cache:user:fcbe0cf7
+2025-11-22 08:34:51.703 [INF] Cache: DELETE /api/v1/sessions/e1068dcf completed in 12ms
+2025-11-22 08:34:55.197 [INF] Database: POST /api/v1/orders completed in 30ms
+2025-11-22 08:34:55.435 [DBG] Metrics: Cache lookup for key cache:config:17adfc80
+2025-11-22 08:34:57.580 [INF] Metrics: Outbound HTTP call to PaymentService completed in 2216ms
+2025-11-22 08:34:58.805 [INF] Cache: POST /api/v1/orders completed in 4169ms
+2025-11-22 08:35:02.802 [INF] FileProcessor: User user_3390 authenticated successfully
+2025-11-22 08:35:02.868 [TRC] MessageQueue: Loop iteration 55 of 1077
+2025-11-22 08:35:03.064 [DBG] Database: Processing request 91425a62
+2025-11-22 08:35:03.667 [INF] Cache: Configuration reloaded
+2025-11-22 08:35:06.879 [WRN] Metrics: Slow query detected: 971ms for SELECT * FROM users WHERE...
+2025-11-22 08:35:11.586 [ERR] Config: File not found: export_6795b593.csv
+2025-11-22 08:35:13.938 [INF] HttpServer: Scheduled job DataSync completed in 151ms
+2025-11-22 08:35:16.378 [ERR] Scheduler: Database connection failed: Invalid token
+2025-11-22 08:35:16.653 [INF] Config: Scheduled job ReportGenerator completed in 5ms
+2025-11-22 08:35:20.140 [INF] ApiGateway: Batch processing completed: 545/1033 items
+2025-11-22 08:35:24.996 [ERR] HttpServer: Database connection failed: Timeout exceeded
+2025-11-22 08:35:28.587 [INF] MessageQueue: Outbound HTTP call to UserService completed in 1ms
+2025-11-22 08:35:29.907 [TRC] Config: Variable state: {counter: 42, flag: true}
+2025-11-22 08:35:32.906 [DBG] Database: Cache lookup for key cache:session:731b4471
+2025-11-22 08:35:36.567 [INF] Config: GET /api/v1/users/user_3337 completed in 14ms
+2025-11-22 08:35:39.181 [INF] FileProcessor: Database query executed in 28ms
+2025-11-22 08:35:43.794 [INF] Scheduler: PUT /api/v1/users/user_8611/profile completed in 152ms
+2025-11-22 08:35:46.947 [INF] Metrics: Message published to tasks
+2025-11-22 08:35:50.246 [WRN] HttpServer: Certificate expires in 30 days
+2025-11-22 08:35:54.159 [INF] Cache: Message published to orders
+2025-11-22 08:35:57.372 [ERR] FileProcessor: Unhandled exception in MessageQueue: Permission denied
+2025-11-22 08:35:58.359 [INF] Config: Health check passed
+2025-11-22 08:36:02.061 [INF] Scheduler: POST /api/v1/orders completed in 40ms
+2025-11-22 08:36:02.190 [ERR] ApiGateway: Database connection failed: Invalid token
+2025-11-22 08:36:04.093 [INF] Cache: Cache hit for key cache:config:4421a0d3
+2025-11-22 08:36:07.891 [INF] Metrics: Request 20ddfef2 completed in 33ms
+2025-11-22 08:36:08.819 [INF] Cache: Health check passed
+2025-11-22 08:36:09.288 [INF] Auth: PUT /api/v1/users/user_8891/profile completed in 161ms
+2025-11-22 08:36:09.802 [WRN] HttpServer: Memory usage at 72%
+2025-11-22 08:36:11.877 [INF] FileProcessor: Health check passed
+2025-11-22 08:36:12.436 [INF] ApiGateway: GET /api/v1/users/user_2414 completed in 268ms
+2025-11-22 08:36:13.752 [INF] Config: Outbound HTTP call to PaymentService completed in 99ms
+2025-11-22 08:36:13.819 [WRN] Auth: Connection pool exhausted, waiting for available connection
+2025-11-22 08:36:17.313 [ERR] Cache: Database connection failed: Connection refused
+2025-11-22 08:36:21.497 [INF] Auth: Health check passed
+2025-11-22 08:36:25.844 [DBG] Scheduler: Query execution plan generated
+2025-11-22 08:36:29.151 [DBG] Cache: Processing request d5949322
+2025-11-22 08:36:33.988 [INF] Scheduler: Scheduled job BackupJob completed in 482ms
+2025-11-22 08:36:36.901 [INF] FileProcessor: Service started on port 9000
+2025-11-22 08:36:40.659 [INF] HttpServer: Outbound HTTP call to PaymentService completed in 158ms
+2025-11-22 08:36:44.394 [DBG] HttpServer: Parsed configuration: {"timeout": 30, "retries": 3}
+2025-11-22 08:36:44.562 [INF] MessageQueue: Message published to events
+2025-11-22 08:36:45.191 [INF] Scheduler: Connected to database mysql://db:3306/app
+2025-11-22 08:36:49.818 [INF] MessageQueue: GET /api/v1/products?page=78 completed in 3047ms
+2025-11-22 08:36:54.498 [FTL] Config: Unrecoverable error, shutting down
+2025-11-22 08:36:58.165 [WRN] HttpServer: Memory usage at 84%
+2025-11-22 08:36:59.635 [WRN] Scheduler: Certificate expires in 15 days
+2025-11-22 08:37:02.788 [INF] ApiGateway: Request 8371ccc6 completed in 22ms
+2025-11-22 08:37:07.543 [INF] Cache: GET /api/v1/users/user_7183 completed in 62ms
+2025-11-22 08:37:07.870 [INF] Cache: Cache hit for key cache:config:73689edc
+2025-11-22 08:37:12.768 [DBG] FileProcessor: Processing request 557d1d9c
+2025-11-22 08:37:13.272 [DBG] Auth: Processing request b66a252c
+2025-11-22 08:37:15.179 [INF] Cache: POST /api/v1/orders completed in 37ms
+2025-11-22 08:37:18.730 [INF] Scheduler: GET /api/v1/users/user_1316 completed in 31ms
+2025-11-22 08:37:20.356 [INF] Scheduler: Health check passed
+2025-11-22 08:37:24.706 [INF] FileProcessor: Message consumed from tasks in 4431ms
+2025-11-22 08:37:25.241 [DBG] FileProcessor: Query execution plan generated
+2025-11-22 08:37:30.005 [INF] Database: Health check passed
+2025-11-22 08:37:30.208 [WRN] FileProcessor: Deprecated API endpoint called: /api/v1/orders
+2025-11-22 08:37:30.857 [INF] MessageQueue: Connected to database postgres://db:5432/app
+2025-11-22 08:37:32.038 [INF] Metrics: Message consumed from notifications in 161ms
+2025-11-22 08:37:34.811 [ERR] HttpServer: Authentication failed for user user_4082
+2025-11-22 08:37:37.541 [DBG] Database: Processing request ceae2271
+2025-11-22 08:37:40.139 [DBG] Auth: Parsed configuration: {"timeout": 30, "retries": 3}
+2025-11-22 08:37:43.139 [DBG] HttpServer: Connection pool status: 18/20 active
+2025-11-22 08:37:44.187 [INF] Scheduler: File import_ea0a0667.csv processed, 4355 records
+2025-11-22 08:37:47.770 [INF] Config: Batch processing completed: 165/1090 items
+2025-11-22 08:37:50.119 [FTL] FileProcessor: Application startup failed: Timeout exceeded
+2025-11-22 08:37:52.581 [INF] Scheduler: Scheduled job DataSync started
+2025-11-22 08:37:54.308 [INF] Cache: File import_cd123ecc.csv processed, 2186 records
+2025-11-22 08:37:57.797 [INF] Cache: Message published to notifications
+2025-11-22 08:37:59.100 [INF] Auth: File import_e12c377e.csv processed, 8912 records
+2025-11-22 08:38:01.732 [DBG] Config: Cache lookup for key cache:session:ec27c9bf
+2025-11-22 08:38:05.518 [DBG] MessageQueue: Processing request b7b75b2a
+2025-11-22 08:38:08.945 [INF] Config: PUT /api/v1/users/user_9317/profile completed in 373ms
+2025-11-22 08:38:11.653 [INF] HttpServer: Health check passed
+2025-11-22 08:38:11.806 [INF] ApiGateway: Message consumed from events in 154ms
+2025-11-22 08:38:14.833 [INF] ApiGateway: Batch processing completed: 383/1012 items
+2025-11-22 08:38:18.650 [DBG] Cache: Cache lookup for key cache:session:39e4f1c8
+2025-11-22 08:38:22.419 [INF] Auth: File report_a1dbe87c.csv processed, 4022 records
+2025-11-22 08:38:24.792 [DBG] MessageQueue: Parsed configuration: {"timeout": 30, "retries": 3}
+2025-11-22 08:38:27.292 [WRN] Config: Deprecated API endpoint called: /api/v1/legacy
+2025-11-22 08:38:29.647 [INF] Config: GET /api/v1/products?page=23 completed in 820ms
+2025-11-22 08:38:34.325 [DBG] FileProcessor: Connection pool status: 14/20 active
+2025-11-22 08:38:37.019 [WRN] Cache: Memory usage at 95%
+2025-11-22 08:38:39.804 [INF] Database: Message consumed from orders in 4823ms
+2025-11-22 08:38:40.206 [INF] Metrics: Message published to tasks
+2025-11-22 08:38:40.334 [DBG] Scheduler: Connection pool status: 20/20 active
+2025-11-22 08:38:44.495 [DBG] Database: Query execution plan generated
+2025-11-22 08:38:48.902 [INF] Cache: Scheduled job DataSync completed in 2480ms
+2025-11-22 08:38:52.153 [INF] Auth: DELETE /api/v1/sessions/bae45cbd completed in 4019ms
+2025-11-22 08:38:56.920 [INF] FileProcessor: POST /api/v1/orders completed in 918ms
+2025-11-22 08:38:58.414 [ERR] Scheduler: Authentication failed for user user_8366
+2025-11-22 08:39:01.736 [INF] HttpServer: Configuration reloaded
+2025-11-22 08:39:04.861 [INF] Database: Scheduled job BackupJob completed in 85ms
+2025-11-22 08:39:09.457 [INF] Cache: Connected to database postgres://db:5432/app
+2025-11-22 08:39:11.523 [INF] HttpServer: DELETE /api/v1/sessions/1f21d653 completed in 43ms
+2025-11-22 08:39:12.847 [DBG] MessageQueue: Cache lookup for key cache:user:8a7452ae
+2025-11-22 08:39:15.183 [INF] ApiGateway: POST /api/v1/orders completed in 959ms
+2025-11-22 08:39:16.152 [INF] ApiGateway: PUT /api/v1/users/user_3131/profile completed in 4724ms
+2025-11-22 08:39:20.391 [DBG] HttpServer: Connection pool status: 16/20 active
+2025-11-22 08:39:20.909 [INF] Cache: Batch processing completed: 449/1066 items
+2025-11-22 08:39:22.608 [INF] FileProcessor: File import_7204f308.csv processed, 2888 records
+2025-11-22 08:39:24.548 [INF] MessageQueue: Outbound HTTP call to PaymentService completed in 190ms
+2025-11-22 08:39:28.974 [WRN] Auth: Deprecated API endpoint called: /api/v1/orders
+2025-11-22 08:39:29.051 [INF] Scheduler: Scheduled job DataSync started
+2025-11-22 08:39:29.877 [INF] FileProcessor: Request ebaf4584 completed in 313ms
+2025-11-22 08:39:31.550 [INF] Cache: Scheduled job CleanupJob started
+2025-11-22 08:39:35.097 [INF] Auth: User user_8446 authenticated successfully
+2025-11-22 08:39:35.384 [INF] Scheduler: Request 02c5ef5d completed in 824ms
+2025-11-22 08:39:38.284 [INF] HttpServer: Service started on port 9000
+2025-11-22 08:39:39.820 [INF] FileProcessor: PUT /api/v1/users/user_4836/profile completed in 198ms
+2025-11-22 08:39:41.443 [TRC] Auth: Entering method Transform with parameters {id: 123, type: "full"}
+2025-11-22 08:39:43.578 [INF] FileProcessor: Health check passed
+2025-11-22 08:39:47.230 [WRN] Auth: Deprecated API endpoint called: /api/v1/legacy
+2025-11-22 08:39:47.645 [INF] Auth: Health check passed
+2025-11-22 08:39:50.986 [INF] Cache: Scheduled job DataSync completed in 27ms
+2025-11-22 08:39:52.744 [DBG] ApiGateway: Processing request a12fed44
+2025-11-22 08:39:56.714 [INF] Scheduler: POST /api/v1/orders completed in 72ms
+2025-11-22 08:39:57.694 [DBG] FileProcessor: Processing request be2a18fe
+2025-11-22 08:39:58.476 [INF] Metrics: PUT /api/v1/users/user_9819/profile completed in 18ms
+2025-11-22 08:39:59.490 [INF] Cache: Database query executed in 881ms
+2025-11-22 08:40:01.393 [DBG] HttpServer: Parsed configuration: {"timeout": 30, "retries": 3}
+2025-11-22 08:40:05.912 [DBG] Cache: Parsed configuration: {"timeout": 30, "retries": 3}
+2025-11-22 08:40:06.891 [INF] MessageQueue: Request 49f543fb completed in 321ms
+2025-11-22 08:40:10.059 [DBG] Config: Connection pool status: 6/20 active
+2025-11-22 08:40:14.379 [INF] Database: Health check passed
+2025-11-22 08:40:18.969 [ERR] ApiGateway: Database connection failed: Connection refused
+2025-11-22 08:40:20.317 [WRN] Config: Slow query detected: 2759ms for SELECT * FROM users WHERE...
+2025-11-22 08:40:23.987 [INF] ApiGateway: GET /api/v1/users/user_6896 completed in 197ms
+2025-11-22 08:40:26.413 [INF] ApiGateway: Message published to events
+2025-11-22 08:40:29.479 [INF] Config: Outbound HTTP call to NotificationService completed in 37ms
+2025-11-22 08:40:30.260 [INF] Cache: Connected to database mysql://db:3306/app
+2025-11-22 08:40:30.299 [DBG] ApiGateway: Cache lookup for key cache:config:5bd02966
+2025-11-22 08:40:31.206 [WRN] HttpServer: Deprecated API endpoint called: /api/v1/orders
+2025-11-22 08:40:31.954 [DBG] Metrics: Processing request 130f8027
+2025-11-22 08:40:34.916 [DBG] FileProcessor: Query execution plan generated
+2025-11-22 08:40:36.877 [FTL] Metrics: Data corruption detected in users
+2025-11-22 08:40:41.136 [DBG] FileProcessor: Cache lookup for key cache:session:07e1a9d3
+2025-11-22 08:40:42.933 [DBG] FileProcessor: Connection pool status: 9/20 active
+2025-11-22 08:40:46.935 [INF] HttpServer: Configuration reloaded
+2025-11-22 08:40:48.794 [DBG] Auth: Connection pool status: 6/20 active
+2025-11-22 08:40:49.006 [DBG] HttpServer: Processing request 0099f27a
+2025-11-22 08:40:51.484 [DBG] FileProcessor: Processing request 20251ad6
+2025-11-22 08:40:51.550 [INF] MessageQueue: Configuration reloaded
+2025-11-22 08:40:56.155 [INF] Scheduler: Cache hit for key cache:session:3ca320b3
+2025-11-22 08:40:58.415 [DBG] Config: Processing request b95bbd17
+2025-11-22 08:41:00.635 [INF] MessageQueue: Database query executed in 504ms
+2025-11-22 08:41:00.918 [INF] HttpServer: Scheduled job BackupJob started
+2025-11-22 08:41:04.581 [WRN] Metrics: Certificate expires in 12 days
+2025-11-22 08:41:08.007 [INF] FileProcessor: PUT /api/v1/users/user_9357/profile completed in 81ms
+2025-11-22 08:41:09.547 [DBG] Config: Query execution plan generated
+2025-11-22 08:41:13.507 [ERR] Auth: Timeout waiting for response from NotificationService
+2025-11-22 08:41:16.867 [INF] Metrics: Database query executed in 331ms
+2025-11-22 08:41:18.997 [INF] Scheduler: Service started on port 443
+2025-11-22 08:41:23.754 [ERR] Config: Failed to process request de6a6fd5: Resource not found
+2025-11-22 08:41:26.655 [WRN] Metrics: Retry attempt 5 for operation ProcessPayment
+2025-11-22 08:41:28.071 [DBG] ApiGateway: Cache lookup for key cache:session:1479dd8a
+2025-11-22 08:41:28.211 [INF] Database: Message consumed from tasks in 2753ms
+2025-11-22 08:41:28.444 [INF] Cache: User user_1029 authenticated successfully
+2025-11-22 08:41:33.051 [DBG] FileProcessor: Parsed configuration: {"timeout": 30, "retries": 3}
+2025-11-22 08:41:34.989 [DBG] Config: Processing request 7459a66b
+2025-11-22 08:41:37.983 [DBG] MessageQueue: Cache lookup for key cache:user:644504cc
+2025-11-22 08:41:39.381 [INF] MessageQueue: DELETE /api/v1/sessions/dee75827 completed in 3ms
+2025-11-22 08:41:44.190 [DBG] Scheduler: Connection pool status: 1/20 active
+2025-11-22 08:41:45.182 [INF] MessageQueue: Service started on port 5000
+2025-11-22 08:41:47.493 [DBG] Database: Parsed configuration: {"timeout": 30, "retries": 3}
+2025-11-22 08:41:51.885 [INF] Config: Outbound HTTP call to NotificationService completed in 1959ms
+2025-11-22 08:41:52.894 [INF] Auth: Request dfef5797 completed in 388ms
+2025-11-22 08:41:53.808 [WRN] FileProcessor: Certificate expires in 6 days
+2025-11-22 08:41:54.471 [INF] Database: POST /api/v1/orders completed in 742ms
+2025-11-22 08:41:58.775 [INF] Auth: Batch processing completed: 111/1093 items
+2025-11-22 08:41:58.817 [DBG] ApiGateway: Query execution plan generated
+2025-11-22 08:42:03.584 [DBG] Cache: Connection pool status: 3/20 active
+2025-11-22 08:42:03.968 [INF] Scheduler: Scheduled job BackupJob completed in 44ms
+2025-11-22 08:42:07.162 [INF] FileProcessor: PUT /api/v1/users/user_6457/profile completed in 2478ms
+2025-11-22 08:42:08.457 [INF] MessageQueue: Connected to database postgres://db:5432/app
+2025-11-22 08:42:09.514 [INF] Cache: Message published to orders
+2025-11-22 08:42:10.453 [ERR] Metrics: Unhandled exception in Config: Resource not found
+2025-11-22 08:42:14.776 [DBG] ApiGateway: Query execution plan generated
+2025-11-22 08:42:18.471 [INF] Metrics: Service started on port 5000
+2025-11-22 08:42:19.213 [WRN] HttpServer: Deprecated API endpoint called: /api/v1/legacy

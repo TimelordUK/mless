@@ -2,14 +2,18 @@ package index
 
 import (
 	"bytes"
+	"time"
 
 	mlessio "github.com/user/mless/internal/io"
+	"github.com/user/mless/pkg/logformat"
 )
 
 // LineIndex stores byte offsets for each line in a file
 type LineIndex struct {
-	offsets []int64 // byte offset of each line start
-	file    *mlessio.MappedFile
+	offsets    []int64      // byte offset of each line start
+	timestamps []*time.Time // parsed timestamp for each line (nil if not parsed)
+	file       *mlessio.MappedFile
+	tsParser   *logformat.TimestampParser
 }
 
 // BuildLineIndex scans the file and builds a line offset index
@@ -17,8 +21,9 @@ func BuildLineIndex(file *mlessio.MappedFile) (*LineIndex, error) {
 	size := file.Size()
 	if size == 0 {
 		return &LineIndex{
-			offsets: []int64{0},
-			file:    file,
+			offsets:  []int64{0},
+			file:     file,
+			tsParser: logformat.NewTimestampParser(),
 		}, nil
 	}
 
@@ -62,8 +67,9 @@ func BuildLineIndex(file *mlessio.MappedFile) (*LineIndex, error) {
 	}
 
 	return &LineIndex{
-		offsets: offsets,
-		file:    file,
+		offsets:  offsets,
+		file:     file,
+		tsParser: logformat.NewTimestampParser(),
 	}, nil
 }
 
@@ -125,6 +131,68 @@ func (idx *LineIndex) ByteOffset(lineNum int) int64 {
 		return -1
 	}
 	return idx.offsets[lineNum]
+}
+
+// GetTimestamp returns the parsed timestamp for a line (lazy parsing)
+func (idx *LineIndex) GetTimestamp(lineNum int) *time.Time {
+	if lineNum < 0 || lineNum >= len(idx.offsets) {
+		return nil
+	}
+
+	// Initialize timestamps slice if needed
+	if idx.timestamps == nil {
+		idx.timestamps = make([]*time.Time, len(idx.offsets))
+	}
+
+	// Extend if needed (for appended lines)
+	for len(idx.timestamps) < len(idx.offsets) {
+		idx.timestamps = append(idx.timestamps, nil)
+	}
+
+	// Return cached timestamp if already parsed
+	if idx.timestamps[lineNum] != nil {
+		return idx.timestamps[lineNum]
+	}
+
+	// Parse timestamp from line content
+	content, err := idx.GetLine(lineNum)
+	if err != nil || content == nil {
+		return nil
+	}
+
+	ts := idx.tsParser.Parse(content)
+	idx.timestamps[lineNum] = ts
+	return ts
+}
+
+// FindLineAtTime finds the first line at or after the given time
+// Returns -1 if no such line exists
+func (idx *LineIndex) FindLineAtTime(target time.Time) int {
+	// Binary search would be better for large files, but for now linear scan
+	// from the end since we often look for recent times
+	for i := 0; i < len(idx.offsets); i++ {
+		ts := idx.GetTimestamp(i)
+		if ts != nil && !ts.Before(target) {
+			return i
+		}
+	}
+	return -1
+}
+
+// FindLineBeforeTime finds the last line before the given time
+func (idx *LineIndex) FindLineBeforeTime(target time.Time) int {
+	lastBefore := -1
+	for i := 0; i < len(idx.offsets); i++ {
+		ts := idx.GetTimestamp(i)
+		if ts != nil {
+			if ts.Before(target) {
+				lastBefore = i
+			} else {
+				break
+			}
+		}
+	}
+	return lastBefore
 }
 
 // AppendNewLines indexes new content from oldSize to current file size

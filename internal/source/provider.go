@@ -1,18 +1,22 @@
 package source
 
-import "time"
+import (
+	"time"
 
-// LogLevel represents a log severity level
-type LogLevel int
+	"github.com/user/mless/pkg/logformat"
+)
+
+// Re-export LogLevel types for convenience
+type LogLevel = logformat.LogLevel
 
 const (
-	LevelUnknown LogLevel = iota
-	LevelTrace
-	LevelDebug
-	LevelInfo
-	LevelWarn
-	LevelError
-	LevelFatal
+	LevelUnknown = logformat.LevelUnknown
+	LevelTrace   = logformat.LevelTrace
+	LevelDebug   = logformat.LevelDebug
+	LevelInfo    = logformat.LevelInfo
+	LevelWarn    = logformat.LevelWarn
+	LevelError   = logformat.LevelError
+	LevelFatal   = logformat.LevelFatal
 )
 
 // SourceInfo identifies where a line came from (for merged views)

@@ -4,69 +4,81 @@ import (
 	"strings"
 
 	"github.com/user/mless/internal/config"
-	"github.com/user/mless/internal/source"
+)
+
+// LogLevel represents a log severity level
+type LogLevel int
+
+const (
+	LevelUnknown LogLevel = iota
+	LevelTrace
+	LevelDebug
+	LevelInfo
+	LevelWarn
+	LevelError
+	LevelFatal
 )
 
 // LevelDetector detects log levels from line content
 type LevelDetector struct {
-	patterns map[source.LogLevel][]string
+	patterns map[LogLevel][]string
 }
 
 // NewLevelDetector creates a detector from config
 func NewLevelDetector(cfg *config.LogLevelConfig) *LevelDetector {
 	return &LevelDetector{
-		patterns: map[source.LogLevel][]string{
-			source.LevelTrace: cfg.TracePatterns,
-			source.LevelDebug: cfg.DebugPatterns,
-			source.LevelInfo:  cfg.InfoPatterns,
-			source.LevelWarn:  cfg.WarnPatterns,
-			source.LevelError: cfg.ErrorPatterns,
-			source.LevelFatal: cfg.FatalPatterns,
+		patterns: map[LogLevel][]string{
+			LevelTrace: cfg.TracePatterns,
+			LevelDebug: cfg.DebugPatterns,
+			LevelInfo:  cfg.InfoPatterns,
+			LevelWarn:  cfg.WarnPatterns,
+			LevelError: cfg.ErrorPatterns,
+			LevelFatal: cfg.FatalPatterns,
 		},
 	}
 }
 
 // Detect returns the log level for a line
-func (d *LevelDetector) Detect(content []byte) source.LogLevel {
+func (d *LevelDetector) Detect(content []byte) LogLevel {
 	line := string(content)
 
 	// Check in order of severity (most specific first)
 	// Check fatal first as it's most important to identify
-	for _, pattern := range d.patterns[source.LevelFatal] {
+	for _, pattern := range d.patterns[LevelFatal] {
 		if strings.Contains(line, pattern) {
-			return source.LevelFatal
+			return LevelFatal
 		}
 	}
 
-	for _, pattern := range d.patterns[source.LevelError] {
+	for _, pattern := range d.patterns[LevelError] {
 		if strings.Contains(line, pattern) {
-			return source.LevelError
+			return LevelError
 		}
 	}
 
-	for _, pattern := range d.patterns[source.LevelWarn] {
+	for _, pattern := range d.patterns[LevelWarn] {
 		if strings.Contains(line, pattern) {
-			return source.LevelWarn
+			return LevelWarn
 		}
 	}
 
-	for _, pattern := range d.patterns[source.LevelInfo] {
+	for _, pattern := range d.patterns[LevelInfo] {
 		if strings.Contains(line, pattern) {
-			return source.LevelInfo
+			return LevelInfo
 		}
 	}
 
-	for _, pattern := range d.patterns[source.LevelDebug] {
+	for _, pattern := range d.patterns[LevelDebug] {
 		if strings.Contains(line, pattern) {
-			return source.LevelDebug
+			return LevelDebug
 		}
 	}
 
-	for _, pattern := range d.patterns[source.LevelTrace] {
+	for _, pattern := range d.patterns[LevelTrace] {
 		if strings.Contains(line, pattern) {
-			return source.LevelTrace
+			return LevelTrace
 		}
 	}
 
-	return source.LevelUnknown
+	return LevelUnknown
 }
