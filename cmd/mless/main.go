@@ -1,6 +1,7 @@
 package main
 
 import (
+	"flag"
 	"fmt"
 	"os"
 
@@ -9,14 +10,26 @@ import (
 )
 
 func main() {
-	if len(os.Args) < 2 {
-		fmt.Fprintln(os.Stderr, "Usage: mless <file>")
+	cacheFlag := flag.Bool("c", false, "Cache file locally for better performance")
+	flag.Usage = func() {
+		fmt.Fprintf(os.Stderr, "Usage: mless [-c] <file>\n")
+		fmt.Fprintf(os.Stderr, "  -c\tCache file locally (useful for network files)\n")
+	}
+	flag.Parse()
+
+	if flag.NArg() < 1 {
+		flag.Usage()
 		os.Exit(1)
 	}
 
-	filepath := os.Args[1]
+	filepath := flag.Arg(0)
 
-	model, err := ui.NewModel(filepath)
+	opts := ui.ModelOptions{
+		Filepath:  filepath,
+		CacheFile: *cacheFlag,
+	}
+
+	model, err := ui.NewModelWithOptions(opts)
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Error: %v\n", err)
 		os.Exit(1)

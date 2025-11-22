@@ -1,7 +1,11 @@
 package ui
 
 import (
+	"crypto/md5"
 	"fmt"
+	"io"
+	"os"
+	"path/filepath"
 	"strings"
 
 	"github.com/charmbracelet/bubbles/textinput"
@@ -13,6 +17,12 @@ import (
 	"github.com/user/mless/internal/view"
 	"github.com/user/mless/pkg/logformat"
 )
+
+// ModelOptions contains options for creating a new model
+type ModelOptions struct {
+	Filepath  string
+	CacheFile bool
+}
 
 // Mode represents the current UI mode
 type Mode int
@@ -47,17 +57,55 @@ type Model struct {
 	// Status
 	filename string
 	err      error
+
+	// Cache state
+	sourcePath string // Original file path
+	cachePath  string // Cached file path (empty if not cached)
+	isCached   bool
 }
 
 // NewModel creates a new application model
-func NewModel(filepath string) (*Model, error) {
+func NewModel(filePath string) (*Model, error) {
+	return NewModelWithOptions(ModelOptions{Filepath: filePath})
+}
+
+// NewModelWithOptions creates a new application model with options
+func NewModelWithOptions(opts ModelOptions) (*Model, error) {
 	cfg, err := config.Load()
 	if err != nil {
 		return nil, err
 	}
 
-	src, err := source.NewFileSource(filepath)
+	var actualPath string
+	var cachePath string
+	var isCached bool
+
+	if opts.CacheFile {
+		// Create cache directory
+		cacheDir := os.TempDir()
+
+		// Generate cache filename from source path hash
+		hash := md5.Sum([]byte(opts.Filepath))
+		baseName := filepath.Base(opts.Filepath)
+		cachePath = filepath.Join(cacheDir, fmt.Sprintf("mless-%x-%s", hash[:8], baseName))
+
+		// Copy file to cache
+		if err := copyFile(opts.Filepath, cachePath); err != nil {
+			return nil, fmt.Errorf("failed to cache file: %w", err)
+		}
+
+		actualPath = cachePath
+		isCached = true
+	} else {
+		actualPath = opts.Filepath
+	}
+
+	src, err := source.NewFileSource(actualPath)
 	if err != nil {
+		// Clean up cache file if we created one
+		if cachePath != "" {
+			os.Remove(cachePath)
+		}
 		return nil, err
 	}
 
@@ -84,8 +132,29 @@ func NewModel(filepath string) (*Model, error) {
 		searchInput:    ti,
 		config:         cfg,
 		mode:           ModeNormal,
-		filename:       filepath,
+		filename:       filepath.Base(opts.Filepath),
+		sourcePath:     opts.Filepath,
+		cachePath:      cachePath,
+		isCached:       isCached,
 	}, nil
+}
+
+// copyFile copies a file from src to dst
+func copyFile(src, dst string) error {
+	sourceFile, err := os.Open(src)
+	if err != nil {
+		return err
+	}
+	defer sourceFile.Close()
+
+	destFile, err := os.Create(dst)
+	if err != nil {
+		return err
+	}
+	defer destFile.Close()
+
+	_, err = io.Copy(destFile, sourceFile)
+	return err
 }
 
 // Init implements tea.Model
@@ -218,6 +287,11 @@ func (m *Model) handleKey(msg tea.KeyMsg) (tea.Model, tea.Cmd) {
 
 	case "0": // Clear all filters
 		m.filteredSource.ClearFilter()
+
+	case "R": // Resync from source (for cached files)
+		if m.isCached {
+			m.resyncFromSource()
+		}
 	}
 
 	return m, nil
@@ -349,6 +423,45 @@ func (m *Model) prevSearchResult() {
 	m.viewport.SetHighlightedLine(m.searchResults[m.searchIndex])
 }
 
+// resyncFromSource re-copies the source file to cache and reloads
+func (m *Model) resyncFromSource() {
+	if !m.isCached || m.sourcePath == "" || m.cachePath == "" {
+		return
+	}
+
+	// Close current source
+	m.source.Close()
+
+	// Re-copy from source
+	if err := copyFile(m.sourcePath, m.cachePath); err != nil {
+		m.err = err
+		return
+	}
+
+	// Reopen the cached file
+	src, err := source.NewFileSource(m.cachePath)
+	if err != nil {
+		m.err = err
+		return
+	}
+
+	// Update the source
+	m.source = src
+
+	// Recreate filtered provider
+	detector := logformat.NewLevelDetector(&m.config.LogLevels)
+	m.filteredSource = source.NewFilteredProvider(src, detector.Detect)
+	m.viewport.SetProvider(m.filteredSource)
+
+	// Reset position
+	m.viewport.GotoTop()
+
+	// Clear search results (line numbers may have changed)
+	m.searchResults = nil
+	m.searchTerm = ""
+	m.viewport.ClearHighlight()
+}
+
 // View implements tea.Model
 func (m *Model) View() string {
 	var builder strings.Builder
@@ -431,8 +544,14 @@ func (m *Model) View() string {
 			}
 		}
 
-		status = fmt.Sprintf(" %s  %s  %s%s%s",
-			m.filename, lineInfo, percent, searchInfo, filterInfo)
+		// Cached indicator
+		cachedInfo := ""
+		if m.isCached {
+			cachedInfo = " [cached]"
+		}
+
+		status = fmt.Sprintf(" %s%s  %s  %s%s%s",
+			m.filename, cachedInfo, lineInfo, percent, searchInfo, filterInfo)
 	}
 
 	builder.WriteString(statusStyle.Render(status))
@@ -448,8 +567,15 @@ func (m *Model) View() string {
 
 // Close cleans up resources
 func (m *Model) Close() error {
+	var err error
 	if m.source != nil {
-		return m.source.Close()
+		err = m.source.Close()
 	}
-	return nil
+
+	// Delete cached file
+	if m.cachePath != "" {
+		os.Remove(m.cachePath)
+	}
+
+	return err
 }
