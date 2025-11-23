@@ -230,13 +230,20 @@ func (m *Model) handleSplitCmd(msg tea.KeyMsg) (tea.Model, tea.Cmd) {
 
 | Key | Action |
 |-----|--------|
-| `ctrl+w v` | Vertical split (side-by-side) |
-| `ctrl+w s` | Horizontal split (stacked) |
+| `ctrl+w v` | Vertical split (duplicate current view) |
+| `ctrl+w s` | Horizontal split (duplicate current view) |
+| `ctrl+w 'a` | Split with second pane at mark 'a |
+| `ctrl+w \|range` | Split with second pane showing range (e.g., `\|1000-5000`) |
 | `ctrl+w w` | Switch to next pane |
 | `tab` | Switch to next pane (quick) |
 | `ctrl+w q` | Close current pane |
-| `ctrl+w o` | Open file in new pane |
 | `ctrl+w =` | Equalize pane sizes |
+
+### Split Range Examples
+
+- `ctrl+w |1000-5000` - split showing lines 1000-5000
+- `ctrl+w |'a-'b` - split showing between marks
+- `ctrl+w |.-$` - split showing current line to end
 
 ### Time Sync (Phase 4)
 
@@ -360,6 +367,34 @@ filename.log [slice:100-500]  L50/400 12:30:45  50%  [INF,WRN,ERR]
 
 - `*` indicates active pane
 - `[synced]` shows time sync is on
+
+---
+
+## Same-File Splits
+
+When splitting the same file into two panes:
+
+- Both panes share the same `source` (memory efficient, single mmap)
+- Each pane has its own `filteredSource` (independent filters)
+- Each pane has its own viewport, marks, search, slice stack
+- Changes to the underlying file are reflected in both panes
+
+```go
+// Create second pane sharing source
+func (m *Model) splitWithSharedSource(direction SplitDirection) {
+    current := m.currentPane()
+
+    // New pane shares source but has own filtered provider
+    newPane := &Pane{
+        source:         current.source,  // shared
+        filteredSource: source.NewFilteredProvider(current.source, detector.Detect),
+        viewport:       view.NewViewport(width, height),
+        // ... own state
+    }
+
+    m.panes = append(m.panes, newPane)
+}
+```
 
 ---
 
