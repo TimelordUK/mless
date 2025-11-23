@@ -11,9 +11,13 @@ import (
 
 func main() {
 	cacheFlag := flag.Bool("c", false, "Cache file locally for better performance")
+	sliceFlag := flag.String("S", "", "Slice range (e.g., 1000-5000, 100-$, .-500)")
+	timeFlag := flag.String("t", "", "Go to time (e.g., 14:00, 14:30:00)")
 	flag.Usage = func() {
-		fmt.Fprintf(os.Stderr, "Usage: mless [-c] <file>\n")
+		fmt.Fprintf(os.Stderr, "Usage: mless [-c] [-S range] [-t time] <file>\n")
 		fmt.Fprintf(os.Stderr, "  -c\tCache file locally (useful for network files)\n")
+		fmt.Fprintf(os.Stderr, "  -S\tSlice range (e.g., 1000-5000, 100-$)\n")
+		fmt.Fprintf(os.Stderr, "  -t\tGo to time (e.g., 14:00, 14:30:00)\n")
 	}
 	flag.Parse()
 
@@ -25,8 +29,10 @@ func main() {
 	filepath := flag.Arg(0)
 
 	opts := ui.ModelOptions{
-		Filepath:  filepath,
-		CacheFile: *cacheFlag,
+		Filepath:   filepath,
+		CacheFile:  *cacheFlag,
+		SliceRange: *sliceFlag,
+		GotoTime:   *timeFlag,
 	}
 
 	model, err := ui.NewModelWithOptions(opts)

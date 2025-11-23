@@ -1,11 +1,9 @@
 package ui
 
 import (
-	"crypto/md5"
 	"fmt"
 	"io"
 	"os"
-	"path/filepath"
 	"strings"
 	"time"
 
@@ -13,11 +11,7 @@ import (
 	tea "github.com/charmbracelet/bubbletea"
 	"github.com/charmbracelet/lipgloss"
 	"github.com/user/mless/internal/config"
-	"github.com/user/mless/internal/render"
-	"github.com/user/mless/internal/slice"
 	"github.com/user/mless/internal/source"
-	"github.com/user/mless/internal/view"
-	"github.com/user/mless/pkg/logformat"
 )
 
 // tickMsg is sent periodically in follow mode
@@ -25,8 +19,10 @@ type tickMsg time.Time
 
 // ModelOptions contains options for creating a new model
 type ModelOptions struct {
-	Filepath  string
-	CacheFile bool
+	Filepath   string
+	CacheFile  bool
+	SliceRange string // e.g., "1000-5000"
+	GotoTime   string // e.g., "14:00"
 }
 
 // Mode represents the current UI mode
@@ -46,42 +42,18 @@ const (
 
 // Model is the main application model
 type Model struct {
-	viewport       *view.Viewport
-	source         *source.FileSource
-	filteredSource *source.FilteredProvider
-	searchInput    textinput.Model
-	config         *config.Config
+	panes      []*Pane
+	activePane int
+
+	searchInput textinput.Model
+	config      *config.Config
 
 	mode   Mode
 	width  int
 	height int
 
-	// Search state
-	searchTerm    string
-	searchResults []int // line numbers with matches
-	searchIndex   int   // current result index
-
-	// Filter state (fzf-style)
-	filterTerm string
-
 	// Status
-	filename string
-	err      error
-
-	// Cache state
-	sourcePath string // Original file path
-	cachePath  string // Cached file path (empty if not cached)
-	isCached   bool
-
-	// Follow mode
-	following bool
-
-	// Slice state
-	slicer     *slice.Slicer
-	sliceStack []*slice.Info // Stack for nested slices
-
-	// Marks (a-z) - stores original line numbers
-	marks map[rune]int
+	err error
 }
 
 // NewModel creates a new application model
@@ -96,69 +68,40 @@ func NewModelWithOptions(opts ModelOptions) (*Model, error) {
 		return nil, err
 	}
 
-	var actualPath string
-	var cachePath string
-	var isCached bool
-
-	if opts.CacheFile {
-		// Create cache directory
-		cacheDir := os.TempDir()
-
-		// Generate cache filename from source path hash
-		hash := md5.Sum([]byte(opts.Filepath))
-		baseName := filepath.Base(opts.Filepath)
-		cachePath = filepath.Join(cacheDir, fmt.Sprintf("mless-%x-%s", hash[:8], baseName))
-
-		// Copy file to cache
-		if err := copyFile(opts.Filepath, cachePath); err != nil {
-			return nil, fmt.Errorf("failed to cache file: %w", err)
-		}
-
-		actualPath = cachePath
-		isCached = true
-	} else {
-		actualPath = opts.Filepath
-	}
-
-	src, err := source.NewFileSource(actualPath)
+	pane, err := NewPane(opts.Filepath, cfg, opts.CacheFile)
 	if err != nil {
-		// Clean up cache file if we created one
-		if cachePath != "" {
-			os.Remove(cachePath)
-		}
 		return nil, err
 	}
 
-	// Set up level detector and filtered provider
-	detector := logformat.NewLevelDetector(&cfg.LogLevels)
-	filtered := source.NewFilteredProvider(src, detector.Detect)
+	// Apply initial slice if specified
+	if opts.SliceRange != "" {
+		if err := pane.ParseAndSlice(opts.SliceRange); err != nil {
+			pane.Close()
+			return nil, fmt.Errorf("invalid slice range: %w", err)
+		}
+	}
 
-	viewport := view.NewViewport(80, 24)
-	viewport.SetProvider(filtered)
-	viewport.SetShowLineNumbers(cfg.Display.ShowLineNumbers)
-
-	// Set up log level renderer
-	renderer := render.NewLogLevelRenderer(cfg)
-	viewport.SetRenderer(renderer)
+	// Apply initial time navigation if specified
+	if opts.GotoTime != "" {
+		pane.GotoTime(opts.GotoTime)
+	}
 
 	ti := textinput.New()
 	ti.Placeholder = "Search..."
 	ti.CharLimit = 256
 
 	return &Model{
-		viewport:       viewport,
-		source:         src,
-		filteredSource: filtered,
-		searchInput:    ti,
-		config:         cfg,
-		mode:           ModeNormal,
-		filename:       filepath.Base(opts.Filepath),
-		sourcePath:     opts.Filepath,
-		cachePath:      cachePath,
-		isCached:       isCached,
-		slicer:         slice.NewSlicer(),
-		marks:          make(map[rune]int),
+		panes:       []*Pane{pane},
+		activePane:  0,
+		searchInput: ti,
+		config:      cfg,
+		mode:        ModeNormal,
 	}, nil
+}
+
+// activePane returns the currently active pane
+func (m *Model) currentPane() *Pane {
+	return m.panes[m.activePane]
 }
 
 // copyFile copies a file from src to dst
@@ -194,12 +137,12 @@ func (m *Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		m.width = msg.Width
 		m.height = msg.Height
 		// Reserve 2 lines for status bar
-		m.viewport.SetSize(msg.Width, msg.Height-2)
+		m.currentPane().SetSize(msg.Width, msg.Height-2)
 		return m, nil
 
 	case tickMsg:
-		if m.following {
-			m.checkForNewLines()
+		if m.currentPane().IsFollowing() {
+			m.currentPane().CheckForNewLines()
 			return m, m.tickCmd()
 		}
 		return m, nil
@@ -245,48 +188,46 @@ func (m *Model) handleKey(msg tea.KeyMsg) (tea.Model, tea.Cmd) {
 	}
 
 	// Normal mode
+	pane := m.currentPane()
 	switch msg.String() {
 	case "q", "ctrl+c":
 		return m, tea.Quit
 
 	case "esc":
 		// Clear all active modes/filters
-		if m.following {
-			m.following = false
+		if pane.IsFollowing() {
+			pane.SetFollowing(false)
 		}
-		if m.filteredSource.HasTextFilter() {
-			m.filteredSource.ClearTextFilter()
-			m.filterTerm = ""
+		if pane.FilteredSource().HasTextFilter() {
+			pane.FilteredSource().ClearTextFilter()
+			pane.SetFilterTerm("")
 		}
-		if m.searchTerm != "" {
-			m.searchTerm = ""
-			m.searchResults = nil
-			m.searchIndex = 0
-			m.viewport.ClearHighlight()
+		if pane.SearchTerm() != "" {
+			pane.ClearSearch()
 		}
 
 	case "j", "down":
-		m.viewport.ScrollDown(1)
+		pane.Viewport().ScrollDown(1)
 	case "k", "up":
-		m.viewport.ScrollUp(1)
+		pane.Viewport().ScrollUp(1)
 
 	case "ctrl+d", "ctrl+f":
-		m.viewport.PageDown()
+		pane.Viewport().PageDown()
 	case "ctrl+u", "ctrl+b":
-		m.viewport.PageUp()
+		pane.Viewport().PageUp()
 
 	case "f", "pgdown", " ":
-		m.viewport.PageDown()
+		pane.Viewport().PageDown()
 	case "b", "pgup":
-		m.viewport.PageUp()
+		pane.Viewport().PageUp()
 
 	case "g", "home":
-		m.viewport.GotoTop()
+		pane.Viewport().GotoTop()
 	case "G", "end":
 		// Refresh file to pick up any new content, then go to bottom
-		m.source.Refresh()
-		m.filteredSource.MarkDirty()
-		m.viewport.GotoBottom()
+		pane.Source().Refresh()
+		pane.FilteredSource().MarkDirty()
+		pane.Viewport().GotoBottom()
 
 	case "/":
 		m.mode = ModeSearch
@@ -316,72 +257,71 @@ func (m *Model) handleKey(msg tea.KeyMsg) (tea.Model, tea.Cmd) {
 		return m, textinput.Blink
 
 	case "n":
-		m.nextSearchResult()
+		pane.NextSearchResult()
 	case "N":
-		m.prevSearchResult()
+		pane.PrevSearchResult()
 
 	case "l":
 		// Toggle line numbers
-		m.viewport.SetShowLineNumbers(true)
+		pane.Viewport().SetShowLineNumbers(true)
 
 	// Level filtering: letters toggle levels
 	case "t": // Trace
-		m.filteredSource.ToggleLevel(source.LevelTrace)
-		m.viewport.GotoTop()
+		pane.FilteredSource().ToggleLevel(source.LevelTrace)
+		pane.Viewport().GotoTop()
 	case "d": // Debug
-		m.filteredSource.ToggleLevel(source.LevelDebug)
-		m.viewport.GotoTop()
+		pane.FilteredSource().ToggleLevel(source.LevelDebug)
+		pane.Viewport().GotoTop()
 	case "i": // Info
-		m.filteredSource.ToggleLevel(source.LevelInfo)
-		m.viewport.GotoTop()
+		pane.FilteredSource().ToggleLevel(source.LevelInfo)
+		pane.Viewport().GotoTop()
 	case "w": // Warn
-		m.filteredSource.ToggleLevel(source.LevelWarn)
-		m.viewport.GotoTop()
+		pane.FilteredSource().ToggleLevel(source.LevelWarn)
+		pane.Viewport().GotoTop()
 	case "e": // Error
-		m.filteredSource.ToggleLevel(source.LevelError)
-		m.viewport.GotoTop()
+		pane.FilteredSource().ToggleLevel(source.LevelError)
+		pane.Viewport().GotoTop()
 	case "alt+f": // Fatal (use alt+f since F is for follow mode)
-		m.filteredSource.ToggleLevel(source.LevelFatal)
-		m.viewport.GotoTop()
+		pane.FilteredSource().ToggleLevel(source.LevelFatal)
+		pane.Viewport().GotoTop()
 
 	case "F": // Follow mode
-		m.following = !m.following
-		if m.following {
-			m.viewport.GotoBottom()
+		if pane.ToggleFollowing() {
+			pane.Viewport().GotoBottom()
 			return m, m.tickCmd()
 		}
 
 	// Shift+letter: show this level and above
 	case "T": // Trace and above (all)
-		m.filteredSource.SetLevelAndAbove(source.LevelTrace)
-		m.viewport.GotoTop()
+		pane.FilteredSource().SetLevelAndAbove(source.LevelTrace)
+		pane.Viewport().GotoTop()
 	case "D": // Debug and above
-		m.filteredSource.SetLevelAndAbove(source.LevelDebug)
-		m.viewport.GotoTop()
+		pane.FilteredSource().SetLevelAndAbove(source.LevelDebug)
+		pane.Viewport().GotoTop()
 	case "I": // Info and above
-		m.filteredSource.SetLevelAndAbove(source.LevelInfo)
-		m.viewport.GotoTop()
+		pane.FilteredSource().SetLevelAndAbove(source.LevelInfo)
+		pane.Viewport().GotoTop()
 	case "W": // Warn and above
-		m.filteredSource.SetLevelAndAbove(source.LevelWarn)
-		m.viewport.GotoTop()
+		pane.FilteredSource().SetLevelAndAbove(source.LevelWarn)
+		pane.Viewport().GotoTop()
 	case "E": // Error and above
-		m.filteredSource.SetLevelAndAbove(source.LevelError)
-		m.viewport.GotoTop()
+		pane.FilteredSource().SetLevelAndAbove(source.LevelError)
+		pane.Viewport().GotoTop()
 	// Note: F is already used for fatal toggle, use ctrl+f for fatal-only if needed
 
 	case "0": // Clear all filters
-		m.filteredSource.ClearFilter()
-		m.viewport.GotoTop()
+		pane.FilteredSource().ClearFilter()
+		pane.Viewport().GotoTop()
 
 	case "R": // Revert slice or resync from source
-		if len(m.sliceStack) > 0 {
-			m.revertSlice()
-		} else if m.isCached {
-			m.resyncFromSource()
+		if pane.HasSlice() {
+			pane.RevertSlice()
+		} else if pane.IsCached() {
+			pane.ResyncFromSource()
 		}
 
 	case "ctrl+s": // Quick slice from current line to end
-		m.sliceFromCurrent()
+		pane.SliceFromCurrent()
 
 	case "S": // Enter slice mode for range input
 		m.mode = ModeSlice
@@ -394,16 +334,16 @@ func (m *Model) handleKey(msg tea.KeyMsg) (tea.Model, tea.Cmd) {
 		m.mode = ModeMarkSet
 
 	case "M": // Clear all marks
-		m.marks = make(map[rune]int)
+		pane.ClearMarks()
 
 	case "'": // Enter mark jump mode
 		m.mode = ModeMarkJump
 
 	case "]'": // Next mark
-		m.nextMark()
+		pane.NextMark()
 
 	case "['": // Previous mark
-		m.prevMark()
+		pane.PrevMark()
 
 	case "h": // Show help
 		m.mode = ModeHelp
@@ -415,8 +355,7 @@ func (m *Model) handleKey(msg tea.KeyMsg) (tea.Model, tea.Cmd) {
 func (m *Model) handleSearchKey(msg tea.KeyMsg) (tea.Model, tea.Cmd) {
 	switch msg.String() {
 	case "enter":
-		m.searchTerm = m.searchInput.Value()
-		m.performSearch()
+		m.currentPane().PerformSearch(m.searchInput.Value())
 		m.mode = ModeNormal
 		m.searchInput.Blur()
 		return m, nil
@@ -438,7 +377,7 @@ func (m *Model) handleGotoKey(msg tea.KeyMsg) (tea.Model, tea.Cmd) {
 		var lineNum int
 		fmt.Sscanf(m.searchInput.Value(), "%d", &lineNum)
 		if lineNum > 0 {
-			m.viewport.GotoLine(lineNum - 1) // Convert to 0-based
+			m.currentPane().Viewport().GotoLine(lineNum - 1) // Convert to 0-based
 		}
 		m.mode = ModeNormal
 		m.searchInput.Blur()
@@ -460,22 +399,7 @@ func (m *Model) handleGotoKey(msg tea.KeyMsg) (tea.Model, tea.Cmd) {
 func (m *Model) handleGotoTimeKey(msg tea.KeyMsg) (tea.Model, tea.Cmd) {
 	switch msg.String() {
 	case "enter":
-		timeStr := m.searchInput.Value()
-		if target := m.parseTimeInput(timeStr); target != nil {
-			originalLine := m.source.FindLineAtTime(*target)
-			if originalLine >= 0 {
-				// Map original line to filtered index
-				filteredIndex := m.filteredSource.FilteredIndexFor(originalLine)
-				if filteredIndex >= 0 {
-					m.viewport.GotoLine(filteredIndex)
-					// Highlight using the actual original line at that filtered position
-					actualOriginal := m.filteredSource.OriginalLineNumber(filteredIndex)
-					if actualOriginal >= 0 {
-						m.viewport.SetHighlightedLine(actualOriginal)
-					}
-				}
-			}
-		}
+		m.currentPane().GotoTime(m.searchInput.Value())
 		m.mode = ModeNormal
 		m.searchInput.Blur()
 		m.searchInput.Placeholder = "Search..."
@@ -493,44 +417,13 @@ func (m *Model) handleGotoTimeKey(msg tea.KeyMsg) (tea.Model, tea.Cmd) {
 	return m, cmd
 }
 
-// parseTimeInput parses user time input into a time.Time
-func (m *Model) parseTimeInput(input string) *time.Time {
-	// Try various formats
-	layouts := []string{
-		"15:04:05",
-		"15:04",
-		"2006-01-02 15:04:05",
-		"2006-01-02 15:04",
-		"2006-01-02T15:04:05",
-	}
-
-	for _, layout := range layouts {
-		if t, err := time.Parse(layout, input); err == nil {
-			// For time-only formats, use the date from the first line's timestamp
-			if layout == "15:04:05" || layout == "15:04" {
-				// Get reference date from first line
-				if firstTs := m.source.GetTimestamp(0); firstTs != nil {
-					t = time.Date(firstTs.Year(), firstTs.Month(), firstTs.Day(),
-						t.Hour(), t.Minute(), t.Second(), 0, firstTs.Location())
-				} else {
-					// Fallback to today
-					now := time.Now()
-					t = time.Date(now.Year(), now.Month(), now.Day(),
-						t.Hour(), t.Minute(), t.Second(), 0, time.Local)
-				}
-			}
-			return &t
-		}
-	}
-
-	return nil
-}
 
 func (m *Model) handleFilterKey(msg tea.KeyMsg) (tea.Model, tea.Cmd) {
+	pane := m.currentPane()
 	switch msg.String() {
 	case "enter":
 		// Keep filter and return to normal mode
-		m.filterTerm = m.searchInput.Value()
+		pane.SetFilterTerm(m.searchInput.Value())
 		m.mode = ModeNormal
 		m.searchInput.Blur()
 		m.searchInput.Placeholder = "Search..."
@@ -538,9 +431,9 @@ func (m *Model) handleFilterKey(msg tea.KeyMsg) (tea.Model, tea.Cmd) {
 
 	case "esc":
 		// Cancel filter and clear
-		m.filteredSource.ClearTextFilter()
-		m.filterTerm = ""
-		m.viewport.GotoTop()
+		pane.FilteredSource().ClearTextFilter()
+		pane.SetFilterTerm("")
+		pane.Viewport().GotoTop()
 		m.mode = ModeNormal
 		m.searchInput.Blur()
 		m.searchInput.Placeholder = "Search..."
@@ -552,122 +445,19 @@ func (m *Model) handleFilterKey(msg tea.KeyMsg) (tea.Model, tea.Cmd) {
 	m.searchInput, cmd = m.searchInput.Update(msg)
 
 	// Apply filter immediately (live filtering)
-	m.filteredSource.SetTextFilter(m.searchInput.Value())
-	m.viewport.GotoTop()
+	pane.FilteredSource().SetTextFilter(m.searchInput.Value())
+	pane.Viewport().GotoTop()
 
 	return m, cmd
 }
 
-func (m *Model) performSearch() {
-	if m.searchTerm == "" {
-		m.searchResults = nil
-		return
-	}
-
-	// Simple search - find all lines containing the term
-	m.searchResults = nil
-	for i := 0; i < m.source.LineCount(); i++ {
-		line, err := m.source.GetLine(i)
-		if err != nil {
-			continue
-		}
-		if strings.Contains(string(line.Content), m.searchTerm) {
-			m.searchResults = append(m.searchResults, i)
-		}
-	}
-
-	// Jump to first result
-	if len(m.searchResults) > 0 {
-		m.searchIndex = 0
-		m.viewport.GotoLine(m.searchResults[0])
-		m.viewport.SetHighlightedLine(m.searchResults[0])
-	} else {
-		m.viewport.ClearHighlight()
-	}
-}
-
-func (m *Model) nextSearchResult() {
-	if len(m.searchResults) == 0 {
-		return
-	}
-	m.searchIndex = (m.searchIndex + 1) % len(m.searchResults)
-	m.viewport.GotoLine(m.searchResults[m.searchIndex])
-	m.viewport.SetHighlightedLine(m.searchResults[m.searchIndex])
-}
-
-func (m *Model) prevSearchResult() {
-	if len(m.searchResults) == 0 {
-		return
-	}
-	m.searchIndex--
-	if m.searchIndex < 0 {
-		m.searchIndex = len(m.searchResults) - 1
-	}
-	m.viewport.GotoLine(m.searchResults[m.searchIndex])
-	m.viewport.SetHighlightedLine(m.searchResults[m.searchIndex])
-}
-
-// checkForNewLines checks if file has grown and updates view
-func (m *Model) checkForNewLines() {
-	newLines, err := m.source.Refresh()
-	if err != nil {
-		m.err = err
-		return
-	}
-
-	if newLines > 0 {
-		// Mark filter as dirty to rebuild index with new lines
-		m.filteredSource.MarkDirty()
-
-		// Auto-scroll to bottom in follow mode
-		m.viewport.GotoBottom()
-	}
-}
-
-// resyncFromSource re-copies the source file to cache and reloads
-func (m *Model) resyncFromSource() {
-	if !m.isCached || m.sourcePath == "" || m.cachePath == "" {
-		return
-	}
-
-	// Close current source
-	m.source.Close()
-
-	// Re-copy from source
-	if err := copyFile(m.sourcePath, m.cachePath); err != nil {
-		m.err = err
-		return
-	}
-
-	// Reopen the cached file
-	src, err := source.NewFileSource(m.cachePath)
-	if err != nil {
-		m.err = err
-		return
-	}
-
-	// Update the source
-	m.source = src
-
-	// Recreate filtered provider
-	detector := logformat.NewLevelDetector(&m.config.LogLevels)
-	m.filteredSource = source.NewFilteredProvider(src, detector.Detect)
-	m.viewport.SetProvider(m.filteredSource)
-
-	// Reset position
-	m.viewport.GotoTop()
-
-	// Clear search results (line numbers may have changed)
-	m.searchResults = nil
-	m.searchTerm = ""
-	m.viewport.ClearHighlight()
-}
 
 func (m *Model) handleSliceKey(msg tea.KeyMsg) (tea.Model, tea.Cmd) {
 	switch msg.String() {
 	case "enter":
-		rangeStr := m.searchInput.Value()
-		m.parseAndSlice(rangeStr)
+		if err := m.currentPane().ParseAndSlice(m.searchInput.Value()); err != nil {
+			m.err = err
+		}
 		m.mode = ModeNormal
 		m.searchInput.Blur()
 		m.searchInput.Placeholder = "Search..."
@@ -691,12 +481,7 @@ func (m *Model) handleMarkSetKey(msg tea.KeyMsg) (tea.Model, tea.Cmd) {
 
 	// Check if it's a valid mark character (a-z)
 	if len(key) == 1 && key[0] >= 'a' && key[0] <= 'z' {
-		// Get original line number for current position
-		currentFiltered := m.viewport.CurrentLine()
-		originalLine := m.filteredSource.OriginalLineNumber(currentFiltered)
-		if originalLine >= 0 {
-			m.marks[rune(key[0])] = originalLine
-		}
+		m.currentPane().SetMark(rune(key[0]))
 	}
 
 	return m, nil
@@ -708,327 +493,12 @@ func (m *Model) handleMarkJumpKey(msg tea.KeyMsg) (tea.Model, tea.Cmd) {
 
 	// Check if it's a valid mark character (a-z)
 	if len(key) == 1 && key[0] >= 'a' && key[0] <= 'z' {
-		if originalLine, ok := m.marks[rune(key[0])]; ok {
-			// Map original line to filtered index
-			filteredIndex := m.filteredSource.FilteredIndexFor(originalLine)
-			if filteredIndex >= 0 {
-				m.viewport.GotoLine(filteredIndex)
-				// Highlight the actual line at that position
-				actualOriginal := m.filteredSource.OriginalLineNumber(filteredIndex)
-				if actualOriginal >= 0 {
-					m.viewport.SetHighlightedLine(actualOriginal)
-				}
-			}
-		}
+		m.currentPane().JumpToMark(rune(key[0]))
 	}
 
 	return m, nil
 }
 
-// nextMark jumps to the next mark by line order
-func (m *Model) nextMark() {
-	if len(m.marks) == 0 {
-		return
-	}
-
-	// Get current original line
-	currentFiltered := m.viewport.CurrentLine()
-	currentOriginal := m.filteredSource.OriginalLineNumber(currentFiltered)
-
-	// Find next mark after current position
-	var nextLine int = -1
-	var firstLine int = -1
-
-	for _, line := range m.marks {
-		if firstLine == -1 || line < firstLine {
-			firstLine = line
-		}
-		if line > currentOriginal {
-			if nextLine == -1 || line < nextLine {
-				nextLine = line
-			}
-		}
-	}
-
-	// Wrap around if no mark after current
-	if nextLine == -1 {
-		nextLine = firstLine
-	}
-
-	if nextLine >= 0 {
-		filteredIndex := m.filteredSource.FilteredIndexFor(nextLine)
-		if filteredIndex >= 0 {
-			m.viewport.GotoLine(filteredIndex)
-			actualOriginal := m.filteredSource.OriginalLineNumber(filteredIndex)
-			if actualOriginal >= 0 {
-				m.viewport.SetHighlightedLine(actualOriginal)
-			}
-		}
-	}
-}
-
-// prevMark jumps to the previous mark by line order
-func (m *Model) prevMark() {
-	if len(m.marks) == 0 {
-		return
-	}
-
-	// Get current original line
-	currentFiltered := m.viewport.CurrentLine()
-	currentOriginal := m.filteredSource.OriginalLineNumber(currentFiltered)
-
-	// Find previous mark before current position
-	var prevLine int = -1
-	var lastLine int = -1
-
-	for _, line := range m.marks {
-		if line > lastLine {
-			lastLine = line
-		}
-		if line < currentOriginal {
-			if line > prevLine {
-				prevLine = line
-			}
-		}
-	}
-
-	// Wrap around if no mark before current
-	if prevLine == -1 {
-		prevLine = lastLine
-	}
-
-	if prevLine >= 0 {
-		filteredIndex := m.filteredSource.FilteredIndexFor(prevLine)
-		if filteredIndex >= 0 {
-			m.viewport.GotoLine(filteredIndex)
-			actualOriginal := m.filteredSource.OriginalLineNumber(filteredIndex)
-			if actualOriginal >= 0 {
-				m.viewport.SetHighlightedLine(actualOriginal)
-			}
-		}
-	}
-}
-
-// parseAndSlice parses a range string and performs the slice
-func (m *Model) parseAndSlice(rangeStr string) {
-	// Get current position (original line number)
-	currentFiltered := m.viewport.CurrentLine()
-	currentLine := m.filteredSource.OriginalLineNumber(currentFiltered)
-	if currentLine < 0 {
-		currentLine = 0
-	}
-	totalLines := m.source.LineCount()
-
-	// Parse range - split on first dash that's not part of an offset
-	// Format: start-end where start/end can be:
-	//   . = current position
-	//   $ = end of file
-	//   $-N = end minus N
-	//   N = absolute line number
-
-	var start, end int
-	var startStr, endStr string
-
-	// Find the separator dash (not one that's part of $-N or .-N)
-	dashIdx := -1
-	for i := 0; i < len(rangeStr); i++ {
-		if rangeStr[i] == '-' {
-			// Check if this dash is part of $-N or .-N
-			if i > 0 && (rangeStr[i-1] == '$' || rangeStr[i-1] == '.') {
-				continue
-			}
-			dashIdx = i
-			break
-		}
-	}
-
-	if dashIdx >= 0 {
-		startStr = rangeStr[:dashIdx]
-		endStr = rangeStr[dashIdx+1:]
-	} else {
-		// Single value - from that point to end
-		startStr = rangeStr
-		endStr = "$"
-	}
-
-	start = m.parseLineRef(startStr, currentLine, totalLines)
-	end = m.parseLineRef(endStr, currentLine, totalLines)
-
-	if start < 0 {
-		start = 0
-	}
-	if end > totalLines {
-		end = totalLines
-	}
-
-	m.performSlice(start, end)
-}
-
-// parseLineRef parses a line reference like ".", "$", "$-100", "'a", "13:00", or "500"
-func (m *Model) parseLineRef(ref string, current, total int) int {
-	ref = strings.TrimSpace(ref)
-
-	if ref == "" {
-		return 0
-	}
-
-	if ref == "." {
-		return current
-	}
-
-	if ref == "$" {
-		return total
-	}
-
-	// Handle mark references like 'a
-	if strings.HasPrefix(ref, "'") && len(ref) >= 2 {
-		markChar := ref[1]
-		if markChar >= 'a' && markChar <= 'z' {
-			if line, ok := m.marks[rune(markChar)]; ok {
-				return line
-			}
-		}
-		return -1 // Mark not found
-	}
-
-	// Handle time references like 13:00 or 13:00:00
-	if strings.Contains(ref, ":") && !strings.HasPrefix(ref, "$") && !strings.HasPrefix(ref, ".") {
-		if target := m.parseTimeInput(ref); target != nil {
-			line := m.source.FindLineAtTime(*target)
-			if line >= 0 {
-				return line
-			}
-		}
-		return -1 // Time not found
-	}
-
-	// Handle $-N or $+N
-	if strings.HasPrefix(ref, "$") {
-		offset := 0
-		fmt.Sscanf(ref[1:], "%d", &offset)
-		return total + offset // offset is negative for $-100
-	}
-
-	// Handle .-N or .+N
-	if strings.HasPrefix(ref, ".") {
-		offset := 0
-		fmt.Sscanf(ref[1:], "%d", &offset)
-		return current + offset
-	}
-
-	// Absolute line number (1-based input, convert to 0-based)
-	var lineNum int
-	fmt.Sscanf(ref, "%d", &lineNum)
-	return lineNum - 1
-}
-
-// sliceFromCurrent slices from current viewport line to end
-func (m *Model) sliceFromCurrent() {
-	// Get original line number for current position
-	currentFiltered := m.viewport.CurrentLine()
-	originalLine := m.filteredSource.OriginalLineNumber(currentFiltered)
-	if originalLine < 0 {
-		originalLine = 0
-	}
-
-	m.performSlice(originalLine, m.source.LineCount())
-}
-
-// performSlice executes a slice operation and switches to the sliced file
-func (m *Model) performSlice(start, end int) {
-	info, cachePath, err := m.slicer.SliceRange(m.source, start, end)
-	if err != nil {
-		m.err = err
-		return
-	}
-
-	// Track parent slice info
-	if len(m.sliceStack) > 0 {
-		info.Parent = m.sliceStack[len(m.sliceStack)-1]
-	}
-	m.sliceStack = append(m.sliceStack, info)
-
-	// Close current source
-	m.source.Close()
-
-	// Open sliced file
-	src, err := source.NewFileSource(cachePath)
-	if err != nil {
-		m.err = err
-		// Pop the failed slice
-		m.sliceStack = m.sliceStack[:len(m.sliceStack)-1]
-		return
-	}
-
-	// Update source
-	m.source = src
-	m.isCached = true
-
-	// Recreate filtered provider
-	detector := logformat.NewLevelDetector(&m.config.LogLevels)
-	m.filteredSource = source.NewFilteredProvider(src, detector.Detect)
-	m.viewport.SetProvider(m.filteredSource)
-
-	// Reset position and clear filters
-	m.filteredSource.ClearFilter()
-	m.viewport.GotoTop()
-
-	// Clear search results
-	m.searchResults = nil
-	m.searchTerm = ""
-	m.viewport.ClearHighlight()
-}
-
-// revertSlice returns to the parent file/slice
-func (m *Model) revertSlice() {
-	if len(m.sliceStack) == 0 {
-		return
-	}
-
-	// Get current slice info
-	current := m.sliceStack[len(m.sliceStack)-1]
-	m.sliceStack = m.sliceStack[:len(m.sliceStack)-1]
-
-	// Cleanup current slice file
-	m.slicer.Cleanup(current)
-
-	// Close current source
-	m.source.Close()
-
-	// Determine which file to open
-	var pathToOpen string
-	if len(m.sliceStack) > 0 {
-		// Open parent slice
-		pathToOpen = m.sliceStack[len(m.sliceStack)-1].CachePath
-	} else {
-		// Open original file
-		pathToOpen = m.sourcePath
-		m.isCached = false
-	}
-
-	// Open the file
-	src, err := source.NewFileSource(pathToOpen)
-	if err != nil {
-		m.err = err
-		return
-	}
-
-	// Update source
-	m.source = src
-
-	// Recreate filtered provider
-	detector := logformat.NewLevelDetector(&m.config.LogLevels)
-	m.filteredSource = source.NewFilteredProvider(src, detector.Detect)
-	m.viewport.SetProvider(m.filteredSource)
-
-	// Reset position
-	m.viewport.GotoTop()
-
-	// Clear search results
-	m.searchResults = nil
-	m.searchTerm = ""
-	m.viewport.ClearHighlight()
-}
 
 // View implements tea.Model
 func (m *Model) View() string {
@@ -1039,19 +509,10 @@ func (m *Model) View() string {
 		return m.renderHelp()
 	}
 
-	// Update viewport with current marks (reverse map: line -> char)
-	if len(m.marks) > 0 {
-		reverseMarks := make(map[int]rune)
-		for char, line := range m.marks {
-			reverseMarks[line] = char
-		}
-		m.viewport.SetMarks(reverseMarks)
-	} else {
-		m.viewport.SetMarks(nil)
-	}
+	pane := m.currentPane()
 
-	// Main content
-	builder.WriteString(m.viewport.Render())
+	// Main content (pane.Render() handles marks)
+	builder.WriteString(pane.Render())
 	builder.WriteString("\n")
 
 	// Status bar
@@ -1075,31 +536,31 @@ func (m *Model) View() string {
 	default:
 		// Show filtered count vs total if filter is active
 		var lineInfo string
-		if m.filteredSource.IsFiltered() {
+		if pane.FilteredSource().IsFiltered() {
 			lineInfo = fmt.Sprintf("L%d/%d (of %d)",
-				m.viewport.CurrentLine()+1,
-				m.filteredSource.LineCount(),
-				m.source.LineCount())
+				pane.Viewport().CurrentLine()+1,
+				pane.FilteredSource().LineCount(),
+				pane.Source().LineCount())
 		} else {
 			lineInfo = fmt.Sprintf("L%d/%d",
-				m.viewport.CurrentLine()+1,
-				m.source.LineCount())
+				pane.Viewport().CurrentLine()+1,
+				pane.Source().LineCount())
 		}
 
-		percent := fmt.Sprintf("%.0f%%", m.viewport.PercentScrolled())
+		percent := fmt.Sprintf("%.0f%%", pane.Viewport().PercentScrolled())
 
 		searchInfo := ""
-		if m.searchTerm != "" {
-			searchInfo = fmt.Sprintf(" [%d matches]", len(m.searchResults))
+		if pane.SearchTerm() != "" {
+			searchInfo = fmt.Sprintf(" [%d matches]", len(pane.SearchResults()))
 		}
 
 		// Show active filters
 		filterInfo := ""
-		if m.filteredSource.IsFiltered() {
+		if pane.FilteredSource().IsFiltered() {
 			var parts []string
 
 			// Level filters
-			filters := m.filteredSource.GetActiveFilters()
+			filters := pane.FilteredSource().GetActiveFilters()
 			levelNames := map[source.LogLevel]string{
 				source.LevelTrace: "TRC",
 				source.LevelDebug: "DBG",
@@ -1119,8 +580,8 @@ func (m *Model) View() string {
 			}
 
 			// Text filter
-			if m.filteredSource.HasTextFilter() {
-				text := m.filteredSource.GetTextFilter()
+			if pane.FilteredSource().HasTextFilter() {
+				text := pane.FilteredSource().GetTextFilter()
 				if len(text) > 15 {
 					text = text[:15] + "..."
 				}
@@ -1134,28 +595,28 @@ func (m *Model) View() string {
 
 		// Slice/cached indicator
 		sliceInfo := ""
-		if len(m.sliceStack) > 0 {
-			current := m.sliceStack[len(m.sliceStack)-1]
+		if pane.HasSlice() {
+			current := pane.CurrentSlice()
 			sliceInfo = fmt.Sprintf(" [slice:%d-%d]", current.StartLine+1, current.EndLine)
-		} else if m.isCached {
+		} else if pane.IsCached() {
 			sliceInfo = " [cached]"
 		}
 
 		// Follow indicator
 		followInfo := ""
-		if m.following {
+		if pane.IsFollowing() {
 			followInfo = " [following]"
 		}
 
 		// Get timestamp for current line
 		timeInfo := ""
-		currentLine := m.viewport.CurrentLine()
-		if ts := m.source.GetTimestamp(currentLine); ts != nil {
+		currentLine := pane.Viewport().CurrentLine()
+		if ts := pane.Source().GetTimestamp(currentLine); ts != nil {
 			timeInfo = fmt.Sprintf(" %s", ts.Format("15:04:05"))
 		}
 
 		status = fmt.Sprintf(" %s%s%s  %s%s  %s%s%s",
-			m.filename, sliceInfo, followInfo, lineInfo, timeInfo, percent, searchInfo, filterInfo)
+			pane.Filename(), sliceInfo, followInfo, lineInfo, timeInfo, percent, searchInfo, filterInfo)
 	}
 
 	builder.WriteString(statusStyle.Render(status))
@@ -1249,14 +710,10 @@ func (m *Model) renderHelp() string {
 // Close cleans up resources
 func (m *Model) Close() error {
 	var err error
-	if m.source != nil {
-		err = m.source.Close()
+	for _, pane := range m.panes {
+		if paneErr := pane.Close(); paneErr != nil && err == nil {
+			err = paneErr
+		}
 	}
-
-	// Delete cached file
-	if m.cachePath != "" {
-		os.Remove(m.cachePath)
-	}
-
 	return err
 }
