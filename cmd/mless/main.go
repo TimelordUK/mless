@@ -42,19 +42,28 @@ func main() {
 	sliceFlag := flag.String("S", "", "Slice range (e.g., 1000-5000, 100-$, .-500)")
 	timeFlag := flag.String("t", "", "Go to time (e.g., 14:00, 14:30:00)")
 	flag.Usage = func() {
-		fmt.Fprintf(os.Stderr, "Usage: mless [-c] [-S range] [-t time] [file]\n")
+		fmt.Fprintf(os.Stderr, "Usage: mless [-c] [-S range] [-t time] [file...]\n")
 		fmt.Fprintf(os.Stderr, "       command | mless [-S range] [-t time]\n")
 		fmt.Fprintf(os.Stderr, "  -c\tCache file locally (useful for network files)\n")
 		fmt.Fprintf(os.Stderr, "  -S\tSlice range (e.g., 1000-5000, 100-$)\n")
 		fmt.Fprintf(os.Stderr, "  -t\tGo to time (e.g., 14:00, 14:30:00)\n")
+		fmt.Fprintf(os.Stderr, "\nMultiple files open in split view (max 2)\n")
 	}
 	flag.Parse()
 
-	var filePath string
+	var filePaths []string
 	var stdinTempFile string
 
 	if flag.NArg() >= 1 {
-		filePath = flag.Arg(0)
+		// Get absolute paths for all files
+		for i := 0; i < flag.NArg() && i < 2; i++ { // Max 2 files
+			filePath := flag.Arg(i)
+			absPath, err := filepath.Abs(filePath)
+			if err == nil {
+				filePath = absPath
+			}
+			filePaths = append(filePaths, filePath)
+		}
 	} else if isPiped() {
 		// Read from stdin
 		var err error
@@ -63,7 +72,7 @@ func main() {
 			fmt.Fprintf(os.Stderr, "Error: %v\n", err)
 			os.Exit(1)
 		}
-		filePath = stdinTempFile
+		filePaths = []string{stdinTempFile}
 		// Clean up temp file on exit
 		defer os.Remove(stdinTempFile)
 	} else {
@@ -71,14 +80,8 @@ func main() {
 		os.Exit(1)
 	}
 
-	// Get absolute path for display
-	absPath, err := filepath.Abs(filePath)
-	if err == nil {
-		filePath = absPath
-	}
-
 	opts := ui.ModelOptions{
-		Filepath:   filePath,
+		Filepaths:  filePaths,
 		CacheFile:  *cacheFlag,
 		SliceRange: *sliceFlag,
 		GotoTime:   *timeFlag,

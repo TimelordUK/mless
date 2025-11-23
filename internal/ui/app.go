@@ -23,6 +23,7 @@ type tickMsg time.Time
 // ModelOptions contains options for creating a new model
 type ModelOptions struct {
 	Filepath   string
+	Filepaths  []string // Multiple files for split view
 	CacheFile  bool
 	SliceRange string // e.g., "1000-5000"
 	GotoTime   string // e.g., "14:00"
@@ -59,6 +60,7 @@ type Model struct {
 	panes      []*Pane
 	activePane int
 	splitDir   SplitDirection
+	splitRatio float64 // 0.0 to 1.0, proportion for first pane (default 0.5)
 
 	searchInput textinput.Model
 	config      *config.Config
@@ -83,31 +85,60 @@ func NewModelWithOptions(opts ModelOptions) (*Model, error) {
 		return nil, err
 	}
 
-	pane, err := NewPane(opts.Filepath, cfg, opts.CacheFile)
-	if err != nil {
-		return nil, err
+	// Build list of files to open
+	var files []string
+	if len(opts.Filepaths) > 0 {
+		files = opts.Filepaths
+	} else if opts.Filepath != "" {
+		files = []string{opts.Filepath}
+	} else {
+		return nil, fmt.Errorf("no file specified")
 	}
 
-	// Apply initial slice if specified
-	if opts.SliceRange != "" {
-		if err := pane.ParseAndSlice(opts.SliceRange); err != nil {
-			pane.Close()
+	// Create panes for each file
+	var panes []*Pane
+	for _, filePath := range files {
+		pane, err := NewPane(filePath, cfg, opts.CacheFile)
+		if err != nil {
+			// Clean up already created panes
+			for _, p := range panes {
+				p.Close()
+			}
+			return nil, err
+		}
+		panes = append(panes, pane)
+	}
+
+	// Apply initial slice to first pane if specified
+	if opts.SliceRange != "" && len(panes) > 0 {
+		if err := panes[0].ParseAndSlice(opts.SliceRange); err != nil {
+			for _, p := range panes {
+				p.Close()
+			}
 			return nil, fmt.Errorf("invalid slice range: %w", err)
 		}
 	}
 
-	// Apply initial time navigation if specified
-	if opts.GotoTime != "" {
-		pane.GotoTime(opts.GotoTime)
+	// Apply initial time navigation to first pane if specified
+	if opts.GotoTime != "" && len(panes) > 0 {
+		panes[0].GotoTime(opts.GotoTime)
 	}
 
 	ti := textinput.New()
 	ti.Placeholder = "Search..."
 	ti.CharLimit = 256
 
+	// Determine split direction based on number of files
+	splitDir := SplitNone
+	if len(panes) > 1 {
+		splitDir = SplitVertical
+	}
+
 	return &Model{
-		panes:       []*Pane{pane},
+		panes:       panes,
 		activePane:  0,
+		splitDir:    splitDir,
+		splitRatio:  0.5,
 		searchInput: ti,
 		config:      cfg,
 		mode:        ModeNormal,
@@ -379,6 +410,29 @@ func (m *Model) handleKey(msg tea.KeyMsg) (tea.Model, tea.Cmd) {
 	case "tab": // Quick pane switch
 		if len(m.panes) > 1 {
 			m.activePane = (m.activePane + 1) % len(m.panes)
+		}
+
+	// Split resizing
+	case "H": // Shrink first pane (move splitter left/up)
+		if len(m.panes) > 1 {
+			m.splitRatio -= 0.05
+			if m.splitRatio < 0.1 {
+				m.splitRatio = 0.1
+			}
+			m.calculatePaneSizes()
+		}
+	case "L": // Grow first pane (move splitter right/down)
+		if len(m.panes) > 1 {
+			m.splitRatio += 0.05
+			if m.splitRatio > 0.9 {
+				m.splitRatio = 0.9
+			}
+			m.calculatePaneSizes()
+		}
+	case "=": // Reset split to 50/50
+		if len(m.panes) > 1 {
+			m.splitRatio = 0.5
+			m.calculatePaneSizes()
 		}
 	}
 
@@ -662,15 +716,27 @@ func (m *Model) calculatePaneSizes() {
 	switch m.splitDir {
 	case SplitVertical:
 		// Side by side, leave 1 char for separator
-		halfWidth := (m.width - 1) / 2
-		m.panes[0].SetSize(halfWidth, contentHeight)
-		m.panes[1].SetSize(m.width-halfWidth-1, contentHeight)
+		firstWidth := int(float64(m.width-1) * m.splitRatio)
+		if firstWidth < 10 {
+			firstWidth = 10
+		}
+		if firstWidth > m.width-11 {
+			firstWidth = m.width - 11
+		}
+		m.panes[0].SetSize(firstWidth, contentHeight)
+		m.panes[1].SetSize(m.width-firstWidth-1, contentHeight)
 
 	case SplitHorizontal:
 		// Stacked, leave 1 line for separator
-		halfHeight := (contentHeight - 1) / 2
-		m.panes[0].SetSize(m.width, halfHeight)
-		m.panes[1].SetSize(m.width, contentHeight-halfHeight-1)
+		firstHeight := int(float64(contentHeight-1) * m.splitRatio)
+		if firstHeight < 3 {
+			firstHeight = 3
+		}
+		if firstHeight > contentHeight-4 {
+			firstHeight = contentHeight - 4
+		}
+		m.panes[0].SetSize(m.width, firstHeight)
+		m.panes[1].SetSize(m.width, contentHeight-firstHeight-1)
 	}
 }
 
@@ -690,8 +756,14 @@ func (m *Model) renderVerticalSplit() string {
 		separator = "┃"
 	}
 
-	// Get pane widths
-	leftWidth := (m.width - 1) / 2
+	// Get pane widths from ratio
+	leftWidth := int(float64(m.width-1) * m.splitRatio)
+	if leftWidth < 10 {
+		leftWidth = 10
+	}
+	if leftWidth > m.width-11 {
+		leftWidth = m.width - 11
+	}
 	rightWidth := m.width - leftWidth - 1
 
 	maxLines := len(leftLines)
