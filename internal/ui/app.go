@@ -434,6 +434,16 @@ func (m *Model) handleKey(msg tea.KeyMsg) (tea.Model, tea.Cmd) {
 			m.splitRatio = 0.5
 			m.calculatePaneSizes()
 		}
+
+	case "ctrl+o": // Toggle split orientation
+		if len(m.panes) > 1 {
+			if m.splitDir == SplitVertical {
+				m.splitDir = SplitHorizontal
+			} else {
+				m.splitDir = SplitVertical
+			}
+			m.calculatePaneSizes()
+		}
 	}
 
 	return m, nil
