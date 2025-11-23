@@ -4,6 +4,8 @@ import (
 	"fmt"
 	"io"
 	"os"
+	"os/exec"
+	"runtime"
 	"strings"
 	"time"
 
@@ -44,6 +46,7 @@ const (
 	ModeHelp
 	ModeFileInfo // Showing file info (ctrl+g)
 	ModeSplitCmd // Waiting for split command (v, s, w, q, etc.)
+	ModeYank     // Waiting for yank target (y for line, number, or 'a for mark)
 )
 
 // SplitDirection represents the split layout direction
@@ -69,8 +72,12 @@ type Model struct {
 	width  int
 	height int
 
+	// Command count prefix (e.g., 5j, 10yy)
+	countPrefix int
+
 	// Status
-	err error
+	err     error
+	message string // Temporary status message (e.g., "5 lines yanked")
 }
 
 // NewModel creates a new application model
@@ -204,6 +211,9 @@ func (m *Model) tickCmd() tea.Cmd {
 }
 
 func (m *Model) handleKey(msg tea.KeyMsg) (tea.Model, tea.Cmd) {
+	// Clear any temporary message
+	m.message = ""
+
 	// Handle mode-specific input
 	if m.mode == ModeSearch {
 		return m.handleSearchKey(msg)
@@ -239,10 +249,31 @@ func (m *Model) handleKey(msg tea.KeyMsg) (tea.Model, tea.Cmd) {
 	if m.mode == ModeSplitCmd {
 		return m.handleSplitCmd(msg)
 	}
+	if m.mode == ModeYank {
+		return m.handleYankKey(msg)
+	}
 
 	// Normal mode
 	pane := m.currentPane()
-	switch msg.String() {
+	key := msg.String()
+
+	// Handle digit prefix for counts (1-9 to start, 0-9 to continue)
+	if len(key) == 1 && key[0] >= '0' && key[0] <= '9' {
+		digit := int(key[0] - '0')
+		if m.countPrefix > 0 || digit > 0 { // Don't start with 0
+			m.countPrefix = m.countPrefix*10 + digit
+			return m, nil
+		}
+	}
+
+	// Get count and reset
+	count := m.countPrefix
+	if count == 0 {
+		count = 1
+	}
+	m.countPrefix = 0
+
+	switch key {
 	case "q", "ctrl+c":
 		return m, tea.Quit
 
@@ -260,9 +291,18 @@ func (m *Model) handleKey(msg tea.KeyMsg) (tea.Model, tea.Cmd) {
 		}
 
 	case "j", "down":
-		pane.Viewport().ScrollDown(1)
+		pane.Viewport().ScrollDown(count)
 	case "k", "up":
-		pane.Viewport().ScrollUp(1)
+		pane.Viewport().ScrollUp(count)
+
+	case "left", "<":
+		pane.Viewport().ScrollLeft(10)
+	case "right", ">":
+		pane.Viewport().ScrollRight(10)
+	case "^": // Reset horizontal scroll
+		pane.Viewport().ResetHorizontalScroll()
+	case "Z": // Toggle line wrap
+		pane.Viewport().ToggleWrap()
 
 	case "ctrl+d", "ctrl+f":
 		pane.Viewport().PageDown()
@@ -444,6 +484,14 @@ func (m *Model) handleKey(msg tea.KeyMsg) (tea.Model, tea.Cmd) {
 			}
 			m.calculatePaneSizes()
 		}
+
+	case "y": // Enter yank mode (count already captured)
+		m.mode = ModeYank
+		// Store count for yank mode to use
+		m.countPrefix = count
+
+	case "Y": // Quick yank current line (with count)
+		m.yankLines(count)
 	}
 
 	return m, nil
@@ -615,6 +663,145 @@ func (m *Model) handleSplitCmd(msg tea.KeyMsg) (tea.Model, tea.Cmd) {
 	}
 
 	return m, nil
+}
+
+func (m *Model) handleYankKey(msg tea.KeyMsg) (tea.Model, tea.Cmd) {
+	key := msg.String()
+
+	// Get count from normal mode prefix
+	count := m.countPrefix
+	if count == 0 {
+		count = 1
+	}
+
+	switch key {
+	case "y": // yy or Nyy - yank lines
+		m.mode = ModeNormal
+		m.yankLines(count)
+		m.countPrefix = 0
+
+	case "'": // y'a - yank to mark
+		// Stay in yank mode for mark character
+		m.countPrefix = -1 // Signal waiting for mark
+
+	case "esc":
+		m.mode = ModeNormal
+		m.countPrefix = 0
+
+	default:
+		// Check if it's a mark character after y'
+		if m.countPrefix == -1 && len(key) == 1 && key[0] >= 'a' && key[0] <= 'z' {
+			m.mode = ModeNormal
+			m.yankToMark(rune(key[0]))
+			m.countPrefix = 0
+		} else {
+			m.mode = ModeNormal
+			m.countPrefix = 0
+		}
+	}
+
+	return m, nil
+}
+
+// yankLines yanks N lines from current position to clipboard
+func (m *Model) yankLines(count int) {
+	pane := m.currentPane()
+	startFiltered := pane.Viewport().CurrentLine()
+
+	var lines []string
+	for i := 0; i < count; i++ {
+		line, err := pane.FilteredSource().GetLine(startFiltered + i)
+		if err != nil || line == nil {
+			break
+		}
+		lines = append(lines, string(line.Content))
+	}
+
+	if len(lines) > 0 {
+		text := strings.Join(lines, "\n")
+		m.copyToClipboard(text)
+		if len(lines) == 1 {
+			m.message = "1 line yanked"
+		} else {
+			m.message = fmt.Sprintf("%d lines yanked", len(lines))
+		}
+	}
+}
+
+// yankToMark yanks from current line to mark
+func (m *Model) yankToMark(markChar rune) {
+	pane := m.currentPane()
+
+	markLine, ok := pane.marks[markChar]
+	if !ok {
+		return
+	}
+
+	// Get current original line
+	currentFiltered := pane.Viewport().CurrentLine()
+	currentOriginal := pane.FilteredSource().OriginalLineNumber(currentFiltered)
+
+	// Determine range
+	startOriginal := currentOriginal
+	endOriginal := markLine
+	if startOriginal > endOriginal {
+		startOriginal, endOriginal = endOriginal, startOriginal
+	}
+
+	// Collect lines from filtered view that fall in this range
+	var lines []string
+	for i := 0; i < pane.FilteredSource().LineCount(); i++ {
+		line, err := pane.FilteredSource().GetLine(i)
+		if err != nil || line == nil {
+			continue
+		}
+		origIdx := pane.FilteredSource().OriginalLineNumber(i)
+		if origIdx >= startOriginal && origIdx <= endOriginal {
+			lines = append(lines, string(line.Content))
+		}
+	}
+
+	if len(lines) > 0 {
+		text := strings.Join(lines, "\n")
+		m.copyToClipboard(text)
+		if len(lines) == 1 {
+			m.message = "1 line yanked"
+		} else {
+			m.message = fmt.Sprintf("%d lines yanked", len(lines))
+		}
+	}
+}
+
+// copyToClipboard copies text to system clipboard
+func (m *Model) copyToClipboard(text string) {
+	// Try different clipboard commands based on OS
+	var cmd *exec.Cmd
+
+	switch runtime.GOOS {
+	case "darwin":
+		cmd = exec.Command("pbcopy")
+	case "linux":
+		// Try xclip first, then xsel
+		if _, err := exec.LookPath("xclip"); err == nil {
+			cmd = exec.Command("xclip", "-selection", "clipboard")
+		} else if _, err := exec.LookPath("xsel"); err == nil {
+			cmd = exec.Command("xsel", "--clipboard", "--input")
+		} else {
+			// Fallback: try wl-copy for Wayland
+			cmd = exec.Command("wl-copy")
+		}
+	case "windows":
+		cmd = exec.Command("clip")
+	default:
+		return
+	}
+
+	if cmd == nil {
+		return
+	}
+
+	cmd.Stdin = strings.NewReader(text)
+	cmd.Run()
 }
 
 // splitVertical creates a vertical split (side-by-side panes)
@@ -1017,8 +1204,14 @@ func (m *Model) View() string {
 			timeInfo = fmt.Sprintf(" %s", ts.Format("15:04:05"))
 		}
 
-		status = fmt.Sprintf(" %s%s%s  %s%s  %s%s%s",
-			pane.Filename(), sliceInfo, followInfo, lineInfo, timeInfo, percent, searchInfo, filterInfo)
+		// Add temporary message if present
+		msgInfo := ""
+		if m.message != "" {
+			msgInfo = fmt.Sprintf(" [%s]", m.message)
+		}
+
+		status = fmt.Sprintf(" %s%s%s  %s%s  %s%s%s%s",
+			pane.Filename(), sliceInfo, followInfo, lineInfo, timeInfo, percent, searchInfo, filterInfo, msgInfo)
 	}
 
 	builder.WriteString(statusStyle.Render(status))
@@ -1145,11 +1338,24 @@ func (m *Model) renderHelp() string {
 			"ctrl+s          Slice from current to end",
 			"R               Revert slice / resync cache",
 		}},
+		{"Yank (Copy)", []string{
+			"yy / Y          Yank current line to clipboard",
+			"5yy             Yank 5 lines",
+			"y'a             Yank from current to mark 'a",
+		}},
+		{"Long Lines", []string{
+			"< / >           Scroll horizontally",
+			"^               Reset horizontal scroll",
+			"Z               Toggle line wrap",
+		}},
 		{"Split Views", []string{
 			"ctrl+w v        Vertical split (side-by-side)",
 			"ctrl+w s        Horizontal split (stacked)",
 			"ctrl+w w / tab  Switch pane",
 			"ctrl+w q        Close current pane",
+			"ctrl+o          Toggle split orientation",
+			"H / L           Resize split",
+			"=               Reset split to 50/50",
 		}},
 		{"Other", []string{
 			"F               Toggle follow mode",

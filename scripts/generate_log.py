@@ -134,11 +134,25 @@ def fill_template(template):
         result = result.replace(key, value)
     return result
 
-def generate_log_line(timestamp, format_style):
+def generate_long_content():
+    """Generate extra long content for testing horizontal scroll/wrap."""
+    extras = [
+        ' | Stack trace: at System.Net.Http.HttpClient.SendAsync() at App.Services.ApiClient.CallAsync() at App.Controllers.UserController.GetUser() at Microsoft.AspNetCore.Mvc.Internal.ActionMethodExecutor.Execute()',
+        ' | Context: {"userId": "12345", "sessionId": "abc-def-ghi", "requestPath": "/api/v1/users/profile", "headers": {"Authorization": "Bearer xxx", "X-Request-Id": "req-123", "X-Correlation-Id": "corr-456"}, "queryParams": {"include": "orders,preferences,history"}}',
+        ' | SQL: SELECT u.id, u.name, u.email, u.created_at, u.updated_at, p.avatar_url, p.bio, p.location FROM users u LEFT JOIN profiles p ON u.id = p.user_id WHERE u.id = $1 AND u.deleted_at IS NULL ORDER BY u.created_at DESC LIMIT 100',
+        ' | Metrics: {"cpu_percent": 78.5, "memory_mb": 2048, "disk_io_read": 1024, "disk_io_write": 512, "network_in": 8192, "network_out": 4096, "gc_pause_ms": 15, "active_threads": 42, "open_files": 128}',
+    ]
+    return random.choice(extras)
+
+def generate_log_line(timestamp, format_style, long_line_chance=0.1):
     """Generate a single log line."""
     level = random.choices(LEVELS, weights=LEVEL_WEIGHTS)[0]
     component = random.choice(COMPONENTS)
     message = fill_template(random.choice(MESSAGES[level]))
+
+    # Add long content to some lines
+    if random.random() < long_line_chance:
+        message += generate_long_content()
 
     if format_style == 'bracket':
         # [2024-01-15 10:30:45.123 INF] [Component] Message

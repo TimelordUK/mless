@@ -37,6 +37,9 @@ type Viewport struct {
 
 	// Marks (original line number -> mark character)
 	marks map[int]rune
+
+	// Horizontal scroll offset
+	horizontalOffset int
 }
 
 // NewViewport creates a new viewport
@@ -68,6 +71,43 @@ func (v *Viewport) ClearHighlight() {
 // SetMarks updates the marks to display (original line -> rune)
 func (v *Viewport) SetMarks(marks map[int]rune) {
 	v.marks = marks
+}
+
+// ScrollLeft scrolls horizontally left by n columns
+func (v *Viewport) ScrollLeft(n int) {
+	v.horizontalOffset -= n
+	if v.horizontalOffset < 0 {
+		v.horizontalOffset = 0
+	}
+}
+
+// ScrollRight scrolls horizontally right by n columns
+func (v *Viewport) ScrollRight(n int) {
+	v.horizontalOffset += n
+}
+
+// ResetHorizontalScroll resets horizontal scroll to beginning
+func (v *Viewport) ResetHorizontalScroll() {
+	v.horizontalOffset = 0
+}
+
+// HorizontalOffset returns the current horizontal scroll offset
+func (v *Viewport) HorizontalOffset() int {
+	return v.horizontalOffset
+}
+
+// ToggleWrap toggles line wrapping
+func (v *Viewport) ToggleWrap() bool {
+	v.wrapLines = !v.wrapLines
+	if v.wrapLines {
+		v.horizontalOffset = 0 // Reset horizontal scroll when wrapping
+	}
+	return v.wrapLines
+}
+
+// IsWrapping returns whether line wrapping is enabled
+func (v *Viewport) IsWrapping() bool {
+	return v.wrapLines
 }
 
 // SetRenderer sets the line renderer
@@ -214,15 +254,20 @@ func (v *Viewport) Render() string {
 		// Use renderer for content
 		content := v.renderer.Render(line)
 
-		// Truncate if needed (note: this is naive with ANSI codes)
+		// Calculate available width
 		availableWidth := v.width
 		if v.showLineNumbers {
-			availableWidth -= lineNumWidth + 1
+			availableWidth -= lineNumWidth + 2 // +2 for mark char and space
 		}
 
-		// For now, just write the styled content
-		// TODO: proper truncation with ANSI awareness
-		builder.WriteString(content)
+		if v.wrapLines {
+			// Wrap long lines
+			builder.WriteString(v.wrapContent(content, availableWidth))
+		} else {
+			// Apply horizontal offset and truncation
+			content = v.applyHorizontalScroll(content, availableWidth)
+			builder.WriteString(content)
+		}
 	}
 
 	// Pad with empty lines if needed
@@ -234,6 +279,112 @@ func (v *Viewport) Render() string {
 	}
 
 	return builder.String()
+}
+
+// applyHorizontalScroll applies horizontal offset and truncates to width
+func (v *Viewport) applyHorizontalScroll(content string, width int) string {
+	if width <= 0 {
+		return ""
+	}
+
+	// Skip horizontal offset characters (ANSI-aware)
+	// Always preserve ANSI codes, only skip visible characters
+	skipped := 0
+	var result strings.Builder
+	inEscape := false
+
+	for _, r := range content {
+		if r == '\x1b' {
+			inEscape = true
+			result.WriteRune(r) // Always keep escape sequences
+			continue
+		}
+		if inEscape {
+			result.WriteRune(r) // Always keep escape sequences
+			if (r >= 'a' && r <= 'z') || (r >= 'A' && r <= 'Z') {
+				inEscape = false
+			}
+			continue
+		}
+
+		// Regular character - skip if within offset
+		if skipped < v.horizontalOffset {
+			skipped++
+			continue
+		}
+
+		result.WriteRune(r)
+	}
+
+	// Now truncate to width
+	output := result.String()
+	visWidth := 0
+	var truncated strings.Builder
+	inEscape = false
+
+	for _, r := range output {
+		if r == '\x1b' {
+			inEscape = true
+			truncated.WriteRune(r)
+			continue
+		}
+		if inEscape {
+			truncated.WriteRune(r)
+			if (r >= 'a' && r <= 'z') || (r >= 'A' && r <= 'Z') {
+				inEscape = false
+			}
+			continue
+		}
+		if visWidth >= width {
+			break
+		}
+		truncated.WriteRune(r)
+		visWidth++
+	}
+
+	// Reset ANSI at end
+	truncated.WriteString("\x1b[0m")
+	return truncated.String()
+}
+
+// wrapContent wraps content to fit within width (ANSI-aware)
+func (v *Viewport) wrapContent(content string, width int) string {
+	if width <= 0 {
+		return ""
+	}
+
+	var result strings.Builder
+	visWidth := 0
+	inEscape := false
+
+	for _, r := range content {
+		if r == '\x1b' {
+			inEscape = true
+			result.WriteRune(r)
+			continue
+		}
+		if inEscape {
+			result.WriteRune(r)
+			if (r >= 'a' && r <= 'z') || (r >= 'A' && r <= 'Z') {
+				inEscape = false
+			}
+			continue
+		}
+
+		// Check if we need to wrap
+		if visWidth >= width {
+			result.WriteString("\x1b[0m\n") // Reset and newline
+			// Pad for continuation (no line number)
+			result.WriteString(strings.Repeat(" ", v.width-width))
+			visWidth = 0
+		}
+
+		result.WriteRune(r)
+		visWidth++
+	}
+
+	result.WriteString("\x1b[0m")
+	return result.String()
 }
 
 // PercentScrolled returns how far through the file we are
