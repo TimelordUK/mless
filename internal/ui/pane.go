@@ -196,6 +196,11 @@ func (p *Pane) HasSlice() bool {
 	return len(p.sliceStack) > 0
 }
 
+// SliceDepth returns the number of nested slices
+func (p *Pane) SliceDepth() int {
+	return len(p.sliceStack)
+}
+
 // CurrentSlice returns the current slice info
 func (p *Pane) CurrentSlice() *slice.Info {
 	if len(p.sliceStack) == 0 {

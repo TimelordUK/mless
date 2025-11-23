@@ -1186,7 +1186,12 @@ func (m *Model) View() string {
 		sliceInfo := ""
 		if pane.HasSlice() {
 			current := pane.CurrentSlice()
-			sliceInfo = fmt.Sprintf(" [slice:%d-%d]", current.StartLine+1, current.EndLine)
+			depth := pane.SliceDepth()
+			if depth > 1 {
+				sliceInfo = fmt.Sprintf(" [slice×%d:%d-%d]", depth, current.StartLine+1, current.EndLine)
+			} else {
+				sliceInfo = fmt.Sprintf(" [slice:%d-%d]", current.StartLine+1, current.EndLine)
+			}
 		} else if pane.IsCached() {
 			sliceInfo = " [cached]"
 		}
