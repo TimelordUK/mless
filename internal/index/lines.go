@@ -4,8 +4,8 @@ import (
 	"bytes"
 	"time"
 
-	mlessio "github.com/user/mless/internal/io"
-	"github.com/user/mless/pkg/logformat"
+	mlessio "github.com/TimelordUK/mless/internal/io"
+	"github.com/TimelordUK/mless/pkg/logformat"
 )
 
 // LineIndex stores byte offsets for each line in a file

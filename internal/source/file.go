@@ -3,8 +3,8 @@ package source
 import (
 	"time"
 
-	"github.com/user/mless/internal/index"
-	mlessio "github.com/user/mless/internal/io"
+	"github.com/TimelordUK/mless/internal/index"
+	mlessio "github.com/TimelordUK/mless/internal/io"
 )
 
 // FileSource provides lines from a single file

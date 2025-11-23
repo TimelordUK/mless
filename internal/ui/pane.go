@@ -8,12 +8,12 @@ import (
 	"strings"
 	"time"
 
-	"github.com/user/mless/internal/config"
-	"github.com/user/mless/internal/render"
-	"github.com/user/mless/internal/slice"
-	"github.com/user/mless/internal/source"
-	"github.com/user/mless/internal/view"
-	"github.com/user/mless/pkg/logformat"
+	"github.com/TimelordUK/mless/internal/config"
+	"github.com/TimelordUK/mless/internal/render"
+	"github.com/TimelordUK/mless/internal/slice"
+	"github.com/TimelordUK/mless/internal/source"
+	"github.com/TimelordUK/mless/internal/view"
+	"github.com/TimelordUK/mless/pkg/logformat"
 )
 
 // Pane represents a single file view with its own state

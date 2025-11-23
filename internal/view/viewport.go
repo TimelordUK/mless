@@ -5,8 +5,8 @@ import (
 	"strings"
 
 	"github.com/charmbracelet/lipgloss"
-	"github.com/user/mless/internal/render"
-	"github.com/user/mless/internal/source"
+	"github.com/TimelordUK/mless/internal/render"
+	"github.com/TimelordUK/mless/internal/source"
 )
 
 // Viewport manages the visible portion of content

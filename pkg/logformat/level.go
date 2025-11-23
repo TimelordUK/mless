@@ -3,7 +3,7 @@ package logformat
 import (
 	"strings"
 
-	"github.com/user/mless/internal/config"
+	"github.com/TimelordUK/mless/internal/config"
 )
 
 // LogLevel represents a log severity level

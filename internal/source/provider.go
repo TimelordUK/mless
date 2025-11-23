@@ -3,7 +3,7 @@ package source
 import (
 	"time"
 
-	"github.com/user/mless/pkg/logformat"
+	"github.com/TimelordUK/mless/pkg/logformat"
 )
 
 // Re-export LogLevel types for convenience

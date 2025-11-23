@@ -1,4 +1,4 @@
-module github.com/user/mless
+module github.com/TimelordUK/mless
 
 go 1.24.5
 

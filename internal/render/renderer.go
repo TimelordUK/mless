@@ -2,9 +2,9 @@ package render
 
 import (
 	"github.com/charmbracelet/lipgloss"
-	"github.com/user/mless/internal/config"
-	"github.com/user/mless/internal/source"
-	"github.com/user/mless/pkg/logformat"
+	"github.com/TimelordUK/mless/internal/config"
+	"github.com/TimelordUK/mless/internal/source"
+	"github.com/TimelordUK/mless/pkg/logformat"
 )
 
 // Renderer applies styling to lines

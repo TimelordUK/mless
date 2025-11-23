@@ -10,11 +10,11 @@ import (
 	"github.com/charmbracelet/bubbles/textinput"
 	tea "github.com/charmbracelet/bubbletea"
 	"github.com/charmbracelet/lipgloss"
-	"github.com/user/mless/internal/config"
-	"github.com/user/mless/internal/render"
-	"github.com/user/mless/internal/source"
-	"github.com/user/mless/internal/view"
-	"github.com/user/mless/pkg/logformat"
+	"github.com/TimelordUK/mless/internal/config"
+	"github.com/TimelordUK/mless/internal/render"
+	"github.com/TimelordUK/mless/internal/source"
+	"github.com/TimelordUK/mless/internal/view"
+	"github.com/TimelordUK/mless/pkg/logformat"
 )
 
 // tickMsg is sent periodically in follow mode

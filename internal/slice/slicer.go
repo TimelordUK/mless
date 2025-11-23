@@ -6,7 +6,7 @@ import (
 	"path/filepath"
 	"time"
 
-	"github.com/user/mless/internal/source"
+	"github.com/TimelordUK/mless/internal/source"
 )
 
 // Info contains metadata about a slice
