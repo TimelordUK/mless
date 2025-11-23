@@ -11,7 +11,10 @@ import (
 	tea "github.com/charmbracelet/bubbletea"
 	"github.com/charmbracelet/lipgloss"
 	"github.com/user/mless/internal/config"
+	"github.com/user/mless/internal/render"
 	"github.com/user/mless/internal/source"
+	"github.com/user/mless/internal/view"
+	"github.com/user/mless/pkg/logformat"
 )
 
 // tickMsg is sent periodically in follow mode
@@ -38,12 +41,24 @@ const (
 	ModeMarkSet  // Waiting for mark character (ma-mz)
 	ModeMarkJump // Waiting for mark character ('a-'z)
 	ModeHelp
+	ModeFileInfo // Showing file info (ctrl+g)
+	ModeSplitCmd // Waiting for split command (v, s, w, q, etc.)
+)
+
+// SplitDirection represents the split layout direction
+type SplitDirection int
+
+const (
+	SplitNone SplitDirection = iota
+	SplitVertical   // side-by-side |
+	SplitHorizontal // stacked -
 )
 
 // Model is the main application model
 type Model struct {
 	panes      []*Pane
 	activePane int
+	splitDir   SplitDirection
 
 	searchInput textinput.Model
 	config      *config.Config
@@ -136,8 +151,7 @@ func (m *Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	case tea.WindowSizeMsg:
 		m.width = msg.Width
 		m.height = msg.Height
-		// Reserve 2 lines for status bar
-		m.currentPane().SetSize(msg.Width, msg.Height-2)
+		m.calculatePaneSizes()
 		return m, nil
 
 	case tickMsg:
@@ -185,6 +199,14 @@ func (m *Model) handleKey(msg tea.KeyMsg) (tea.Model, tea.Cmd) {
 		// Any key exits help
 		m.mode = ModeNormal
 		return m, nil
+	}
+	if m.mode == ModeFileInfo {
+		// Any key exits file info
+		m.mode = ModeNormal
+		return m, nil
+	}
+	if m.mode == ModeSplitCmd {
+		return m.handleSplitCmd(msg)
 	}
 
 	// Normal mode
@@ -347,6 +369,17 @@ func (m *Model) handleKey(msg tea.KeyMsg) (tea.Model, tea.Cmd) {
 
 	case "h": // Show help
 		m.mode = ModeHelp
+
+	case "ctrl+g": // Show file info
+		m.mode = ModeFileInfo
+
+	case "ctrl+w": // Enter split command mode
+		m.mode = ModeSplitCmd
+
+	case "tab": // Quick pane switch
+		if len(m.panes) > 1 {
+			m.activePane = (m.activePane + 1) % len(m.panes)
+		}
 	}
 
 	return m, nil
@@ -499,6 +532,279 @@ func (m *Model) handleMarkJumpKey(msg tea.KeyMsg) (tea.Model, tea.Cmd) {
 	return m, nil
 }
 
+func (m *Model) handleSplitCmd(msg tea.KeyMsg) (tea.Model, tea.Cmd) {
+	m.mode = ModeNormal
+
+	switch msg.String() {
+	case "v": // Vertical split (side-by-side)
+		m.splitVertical()
+	case "s": // Horizontal split (stacked)
+		m.splitHorizontal()
+	case "w": // Switch pane
+		if len(m.panes) > 1 {
+			m.activePane = (m.activePane + 1) % len(m.panes)
+		}
+	case "q": // Close current pane
+		m.closeCurrentPane()
+	case "esc": // Cancel
+		// Just return to normal mode
+	}
+
+	return m, nil
+}
+
+// splitVertical creates a vertical split (side-by-side panes)
+func (m *Model) splitVertical() {
+	if len(m.panes) >= 2 {
+		return // Already have max panes
+	}
+
+	current := m.currentPane()
+
+	// Create new pane sharing the same source
+	detector := logformat.NewLevelDetector(&m.config.LogLevels)
+	newPane := &Pane{
+		viewport:       view.NewViewport(80, 24),
+		source:         current.source, // Shared source
+		filteredSource: source.NewFilteredProvider(current.source, detector.Detect),
+		config:         current.config,
+		filename:       current.filename,
+		sourcePath:     current.sourcePath,
+		cachePath:      current.cachePath,
+		isCached:       current.isCached,
+		marks:          make(map[rune]int),
+	}
+	newPane.viewport.SetProvider(newPane.filteredSource)
+	newPane.viewport.SetRenderer(render.NewLogLevelRenderer(m.config))
+	newPane.viewport.GotoLine(current.viewport.CurrentLine())
+
+	m.panes = append(m.panes, newPane)
+	m.splitDir = SplitVertical
+	m.calculatePaneSizes()
+}
+
+// splitHorizontal creates a horizontal split (stacked panes)
+func (m *Model) splitHorizontal() {
+	if len(m.panes) >= 2 {
+		return
+	}
+
+	current := m.currentPane()
+
+	detector := logformat.NewLevelDetector(&m.config.LogLevels)
+	newPane := &Pane{
+		viewport:       view.NewViewport(80, 24),
+		source:         current.source,
+		filteredSource: source.NewFilteredProvider(current.source, detector.Detect),
+		config:         current.config,
+		filename:       current.filename,
+		sourcePath:     current.sourcePath,
+		cachePath:      current.cachePath,
+		isCached:       current.isCached,
+		marks:          make(map[rune]int),
+	}
+	newPane.viewport.SetProvider(newPane.filteredSource)
+	newPane.viewport.SetRenderer(render.NewLogLevelRenderer(m.config))
+	newPane.viewport.GotoLine(current.viewport.CurrentLine())
+
+	m.panes = append(m.panes, newPane)
+	m.splitDir = SplitHorizontal
+	m.calculatePaneSizes()
+}
+
+// closeCurrentPane closes the active pane
+func (m *Model) closeCurrentPane() {
+	if len(m.panes) <= 1 {
+		return // Can't close the last pane
+	}
+
+	// Don't close the source if other panes are using it
+	closingPane := m.panes[m.activePane]
+	sharedSource := false
+	for i, p := range m.panes {
+		if i != m.activePane && p.source == closingPane.source {
+			sharedSource = true
+			break
+		}
+	}
+
+	// Remove the pane
+	m.panes = append(m.panes[:m.activePane], m.panes[m.activePane+1:]...)
+
+	// Adjust active pane index
+	if m.activePane >= len(m.panes) {
+		m.activePane = len(m.panes) - 1
+	}
+
+	// Reset split direction if only one pane left
+	if len(m.panes) == 1 {
+		m.splitDir = SplitNone
+	}
+
+	// Close the pane (but not the shared source)
+	if !sharedSource {
+		closingPane.Close()
+	}
+
+	m.calculatePaneSizes()
+}
+
+// calculatePaneSizes sets the dimensions for each pane
+func (m *Model) calculatePaneSizes() {
+	statusHeight := 2 // status bar + help line
+	contentHeight := m.height - statusHeight
+
+	if len(m.panes) == 1 {
+		m.panes[0].SetSize(m.width, contentHeight)
+		return
+	}
+
+	switch m.splitDir {
+	case SplitVertical:
+		// Side by side, leave 1 char for separator
+		halfWidth := (m.width - 1) / 2
+		m.panes[0].SetSize(halfWidth, contentHeight)
+		m.panes[1].SetSize(m.width-halfWidth-1, contentHeight)
+
+	case SplitHorizontal:
+		// Stacked, leave 1 line for separator
+		halfHeight := (contentHeight - 1) / 2
+		m.panes[0].SetSize(m.width, halfHeight)
+		m.panes[1].SetSize(m.width, contentHeight-halfHeight-1)
+	}
+}
+
+// renderVerticalSplit renders two panes side by side
+func (m *Model) renderVerticalSplit() string {
+	left := m.panes[0].Render()
+	right := m.panes[1].Render()
+
+	leftLines := strings.Split(left, "\n")
+	rightLines := strings.Split(right, "\n")
+
+	var result strings.Builder
+
+	// Choose separator based on active pane
+	separator := "│"
+	if m.activePane == 0 {
+		separator = "┃"
+	}
+
+	// Get pane widths
+	leftWidth := (m.width - 1) / 2
+	rightWidth := m.width - leftWidth - 1
+
+	maxLines := len(leftLines)
+	if len(rightLines) > maxLines {
+		maxLines = len(rightLines)
+	}
+
+	for i := 0; i < maxLines; i++ {
+		leftLine := ""
+		if i < len(leftLines) {
+			leftLine = leftLines[i]
+		}
+		rightLine := ""
+		if i < len(rightLines) {
+			rightLine = rightLines[i]
+		}
+
+		// Truncate or pad left line to fit width
+		leftLine = truncateOrPad(leftLine, leftWidth)
+		// Truncate right line
+		rightLine = truncateString(rightLine, rightWidth)
+
+		result.WriteString(leftLine)
+		result.WriteString(separator)
+		result.WriteString(rightLine)
+		result.WriteString("\n")
+	}
+
+	return result.String()
+}
+
+// truncateOrPad ensures a string is exactly the given visible width (ANSI-aware)
+func truncateOrPad(s string, width int) string {
+	visWidth := visibleWidth(s)
+	if visWidth > width {
+		return truncateToWidth(s, width)
+	}
+	// Pad with spaces
+	return s + strings.Repeat(" ", width-visWidth)
+}
+
+// truncateString truncates a string to max visible width (ANSI-aware)
+func truncateString(s string, width int) string {
+	if visibleWidth(s) > width {
+		return truncateToWidth(s, width)
+	}
+	return s
+}
+
+// visibleWidth calculates the visible width of a string, ignoring ANSI escape codes
+func visibleWidth(s string) int {
+	width := 0
+	inEscape := false
+	for _, r := range s {
+		if r == '\x1b' {
+			inEscape = true
+			continue
+		}
+		if inEscape {
+			if (r >= 'a' && r <= 'z') || (r >= 'A' && r <= 'Z') {
+				inEscape = false
+			}
+			continue
+		}
+		width++
+	}
+	return width
+}
+
+// truncateToWidth truncates a string to a visible width, preserving ANSI codes
+func truncateToWidth(s string, width int) string {
+	var result strings.Builder
+	visWidth := 0
+	inEscape := false
+
+	for _, r := range s {
+		if r == '\x1b' {
+			inEscape = true
+			result.WriteRune(r)
+			continue
+		}
+		if inEscape {
+			result.WriteRune(r)
+			if (r >= 'a' && r <= 'z') || (r >= 'A' && r <= 'Z') {
+				inEscape = false
+			}
+			continue
+		}
+		if visWidth >= width {
+			break
+		}
+		result.WriteRune(r)
+		visWidth++
+	}
+	// Reset any open ANSI codes
+	result.WriteString("\x1b[0m")
+	return result.String()
+}
+
+// renderHorizontalSplit renders two panes stacked
+func (m *Model) renderHorizontalSplit() string {
+	top := m.panes[0].Render()
+	bottom := m.panes[1].Render()
+
+	// Choose separator based on active pane
+	separator := strings.Repeat("─", m.width)
+	if m.activePane == 1 {
+		separator = strings.Repeat("━", m.width)
+	}
+
+	return top + "\n" + separator + "\n" + bottom + "\n"
+}
+
 
 // View implements tea.Model
 func (m *Model) View() string {
@@ -509,11 +815,25 @@ func (m *Model) View() string {
 		return m.renderHelp()
 	}
 
-	pane := m.currentPane()
+	// Show file info
+	if m.mode == ModeFileInfo {
+		return m.renderFileInfo()
+	}
 
-	// Main content (pane.Render() handles marks)
-	builder.WriteString(pane.Render())
-	builder.WriteString("\n")
+	// Render pane(s)
+	if len(m.panes) == 1 {
+		builder.WriteString(m.panes[0].Render())
+		builder.WriteString("\n")
+	} else {
+		switch m.splitDir {
+		case SplitVertical:
+			builder.WriteString(m.renderVerticalSplit())
+		case SplitHorizontal:
+			builder.WriteString(m.renderHorizontalSplit())
+		}
+	}
+
+	pane := m.currentPane()
 
 	// Status bar
 	statusStyle := lipgloss.NewStyle().
@@ -630,6 +950,74 @@ func (m *Model) View() string {
 	return builder.String()
 }
 
+// renderFileInfo renders file information (ctrl+g)
+func (m *Model) renderFileInfo() string {
+	pane := m.currentPane()
+	titleStyle := lipgloss.NewStyle().Bold(true).Foreground(lipgloss.Color("214"))
+	labelStyle := lipgloss.NewStyle().Foreground(lipgloss.Color("117"))
+	valueStyle := lipgloss.NewStyle().Foreground(lipgloss.Color("252"))
+
+	var b strings.Builder
+	b.WriteString(titleStyle.Render("File Information"))
+	b.WriteString("\n\n")
+
+	// File path
+	b.WriteString(labelStyle.Render("  File:      "))
+	b.WriteString(valueStyle.Render(pane.sourcePath))
+	b.WriteString("\n")
+
+	// Line count
+	b.WriteString(labelStyle.Render("  Lines:     "))
+	b.WriteString(valueStyle.Render(fmt.Sprintf("%d", pane.Source().LineCount())))
+	b.WriteString("\n")
+
+	// Current position
+	currentLine := pane.Viewport().CurrentLine() + 1
+	totalLines := pane.Source().LineCount()
+	percent := float64(currentLine) / float64(totalLines) * 100
+	b.WriteString(labelStyle.Render("  Position:  "))
+	b.WriteString(valueStyle.Render(fmt.Sprintf("line %d of %d (%.0f%%)", currentLine, totalLines, percent)))
+	b.WriteString("\n")
+
+	// Filtered info
+	if pane.FilteredSource().IsFiltered() {
+		b.WriteString(labelStyle.Render("  Filtered:  "))
+		b.WriteString(valueStyle.Render(fmt.Sprintf("%d lines visible", pane.FilteredSource().LineCount())))
+		b.WriteString("\n")
+	}
+
+	// Slice info
+	if pane.HasSlice() {
+		slice := pane.CurrentSlice()
+		b.WriteString(labelStyle.Render("  Slice:     "))
+		b.WriteString(valueStyle.Render(fmt.Sprintf("lines %d-%d", slice.StartLine+1, slice.EndLine)))
+		b.WriteString("\n")
+	}
+
+	// Cache info
+	if pane.IsCached() {
+		b.WriteString(labelStyle.Render("  Cached:    "))
+		b.WriteString(valueStyle.Render(pane.cachePath))
+		b.WriteString("\n")
+	}
+
+	// Marks
+	if len(pane.marks) > 0 {
+		var marks []string
+		for char, line := range pane.marks {
+			marks = append(marks, fmt.Sprintf("'%c:%d", char, line+1))
+		}
+		b.WriteString(labelStyle.Render("  Marks:     "))
+		b.WriteString(valueStyle.Render(strings.Join(marks, " ")))
+		b.WriteString("\n")
+	}
+
+	b.WriteString("\n")
+	b.WriteString(valueStyle.Render("Press any key to close"))
+
+	return b.String()
+}
+
 // renderHelp renders the help screen
 func (m *Model) renderHelp() string {
 	titleStyle := lipgloss.NewStyle().Bold(true).Foreground(lipgloss.Color("214"))
@@ -675,9 +1063,16 @@ func (m *Model) renderHelp() string {
 			"ctrl+s          Slice from current to end",
 			"R               Revert slice / resync cache",
 		}},
+		{"Split Views", []string{
+			"ctrl+w v        Vertical split (side-by-side)",
+			"ctrl+w s        Horizontal split (stacked)",
+			"ctrl+w w / tab  Switch pane",
+			"ctrl+w q        Close current pane",
+		}},
 		{"Other", []string{
 			"F               Toggle follow mode",
 			"l               Show line numbers",
+			"ctrl+g          Show file info",
 			"h               Show this help",
 			"q               Quit",
 		}},

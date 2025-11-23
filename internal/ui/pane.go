@@ -300,6 +300,7 @@ func (p *Pane) JumpToMark(char rune) bool {
 // ClearMarks clears all marks
 func (p *Pane) ClearMarks() {
 	p.marks = make(map[rune]int)
+	p.viewport.ClearHighlight()
 }
 
 // NextMark jumps to the next mark by line order
