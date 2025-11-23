@@ -289,6 +289,8 @@ func (m *Model) handleKey(msg tea.KeyMsg) (tea.Model, tea.Cmd) {
 		if pane.SearchTerm() != "" {
 			pane.ClearSearch()
 		}
+		// Clear highlighted line
+		pane.Viewport().SetHighlightedLine(-1)
 
 	case "j", "down":
 		pane.Viewport().ScrollDown(count)
@@ -544,7 +546,16 @@ func (m *Model) handleGotoKey(msg tea.KeyMsg) (tea.Model, tea.Cmd) {
 func (m *Model) handleGotoTimeKey(msg tea.KeyMsg) (tea.Model, tea.Cmd) {
 	switch msg.String() {
 	case "enter":
-		m.currentPane().GotoTime(m.searchInput.Value())
+		result := m.currentPane().GotoTime(m.searchInput.Value())
+		if result.Found && result.Actual != nil {
+			m.message = fmt.Sprintf("Target %s -> %s",
+				result.Target.Format("15:04:05"),
+				result.Actual.Format("2006-01-02 15:04:05"))
+		} else if result.Target != nil {
+			m.message = fmt.Sprintf("No line found near %s", result.Target.Format("2006-01-02 15:04:05"))
+		} else {
+			m.message = "Invalid time format"
+		}
 		m.mode = ModeNormal
 		m.searchInput.Blur()
 		m.searchInput.Placeholder = "Search..."

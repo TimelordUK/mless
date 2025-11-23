@@ -195,6 +195,41 @@ func (idx *LineIndex) FindLineBeforeTime(target time.Time) int {
 	return lastBefore
 }
 
+// FindNearestLineAtTime finds the line with timestamp closest to the given time
+func (idx *LineIndex) FindNearestLineAtTime(target time.Time) int {
+	lineAfter := idx.FindLineAtTime(target)
+	lineBefore := idx.FindLineBeforeTime(target)
+
+	// If only one exists, return it
+	if lineAfter < 0 && lineBefore < 0 {
+		return -1
+	}
+	if lineAfter < 0 {
+		return lineBefore
+	}
+	if lineBefore < 0 {
+		return lineAfter
+	}
+
+	// Compare distances
+	tsAfter := idx.GetTimestamp(lineAfter)
+	tsBefore := idx.GetTimestamp(lineBefore)
+	if tsAfter == nil {
+		return lineBefore
+	}
+	if tsBefore == nil {
+		return lineAfter
+	}
+
+	diffAfter := tsAfter.Sub(target)
+	diffBefore := target.Sub(*tsBefore)
+
+	if diffBefore <= diffAfter {
+		return lineBefore
+	}
+	return lineAfter
+}
+
 // AppendNewLines indexes new content from oldSize to current file size
 func (idx *LineIndex) AppendNewLines(oldSize int64) error {
 	size := idx.file.Size()

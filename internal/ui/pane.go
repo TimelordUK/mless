@@ -561,6 +561,11 @@ func (p *Pane) parseTimeInput(input string) *time.Time {
 				if firstTs := p.source.GetTimestamp(0); firstTs != nil {
 					t = time.Date(firstTs.Year(), firstTs.Month(), firstTs.Day(),
 						t.Hour(), t.Minute(), t.Second(), 0, firstTs.Location())
+					// If the constructed time is before the first timestamp,
+					// the log likely spans midnight - try the next day
+					if t.Before(*firstTs) {
+						t = t.AddDate(0, 0, 1)
+					}
 				} else {
 					now := time.Now()
 					t = time.Date(now.Year(), now.Month(), now.Day(),
@@ -675,17 +680,28 @@ func (p *Pane) RevertSlice() error {
 	return nil
 }
 
+// GotoTimeResult holds the result of a time navigation
+type GotoTimeResult struct {
+	Target   *time.Time // The resolved target time
+	Actual   *time.Time // The actual timestamp we landed on
+	Found    bool
+}
+
 // GotoTime navigates to a specific time
-func (p *Pane) GotoTime(timeStr string) bool {
+// Returns the result with target time, actual time landed on, and success status
+func (p *Pane) GotoTime(timeStr string) GotoTimeResult {
 	target := p.parseTimeInput(timeStr)
 	if target == nil {
-		return false
+		return GotoTimeResult{nil, nil, false}
 	}
 
-	originalLine := p.source.FindLineAtTime(*target)
+	originalLine := p.source.FindNearestLineAtTime(*target)
 	if originalLine < 0 {
-		return false
+		return GotoTimeResult{target, nil, false}
 	}
+
+	// Get the actual timestamp we landed on
+	actualTs := p.source.GetTimestamp(originalLine)
 
 	filteredIndex := p.filteredSource.FilteredIndexFor(originalLine)
 	if filteredIndex >= 0 {
@@ -695,7 +711,7 @@ func (p *Pane) GotoTime(timeStr string) bool {
 			p.viewport.SetHighlightedLine(actualOriginal)
 		}
 	}
-	return true
+	return GotoTimeResult{target, actualTs, true}
 }
 
 // FilterTerm returns the current filter term

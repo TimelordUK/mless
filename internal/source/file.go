@@ -121,3 +121,8 @@ func (s *FileSource) FindLineAtTime(target time.Time) int {
 func (s *FileSource) FindLineBeforeTime(target time.Time) int {
 	return s.lineIndex.FindLineBeforeTime(target)
 }
+
+// FindNearestLineAtTime finds the line with timestamp closest to the given time
+func (s *FileSource) FindNearestLineAtTime(target time.Time) int {
+	return s.lineIndex.FindNearestLineAtTime(target)
+}
