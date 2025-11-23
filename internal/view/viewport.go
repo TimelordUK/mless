@@ -287,22 +287,57 @@ func (v *Viewport) applyHorizontalScroll(content string, width int) string {
 		return ""
 	}
 
+	// If no horizontal offset, just truncate to width and pad
+	if v.horizontalOffset == 0 {
+		visWidth := 0
+		var truncated strings.Builder
+		inEscape := false
+
+		for _, r := range content {
+			if r == '\x1b' {
+				inEscape = true
+				truncated.WriteRune(r)
+				continue
+			}
+			if inEscape {
+				truncated.WriteRune(r)
+				if (r >= 'a' && r <= 'z') || (r >= 'A' && r <= 'Z') {
+					inEscape = false
+				}
+				continue
+			}
+			if visWidth >= width {
+				break
+			}
+			truncated.WriteRune(r)
+			visWidth++
+		}
+		truncated.WriteString("\x1b[0m")
+		return truncated.String()
+	}
+
 	// Skip horizontal offset characters (ANSI-aware)
-	// Always preserve ANSI codes, only skip visible characters
+	// Only keep ANSI codes that come AFTER we've finished skipping
 	skipped := 0
 	var result strings.Builder
+	var escapeBuffer strings.Builder
 	inEscape := false
 
 	for _, r := range content {
 		if r == '\x1b' {
 			inEscape = true
-			result.WriteRune(r) // Always keep escape sequences
+			escapeBuffer.WriteRune(r)
 			continue
 		}
 		if inEscape {
-			result.WriteRune(r) // Always keep escape sequences
+			escapeBuffer.WriteRune(r)
 			if (r >= 'a' && r <= 'z') || (r >= 'A' && r <= 'Z') {
 				inEscape = false
+				// Only keep escape sequence if we're past the skip zone
+				if skipped >= v.horizontalOffset {
+					result.WriteString(escapeBuffer.String())
+				}
+				escapeBuffer.Reset()
 			}
 			continue
 		}

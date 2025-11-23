@@ -91,8 +91,13 @@ func NewPane(filePath string, cfg *config.Config, cacheFile bool) (*Pane, error)
 	viewport.SetProvider(filtered)
 	viewport.SetShowLineNumbers(cfg.Display.ShowLineNumbers)
 
-	// Set up log level renderer
-	renderer := render.NewLogLevelRenderer(cfg)
+	// Set up renderer based on file type
+	var renderer render.Renderer
+	if render.IsSyntaxHighlightable(filePath) {
+		renderer = render.NewSyntaxRenderer(filePath)
+	} else {
+		renderer = render.NewLogLevelRenderer(cfg)
+	}
 	viewport.SetRenderer(renderer)
 
 	return &Pane{
