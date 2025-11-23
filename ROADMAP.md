@@ -111,15 +111,82 @@ func (s *SyncedView) FindNearestTime(target time.Time) int {
 
 ---
 
+## Phase 5: Virtual Merged View
+
+Interleave two log files into a single time-ordered stream.
+
+### Features
+- **Merge by timestamp** - combine logs into unified timeline
+- **Source indicators** - color or prefix to show origin file
+- **Toggle view** - switch between split and merged (`ctrl+m`)
+- **Filter by source** - show only lines from one file
+
+### Implementation Steps
+1. Create `MergedProvider` that wraps two sources
+2. Build unified timestamp index across both files
+3. Interleave lines in time order
+4. Add source field to `Line` struct
+5. Color-code or prefix lines by source
+6. Allow filtering to single source
+
+---
+
+## Phase 6: Time Delta Features
+
+Show elapsed time from a reference point.
+
+### Features
+- **Mark reference time** - `mt` to set T=0 at current line
+- **Delta display** - show +/-HH:MM:SS.mmm from mark
+- **Gutter mode** - show delta in line number area
+- **Status bar mode** - show delta for current line
+- **Duration between marks** - select range, show elapsed
+
+### Proposed Commands
+- `mt` - mark current line as T=0
+- `ctrl+d` - toggle delta display mode
+- `'t` - jump back to T=0 mark
+
+### Implementation Steps
+1. Add `referenceTime` to Model/Pane
+2. Calculate delta for each visible line
+3. Format delta as +/-HH:MM:SS
+4. Option to show in gutter vs status bar
+5. Handle lines without timestamps gracefully
+
+---
+
+## Phase 7: Multi-Tab Support
+
+Open multiple files in tabs, switch between them.
+
+### Features
+- **Tab bar** - show open files at top
+- **Switch tabs** - `gt`/`gT` or `1-9` direct jump
+- **New tab** - `:tabnew <file>` or `ctrl+t`
+- **Close tab** - `:tabclose` or `ctrl+w`
+- **Promote split** - move pane to own tab
+
+### Implementation Steps
+1. Create `TabManager` to hold multiple Models
+2. Render tab bar above content
+3. Route input to active tab
+4. Handle tab switching animations
+5. Persist tab state for session restore
+
+---
+
 ## Future Ideas
 
 - **Diff view**: highlight differences between synced files
-- **Bookmark lines**: mark interesting lines, jump between them
+- **Regex filter mode**: in addition to literal text filter
+- **Time range filter**: show only lines within time window
 - **Export filtered view**: save current filter as new file
 - **Search across splits**: find term in all open files
 - **Session save/restore**: remember open files, splits, positions
 - **Tail multiple files**: follow mode across splits
 - **Time offset**: shift timestamps for files from different timezones
+- **Bookmarks file**: persist marks across sessions
 
 ---
 
@@ -155,7 +222,14 @@ type SliceInfo struct {
 - [x] Follow mode (`F`)
 - [x] Time navigation (`ctrl+t` goto time)
 - [x] Timestamp detection and display
-- [ ] **Phase 1: File slicing** ← Next
-- [ ] Phase 2: Slice management
-- [ ] Phase 3: Split view
-- [ ] Phase 4: Time-synced views
+- [x] **Phase 1: File slicing** (ctrl+s quick slice, S for range input)
+- [x] Phase 2: Slice management (nested slices, R to revert, depth indicator)
+- [x] Phase 3: Split view (ctrl+w v/s/w/q, H/L resize, ctrl+o toggle orientation)
+- [x] Marks (ma-mz set, 'a-'z jump, ]'/[' next/prev)
+- [x] Yank to clipboard (yy/Y, y'a to mark, count prefixes)
+- [x] Horizontal scrolling (</>, ^, Z wrap toggle)
+- [x] Syntax highlighting for source files (chroma-based)
+- [ ] **Phase 4: Time-synced views** ← Next
+- [ ] Phase 5: Virtual merged view
+- [ ] Phase 6: Time delta features
+- [ ] Phase 7: Multi-tab support
