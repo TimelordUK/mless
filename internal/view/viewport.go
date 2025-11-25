@@ -42,8 +42,9 @@ type Viewport struct {
 	horizontalOffset int
 
 	// Visual selection range (original line indices, -1 means no selection)
-	visualStart int
-	visualEnd   int
+	visualStart  int
+	visualEnd    int
+	visualCursor int // The cursor line in visual mode (original index, -1 for none)
 }
 
 // NewViewport creates a new viewport
@@ -61,6 +62,7 @@ func NewViewport(width, height int) *Viewport {
 		highlightedLine: -1,
 		visualStart:     -1,
 		visualEnd:       -1,
+		visualCursor:    -1,
 	}
 }
 
@@ -79,11 +81,12 @@ func (v *Viewport) SetMarks(marks map[int]rune) {
 	v.marks = marks
 }
 
-// SetVisualSelection sets the visual selection range (original line indices)
-// Pass -1, -1 to clear the selection
-func (v *Viewport) SetVisualSelection(start, end int) {
+// SetVisualSelection sets the visual selection range and cursor (original line indices)
+// Pass -1, -1, -1 to clear the selection
+func (v *Viewport) SetVisualSelection(start, end, cursor int) {
 	v.visualStart = start
 	v.visualEnd = end
+	v.visualCursor = cursor
 }
 
 // ScrollLeft scrolls horizontally left by n columns
@@ -252,11 +255,17 @@ func (v *Viewport) Render() string {
 			// Check if this line is in visual selection
 			inVisualSelection := v.visualStart >= 0 && v.visualEnd >= 0 &&
 				originalIdx >= v.visualStart && originalIdx <= v.visualEnd
+			isVisualCursor := v.visualCursor >= 0 && originalIdx == v.visualCursor
 
 			numStr := fmt.Sprintf("%*d", lineNumWidth, lineNum)
 			if isHighlighted {
 				// Highlight line number with marker
 				builder.WriteString(v.highlightStyle.Render(fmt.Sprintf("%c%s ", markChar, numStr)))
+			} else if isVisualCursor {
+				// Visual cursor: show █ marker in bright cyan to indicate cursor position
+				cursorStyle := lipgloss.NewStyle().Foreground(lipgloss.Color("51")).Bold(true) // cyan
+				builder.WriteString(cursorStyle.Render("█"))
+				builder.WriteString(v.lineNumberStyle.Render(fmt.Sprintf("%s ", numStr)))
 			} else if inVisualSelection {
 				// Visual selection: show > marker in cyan
 				visualStyle := lipgloss.NewStyle().Foreground(lipgloss.Color("51")).Bold(true) // cyan
@@ -461,4 +470,21 @@ func (v *Viewport) PercentScrolled() float64 {
 // SetShowLineNumbers toggles line numbers
 func (v *Viewport) SetShowLineNumbers(show bool) {
 	v.showLineNumbers = show
+}
+
+// Height returns the viewport height in lines
+func (v *Viewport) Height() int {
+	return v.height
+}
+
+// CanScrollDown returns true if the viewport can scroll down further
+func (v *Viewport) CanScrollDown() bool {
+	if v.provider == nil {
+		return false
+	}
+	maxScroll := v.provider.LineCount() - v.height
+	if maxScroll < 0 {
+		maxScroll = 0
+	}
+	return v.scrollOffset < maxScroll
 }

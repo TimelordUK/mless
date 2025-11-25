@@ -49,6 +49,10 @@ type Pane struct {
 
 	// Visual selection (original line indices, -1 means no selection)
 	visualAnchor int // Starting line of visual selection (original index)
+
+	// Cursor offset from top line (used in visual mode at boundaries)
+	// 0 means cursor is on the top visible line
+	cursorOffset int
 }
 
 // NewPane creates a new pane for a file
@@ -136,9 +140,10 @@ func (p *Pane) Render() string {
 		p.viewport.SetMarks(nil)
 	}
 
-	// Update viewport with visual selection
+	// Update viewport with visual selection and cursor position
 	start, end := p.GetVisualSelectionRange()
-	p.viewport.SetVisualSelection(start, end)
+	cursor := p.GetCursorOriginalLine()
+	p.viewport.SetVisualSelection(start, end, cursor)
 
 	return p.viewport.Render()
 }
@@ -754,8 +759,7 @@ func (p *Pane) GetVisualSelectionRange() (int, int) {
 	if p.visualAnchor < 0 {
 		return -1, -1
 	}
-	currentFiltered := p.viewport.CurrentLine()
-	currentOriginal := p.filteredSource.OriginalLineNumber(currentFiltered)
+	currentOriginal := p.GetCursorOriginalLine()
 	if currentOriginal < 0 {
 		return -1, -1
 	}
@@ -765,6 +769,33 @@ func (p *Pane) GetVisualSelectionRange() (int, int) {
 		start, end = end, start
 	}
 	return start, end
+}
+
+// GetCursorOriginalLine returns the original line number where the cursor is
+// (accounting for cursorOffset in visual mode)
+func (p *Pane) GetCursorOriginalLine() int {
+	cursorFiltered := p.viewport.CurrentLine() + p.cursorOffset
+	return p.filteredSource.OriginalLineNumber(cursorFiltered)
+}
+
+// GetCursorFilteredLine returns the filtered line number where the cursor is
+func (p *Pane) GetCursorFilteredLine() int {
+	return p.viewport.CurrentLine() + p.cursorOffset
+}
+
+// CursorOffset returns the current cursor offset from top line
+func (p *Pane) CursorOffset() int {
+	return p.cursorOffset
+}
+
+// SetCursorOffset sets the cursor offset
+func (p *Pane) SetCursorOffset(offset int) {
+	p.cursorOffset = offset
+}
+
+// ResetCursorOffset resets cursor offset to 0
+func (p *Pane) ResetCursorOffset() {
+	p.cursorOffset = 0
 }
 
 // md5Sum helper for cache file naming

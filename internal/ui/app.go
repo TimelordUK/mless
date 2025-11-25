@@ -847,34 +847,86 @@ func (m *Model) handleVisualKey(msg tea.KeyMsg) (tea.Model, tea.Cmd) {
 
 	switch key {
 	case "j", "down":
-		pane.Viewport().ScrollDown(count)
+		m.visualMoveDown(pane, count)
 
 	case "k", "up":
-		pane.Viewport().ScrollUp(count)
+		m.visualMoveUp(pane, count)
 
 	case "g": // Go to top
+		pane.ResetCursorOffset()
 		pane.Viewport().GotoTop()
 
 	case "G": // Go to bottom
 		pane.Viewport().GotoBottom()
+		// Set cursor to last visible line
+		maxOffset := pane.Viewport().Height() - 1
+		lineCount := pane.FilteredSource().LineCount()
+		topLine := pane.Viewport().CurrentLine()
+		visibleLines := lineCount - topLine
+		if visibleLines < maxOffset+1 {
+			maxOffset = visibleLines - 1
+		}
+		if maxOffset < 0 {
+			maxOffset = 0
+		}
+		pane.SetCursorOffset(maxOffset)
 
 	case "f", "ctrl+d", "ctrl+f": // Page down
+		pane.ResetCursorOffset()
 		pane.Viewport().PageDown()
 
 	case "b", "ctrl+u", "ctrl+b": // Page up
+		pane.ResetCursorOffset()
 		pane.Viewport().PageUp()
 
 	case "y": // Yank visual selection
 		m.yankVisualSelection()
 		pane.ClearVisualSelection()
+		pane.ResetCursorOffset()
 		m.mode = ModeNormal
 
 	case "v", "esc": // Exit visual mode
 		pane.ClearVisualSelection()
+		pane.ResetCursorOffset()
 		m.mode = ModeNormal
 	}
 
 	return m, nil
+}
+
+// visualMoveDown handles j/down in visual mode with boundary awareness
+func (m *Model) visualMoveDown(pane *Pane, count int) {
+	viewport := pane.Viewport()
+	lineCount := pane.FilteredSource().LineCount()
+	maxOffset := viewport.Height() - 1
+
+	for i := 0; i < count; i++ {
+		// Can we scroll the viewport?
+		if viewport.CanScrollDown() {
+			viewport.ScrollDown(1)
+		} else {
+			// At scroll boundary - increase cursor offset instead
+			cursorFiltered := viewport.CurrentLine() + pane.CursorOffset()
+			if cursorFiltered < lineCount-1 && pane.CursorOffset() < maxOffset {
+				pane.SetCursorOffset(pane.CursorOffset() + 1)
+			}
+		}
+	}
+}
+
+// visualMoveUp handles k/up in visual mode with boundary awareness
+func (m *Model) visualMoveUp(pane *Pane, count int) {
+	viewport := pane.Viewport()
+
+	for i := 0; i < count; i++ {
+		// If we have a cursor offset, reduce it first
+		if pane.CursorOffset() > 0 {
+			pane.SetCursorOffset(pane.CursorOffset() - 1)
+		} else {
+			// No cursor offset - scroll the viewport
+			viewport.ScrollUp(1)
+		}
+	}
 }
 
 // yankVisualSelection yanks the lines in the visual selection to clipboard
