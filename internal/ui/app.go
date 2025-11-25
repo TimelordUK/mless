@@ -47,6 +47,7 @@ const (
 	ModeFileInfo // Showing file info (ctrl+g)
 	ModeSplitCmd // Waiting for split command (v, s, w, q, etc.)
 	ModeYank     // Waiting for yank target (y for line, number, or 'a for mark)
+	ModeVisual   // Visual selection mode
 )
 
 // SplitDirection represents the split layout direction
@@ -251,6 +252,9 @@ func (m *Model) handleKey(msg tea.KeyMsg) (tea.Model, tea.Cmd) {
 	}
 	if m.mode == ModeYank {
 		return m.handleYankKey(msg)
+	}
+	if m.mode == ModeVisual {
+		return m.handleVisualKey(msg)
 	}
 
 	// Normal mode
@@ -494,6 +498,10 @@ func (m *Model) handleKey(msg tea.KeyMsg) (tea.Model, tea.Cmd) {
 
 	case "Y": // Quick yank current line (with count)
 		m.yankLines(count)
+
+	case "v": // Enter visual mode
+		pane.StartVisualSelection()
+		m.mode = ModeVisual
 	}
 
 	return m, nil
@@ -792,8 +800,10 @@ func (m *Model) copyToClipboard(text string) {
 	case "darwin":
 		cmd = exec.Command("pbcopy")
 	case "linux":
-		// Try xclip first, then xsel
-		if _, err := exec.LookPath("xclip"); err == nil {
+		// Check for WSL first (clip.exe works in WSL to access Windows clipboard)
+		if _, err := exec.LookPath("clip.exe"); err == nil {
+			cmd = exec.Command("clip.exe")
+		} else if _, err := exec.LookPath("xclip"); err == nil {
 			cmd = exec.Command("xclip", "-selection", "clipboard")
 		} else if _, err := exec.LookPath("xsel"); err == nil {
 			cmd = exec.Command("xsel", "--clipboard", "--input")
@@ -813,6 +823,90 @@ func (m *Model) copyToClipboard(text string) {
 
 	cmd.Stdin = strings.NewReader(text)
 	cmd.Run()
+}
+
+func (m *Model) handleVisualKey(msg tea.KeyMsg) (tea.Model, tea.Cmd) {
+	pane := m.currentPane()
+	key := msg.String()
+
+	// Handle digit prefix for counts (1-9 to start, 0-9 to continue)
+	if len(key) == 1 && key[0] >= '0' && key[0] <= '9' {
+		digit := int(key[0] - '0')
+		if m.countPrefix > 0 || digit > 0 {
+			m.countPrefix = m.countPrefix*10 + digit
+			return m, nil
+		}
+	}
+
+	// Get count and reset
+	count := m.countPrefix
+	if count == 0 {
+		count = 1
+	}
+	m.countPrefix = 0
+
+	switch key {
+	case "j", "down":
+		pane.Viewport().ScrollDown(count)
+
+	case "k", "up":
+		pane.Viewport().ScrollUp(count)
+
+	case "g": // Go to top
+		pane.Viewport().GotoTop()
+
+	case "G": // Go to bottom
+		pane.Viewport().GotoBottom()
+
+	case "f", "ctrl+d", "ctrl+f": // Page down
+		pane.Viewport().PageDown()
+
+	case "b", "ctrl+u", "ctrl+b": // Page up
+		pane.Viewport().PageUp()
+
+	case "y": // Yank visual selection
+		m.yankVisualSelection()
+		pane.ClearVisualSelection()
+		m.mode = ModeNormal
+
+	case "v", "esc": // Exit visual mode
+		pane.ClearVisualSelection()
+		m.mode = ModeNormal
+	}
+
+	return m, nil
+}
+
+// yankVisualSelection yanks the lines in the visual selection to clipboard
+func (m *Model) yankVisualSelection() {
+	pane := m.currentPane()
+	startOrig, endOrig := pane.GetVisualSelectionRange()
+	if startOrig < 0 || endOrig < 0 {
+		return
+	}
+
+	// Collect lines from filtered view that fall in this range
+	var lines []string
+	for i := 0; i < pane.FilteredSource().LineCount(); i++ {
+		line, err := pane.FilteredSource().GetLine(i)
+		if err != nil || line == nil {
+			continue
+		}
+		origIdx := pane.FilteredSource().OriginalLineNumber(i)
+		if origIdx >= startOrig && origIdx <= endOrig {
+			lines = append(lines, string(line.Content))
+		}
+	}
+
+	if len(lines) > 0 {
+		text := strings.Join(lines, "\n")
+		m.copyToClipboard(text)
+		if len(lines) == 1 {
+			m.message = "1 line yanked"
+		} else {
+			m.message = fmt.Sprintf("%d lines yanked", len(lines))
+		}
+	}
 }
 
 // splitVertical creates a vertical split (side-by-side panes)
@@ -835,6 +929,7 @@ func (m *Model) splitVertical() {
 		cachePath:      current.cachePath,
 		isCached:       current.isCached,
 		marks:          make(map[rune]int),
+		visualAnchor:   -1,
 	}
 	newPane.viewport.SetProvider(newPane.filteredSource)
 	newPane.viewport.SetRenderer(render.NewLogLevelRenderer(m.config))
@@ -864,6 +959,7 @@ func (m *Model) splitHorizontal() {
 		cachePath:      current.cachePath,
 		isCached:       current.isCached,
 		marks:          make(map[rune]int),
+		visualAnchor:   -1,
 	}
 	newPane.viewport.SetProvider(newPane.filteredSource)
 	newPane.viewport.SetRenderer(render.NewLogLevelRenderer(m.config))
@@ -1133,6 +1229,14 @@ func (m *Model) View() string {
 		status = "?" + m.searchInput.View()
 	case ModeSlice:
 		status = "S:" + m.searchInput.View()
+	case ModeVisual:
+		start, end := pane.GetVisualSelectionRange()
+		lineCount := 0
+		if start >= 0 && end >= 0 {
+			lineCount = end - start + 1
+		}
+		status = fmt.Sprintf(" -- VISUAL -- %d lines selected (L%d-L%d)  y:yank  v/esc:cancel",
+			lineCount, start+1, end+1)
 	default:
 		// Show filtered count vs total if filter is active
 		var lineInfo string
@@ -1358,6 +1462,10 @@ func (m *Model) renderHelp() string {
 			"yy / Y          Yank current line to clipboard",
 			"5yy             Yank 5 lines",
 			"y'a             Yank from current to mark 'a",
+			"v               Enter visual mode for selection",
+			"  j/k           Extend selection (in visual mode)",
+			"  y             Yank selection (in visual mode)",
+			"  v/esc         Cancel visual mode",
 		}},
 		{"Long Lines", []string{
 			"< / >           Scroll horizontally",

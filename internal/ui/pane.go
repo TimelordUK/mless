@@ -46,6 +46,9 @@ type Pane struct {
 
 	// Filter state
 	filterTerm string
+
+	// Visual selection (original line indices, -1 means no selection)
+	visualAnchor int // Starting line of visual selection (original index)
 }
 
 // NewPane creates a new pane for a file
@@ -111,6 +114,7 @@ func NewPane(filePath string, cfg *config.Config, cacheFile bool) (*Pane, error)
 		isCached:       isCached,
 		slicer:         slice.NewSlicer(),
 		marks:          make(map[rune]int),
+		visualAnchor:   -1, // No selection
 	}, nil
 }
 
@@ -131,6 +135,10 @@ func (p *Pane) Render() string {
 	} else {
 		p.viewport.SetMarks(nil)
 	}
+
+	// Update viewport with visual selection
+	start, end := p.GetVisualSelectionRange()
+	p.viewport.SetVisualSelection(start, end)
 
 	return p.viewport.Render()
 }
@@ -722,6 +730,41 @@ func (p *Pane) FilterTerm() string {
 // SetFilterTerm sets the filter term
 func (p *Pane) SetFilterTerm(term string) {
 	p.filterTerm = term
+}
+
+// StartVisualSelection starts visual selection at current line
+func (p *Pane) StartVisualSelection() {
+	currentFiltered := p.viewport.CurrentLine()
+	p.visualAnchor = p.filteredSource.OriginalLineNumber(currentFiltered)
+}
+
+// ClearVisualSelection clears the visual selection
+func (p *Pane) ClearVisualSelection() {
+	p.visualAnchor = -1
+}
+
+// HasVisualSelection returns true if visual selection is active
+func (p *Pane) HasVisualSelection() bool {
+	return p.visualAnchor >= 0
+}
+
+// GetVisualSelectionRange returns the original line range (start, end) of the selection
+// where start <= end. Returns (-1, -1) if no selection.
+func (p *Pane) GetVisualSelectionRange() (int, int) {
+	if p.visualAnchor < 0 {
+		return -1, -1
+	}
+	currentFiltered := p.viewport.CurrentLine()
+	currentOriginal := p.filteredSource.OriginalLineNumber(currentFiltered)
+	if currentOriginal < 0 {
+		return -1, -1
+	}
+
+	start, end := p.visualAnchor, currentOriginal
+	if start > end {
+		start, end = end, start
+	}
+	return start, end
 }
 
 // md5Sum helper for cache file naming

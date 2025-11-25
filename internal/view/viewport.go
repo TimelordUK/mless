@@ -40,6 +40,10 @@ type Viewport struct {
 
 	// Horizontal scroll offset
 	horizontalOffset int
+
+	// Visual selection range (original line indices, -1 means no selection)
+	visualStart int
+	visualEnd   int
 }
 
 // NewViewport creates a new viewport
@@ -55,6 +59,8 @@ func NewViewport(width, height int) *Viewport {
 		highlightStyle:  lipgloss.NewStyle().Foreground(lipgloss.Color("226")).Bold(true),
 		renderer:        render.NewPlainRenderer(),
 		highlightedLine: -1,
+		visualStart:     -1,
+		visualEnd:       -1,
 	}
 }
 
@@ -71,6 +77,13 @@ func (v *Viewport) ClearHighlight() {
 // SetMarks updates the marks to display (original line -> rune)
 func (v *Viewport) SetMarks(marks map[int]rune) {
 	v.marks = marks
+}
+
+// SetVisualSelection sets the visual selection range (original line indices)
+// Pass -1, -1 to clear the selection
+func (v *Viewport) SetVisualSelection(start, end int) {
+	v.visualStart = start
+	v.visualEnd = end
 }
 
 // ScrollLeft scrolls horizontally left by n columns
@@ -236,10 +249,19 @@ func (v *Viewport) Render() string {
 				}
 			}
 
+			// Check if this line is in visual selection
+			inVisualSelection := v.visualStart >= 0 && v.visualEnd >= 0 &&
+				originalIdx >= v.visualStart && originalIdx <= v.visualEnd
+
 			numStr := fmt.Sprintf("%*d", lineNumWidth, lineNum)
 			if isHighlighted {
 				// Highlight line number with marker
 				builder.WriteString(v.highlightStyle.Render(fmt.Sprintf("%c%s ", markChar, numStr)))
+			} else if inVisualSelection {
+				// Visual selection: show > marker in cyan
+				visualStyle := lipgloss.NewStyle().Foreground(lipgloss.Color("51")).Bold(true) // cyan
+				builder.WriteString(visualStyle.Render(">"))
+				builder.WriteString(v.lineNumberStyle.Render(fmt.Sprintf("%s ", numStr)))
 			} else {
 				if markChar != ' ' {
 					// Show mark character in highlight style
