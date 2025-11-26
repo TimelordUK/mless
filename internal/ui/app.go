@@ -408,9 +408,20 @@ func (m *Model) handleKey(msg tea.KeyMsg) (tea.Model, tea.Cmd) {
 		pane.Viewport().GotoTop()
 	// Note: F is already used for fatal toggle, use ctrl+f for fatal-only if needed
 
-	case "0": // Clear all filters
+	case "0": // Clear all filters, preserve position
+		// Remember current original line before clearing
+		currentFiltered := pane.Viewport().CurrentLine()
+		originalLine := pane.FilteredSource().OriginalLineNumber(currentFiltered)
+
 		pane.FilteredSource().ClearFilter()
-		pane.Viewport().GotoTop()
+
+		// Jump back to the same original line in unfiltered view
+		if originalLine >= 0 {
+			filteredIdx := pane.FilteredSource().FilteredIndexFor(originalLine)
+			if filteredIdx >= 0 {
+				pane.Viewport().GotoLine(filteredIdx)
+			}
+		}
 
 	case "R": // Revert slice or resync from source
 		if pane.HasSlice() {
