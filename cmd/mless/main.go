@@ -11,6 +11,13 @@ import (
 	"github.com/TimelordUK/mless/internal/ui"
 )
 
+// Version info - set via ldflags at build time
+var (
+	version = "dev"
+	commit  = "none"
+	date    = "unknown"
+)
+
 // isPiped checks if stdin has piped input
 func isPiped() bool {
 	stat, err := os.Stdin.Stat()
@@ -38,6 +45,8 @@ func readStdinToTemp() (string, error) {
 }
 
 func main() {
+	versionFlag := flag.Bool("v", false, "Print version and exit")
+	flag.BoolVar(versionFlag, "version", false, "Print version and exit")
 	cacheFlag := flag.Bool("c", false, "Cache file locally for better performance")
 	sliceFlag := flag.String("S", "", "Slice range (e.g., 1000-5000, 100-$, .-500)")
 	timeFlag := flag.String("t", "", "Go to time (e.g., 14:00, 14:30:00)")
@@ -45,6 +54,7 @@ func main() {
 	flag.Usage = func() {
 		fmt.Fprintf(os.Stderr, "Usage: mless [-c] [-C] [-S range] [-t time] [file...]\n")
 		fmt.Fprintf(os.Stderr, "       command | mless [-S range] [-t time]\n")
+		fmt.Fprintf(os.Stderr, "  -v\tPrint version and exit\n")
 		fmt.Fprintf(os.Stderr, "  -c\tCache file locally (useful for network files)\n")
 		fmt.Fprintf(os.Stderr, "  -C\tConsolidate multiple files into single view\n")
 		fmt.Fprintf(os.Stderr, "  -S\tSlice range (e.g., 1000-5000, 100-$)\n")
@@ -52,6 +62,11 @@ func main() {
 		fmt.Fprintf(os.Stderr, "\nMultiple files: split view (max 2) or consolidated (-C)\n")
 	}
 	flag.Parse()
+
+	if *versionFlag {
+		fmt.Printf("mless %s (commit: %s, built: %s)\n", version, commit, date)
+		os.Exit(0)
+	}
 
 	var filePaths []string
 	var stdinTempFile string

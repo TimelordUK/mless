@@ -1,5 +1,5 @@
 # Binaries
-mless
+/mless
 *.exe
 *.exe~
 *.dll
