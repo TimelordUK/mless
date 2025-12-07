@@ -2,6 +2,7 @@ package logformat
 
 import (
 	"strings"
+	"unicode"
 
 	"github.com/TimelordUK/mless/internal/config"
 )
@@ -42,43 +43,77 @@ func NewLevelDetector(cfg *config.LogLevelConfig) *LevelDetector {
 func (d *LevelDetector) Detect(content []byte) LogLevel {
 	line := string(content)
 
+	// Only look at the prefix of the line (first 150 chars) for level detection
+	// Log levels typically appear near the start, after timestamp
+	prefix := line
+	if len(prefix) > 150 {
+		prefix = prefix[:150]
+	}
+
 	// Check in order of severity (most specific first)
-	// Check fatal first as it's most important to identify
-	for _, pattern := range d.patterns[LevelFatal] {
-		if strings.Contains(line, pattern) {
-			return LevelFatal
-		}
+	if d.matchLevel(prefix, LevelFatal) {
+		return LevelFatal
 	}
-
-	for _, pattern := range d.patterns[LevelError] {
-		if strings.Contains(line, pattern) {
-			return LevelError
-		}
+	if d.matchLevel(prefix, LevelError) {
+		return LevelError
 	}
-
-	for _, pattern := range d.patterns[LevelWarn] {
-		if strings.Contains(line, pattern) {
-			return LevelWarn
-		}
+	if d.matchLevel(prefix, LevelWarn) {
+		return LevelWarn
 	}
-
-	for _, pattern := range d.patterns[LevelInfo] {
-		if strings.Contains(line, pattern) {
-			return LevelInfo
-		}
+	if d.matchLevel(prefix, LevelInfo) {
+		return LevelInfo
 	}
-
-	for _, pattern := range d.patterns[LevelDebug] {
-		if strings.Contains(line, pattern) {
-			return LevelDebug
-		}
+	if d.matchLevel(prefix, LevelDebug) {
+		return LevelDebug
 	}
-
-	for _, pattern := range d.patterns[LevelTrace] {
-		if strings.Contains(line, pattern) {
-			return LevelTrace
-		}
+	if d.matchLevel(prefix, LevelTrace) {
+		return LevelTrace
 	}
 
 	return LevelUnknown
+}
+
+// matchLevel checks if any pattern for the level matches in the prefix
+func (d *LevelDetector) matchLevel(prefix string, level LogLevel) bool {
+	for _, pattern := range d.patterns[level] {
+		if matchPattern(prefix, pattern) {
+			return true
+		}
+	}
+	return false
+}
+
+// matchPattern checks if a pattern matches with appropriate boundaries
+// Bracketed patterns like [ERROR] match anywhere
+// Bare patterns like ERROR require word boundaries
+func matchPattern(text, pattern string) bool {
+	// Bracketed patterns are precise - match anywhere
+	if strings.HasPrefix(pattern, "[") && strings.HasSuffix(pattern, "]") {
+		return strings.Contains(text, pattern)
+	}
+
+	// For bare patterns, require word boundaries
+	idx := strings.Index(text, pattern)
+	if idx == -1 {
+		return false
+	}
+
+	// Check character before pattern (should be non-alphanumeric or start of string)
+	if idx > 0 {
+		before := rune(text[idx-1])
+		if unicode.IsLetter(before) || unicode.IsDigit(before) || before == '_' {
+			return false
+		}
+	}
+
+	// Check character after pattern (should be non-alphanumeric or end of string)
+	endIdx := idx + len(pattern)
+	if endIdx < len(text) {
+		after := rune(text[endIdx])
+		if unicode.IsLetter(after) || unicode.IsDigit(after) || after == '_' {
+			return false
+		}
+	}
+
+	return true
 }

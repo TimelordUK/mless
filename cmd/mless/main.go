@@ -41,13 +41,15 @@ func main() {
 	cacheFlag := flag.Bool("c", false, "Cache file locally for better performance")
 	sliceFlag := flag.String("S", "", "Slice range (e.g., 1000-5000, 100-$, .-500)")
 	timeFlag := flag.String("t", "", "Go to time (e.g., 14:00, 14:30:00)")
+	consolidateFlag := flag.Bool("C", false, "Consolidate multiple files into single view")
 	flag.Usage = func() {
-		fmt.Fprintf(os.Stderr, "Usage: mless [-c] [-S range] [-t time] [file...]\n")
+		fmt.Fprintf(os.Stderr, "Usage: mless [-c] [-C] [-S range] [-t time] [file...]\n")
 		fmt.Fprintf(os.Stderr, "       command | mless [-S range] [-t time]\n")
 		fmt.Fprintf(os.Stderr, "  -c\tCache file locally (useful for network files)\n")
+		fmt.Fprintf(os.Stderr, "  -C\tConsolidate multiple files into single view\n")
 		fmt.Fprintf(os.Stderr, "  -S\tSlice range (e.g., 1000-5000, 100-$)\n")
 		fmt.Fprintf(os.Stderr, "  -t\tGo to time (e.g., 14:00, 14:30:00)\n")
-		fmt.Fprintf(os.Stderr, "\nMultiple files open in split view (max 2)\n")
+		fmt.Fprintf(os.Stderr, "\nMultiple files: split view (max 2) or consolidated (-C)\n")
 	}
 	flag.Parse()
 
@@ -56,7 +58,12 @@ func main() {
 
 	if flag.NArg() >= 1 {
 		// Get absolute paths for all files
-		for i := 0; i < flag.NArg() && i < 2; i++ { // Max 2 files
+		// Consolidated mode: no limit; split view: max 2 files
+		maxFiles := 2
+		if *consolidateFlag {
+			maxFiles = flag.NArg()
+		}
+		for i := 0; i < flag.NArg() && i < maxFiles; i++ {
 			filePath := flag.Arg(i)
 			absPath, err := filepath.Abs(filePath)
 			if err == nil {
@@ -80,11 +87,17 @@ func main() {
 		os.Exit(1)
 	}
 
+	var consolidatePaths []string
+	if *consolidateFlag && len(filePaths) > 0 {
+		consolidatePaths = filePaths
+	}
+
 	opts := ui.ModelOptions{
-		Filepaths:  filePaths,
-		CacheFile:  *cacheFlag,
-		SliceRange: *sliceFlag,
-		GotoTime:   *timeFlag,
+		Filepaths:        filePaths,
+		CacheFile:        *cacheFlag,
+		SliceRange:       *sliceFlag,
+		GotoTime:         *timeFlag,
+		ConsolidatePaths: consolidatePaths,
 	}
 
 	model, err := ui.NewModelWithOptions(opts)

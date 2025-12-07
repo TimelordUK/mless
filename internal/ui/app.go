@@ -13,6 +13,7 @@ import (
 	tea "github.com/charmbracelet/bubbletea"
 	"github.com/charmbracelet/lipgloss"
 	"github.com/TimelordUK/mless/internal/config"
+	"github.com/TimelordUK/mless/internal/consolidate"
 	"github.com/TimelordUK/mless/internal/render"
 	"github.com/TimelordUK/mless/internal/source"
 	"github.com/TimelordUK/mless/internal/view"
@@ -24,11 +25,12 @@ type tickMsg time.Time
 
 // ModelOptions contains options for creating a new model
 type ModelOptions struct {
-	Filepath   string
-	Filepaths  []string // Multiple files for split view
-	CacheFile  bool
-	SliceRange string // e.g., "1000-5000"
-	GotoTime   string // e.g., "14:00"
+	Filepath         string
+	Filepaths        []string // Multiple files for split view
+	CacheFile        bool
+	SliceRange       string   // e.g., "1000-5000"
+	GotoTime         string   // e.g., "14:00"
+	ConsolidatePaths []string // Files to consolidate (nil = normal mode)
 }
 
 // Mode represents the current UI mode
@@ -79,6 +81,9 @@ type Model struct {
 	// Status
 	err     error
 	message string // Temporary status message (e.g., "5 lines yanked")
+
+	// Consolidated mode
+	consolidatedWriter *consolidate.Writer // nil if not consolidating
 }
 
 // NewModel creates a new application model
@@ -93,28 +98,52 @@ func NewModelWithOptions(opts ModelOptions) (*Model, error) {
 		return nil, err
 	}
 
-	// Build list of files to open
-	var files []string
-	if len(opts.Filepaths) > 0 {
-		files = opts.Filepaths
-	} else if opts.Filepath != "" {
-		files = []string{opts.Filepath}
-	} else {
-		return nil, fmt.Errorf("no file specified")
-	}
-
-	// Create panes for each file
 	var panes []*Pane
-	for _, filePath := range files {
-		pane, err := NewPane(filePath, cfg, opts.CacheFile)
+	var writer *consolidate.Writer
+
+	// Consolidated mode: create writer and single pane for output
+	if len(opts.ConsolidatePaths) > 0 {
+		writer, err = consolidate.NewWriter(opts.ConsolidatePaths)
 		if err != nil {
-			// Clean up already created panes
-			for _, p := range panes {
-				p.Close()
-			}
-			return nil, err
+			return nil, fmt.Errorf("failed to create consolidated writer: %w", err)
 		}
-		panes = append(panes, pane)
+
+		// Start the writer goroutine
+		go writer.Run()
+
+		// Create pane for consolidated output
+		pane, err := NewPane(writer.OutputPath(), cfg, false)
+		if err != nil {
+			writer.Close()
+			return nil, fmt.Errorf("failed to open consolidated output: %w", err)
+		}
+
+		// Enable follow mode for consolidated view
+		pane.SetFollowing(true)
+		panes = []*Pane{pane}
+	} else {
+		// Normal mode: build list of files to open
+		var files []string
+		if len(opts.Filepaths) > 0 {
+			files = opts.Filepaths
+		} else if opts.Filepath != "" {
+			files = []string{opts.Filepath}
+		} else {
+			return nil, fmt.Errorf("no file specified")
+		}
+
+		// Create panes for each file
+		for _, filePath := range files {
+			pane, err := NewPane(filePath, cfg, opts.CacheFile)
+			if err != nil {
+				// Clean up already created panes
+				for _, p := range panes {
+					p.Close()
+				}
+				return nil, err
+			}
+			panes = append(panes, pane)
+		}
 	}
 
 	// Apply initial slice to first pane if specified
@@ -143,13 +172,14 @@ func NewModelWithOptions(opts ModelOptions) (*Model, error) {
 	}
 
 	return &Model{
-		panes:       panes,
-		activePane:  0,
-		splitDir:    splitDir,
-		splitRatio:  0.5,
-		searchInput: ti,
-		config:      cfg,
-		mode:        ModeNormal,
+		panes:              panes,
+		activePane:         0,
+		splitDir:           splitDir,
+		splitRatio:         0.5,
+		searchInput:        ti,
+		config:             cfg,
+		mode:               ModeNormal,
+		consolidatedWriter: writer,
 	}, nil
 }
 
@@ -178,6 +208,10 @@ func copyFile(src, dst string) error {
 
 // Init implements tea.Model
 func (m *Model) Init() tea.Cmd {
+	// Start tick if any pane is in follow mode (e.g., consolidated mode)
+	if m.currentPane().IsFollowing() {
+		return m.tickCmd()
+	}
 	return nil
 }
 
@@ -1380,6 +1414,12 @@ func (m *Model) View() string {
 			followInfo = " [following]"
 		}
 
+		// Consolidated indicator
+		consolidatedInfo := ""
+		if m.consolidatedWriter != nil {
+			consolidatedInfo = fmt.Sprintf(" [consolidated: %d files]", m.consolidatedWriter.SourceCount())
+		}
+
 		// Get timestamp for current line
 		timeInfo := ""
 		currentLine := pane.Viewport().CurrentLine()
@@ -1393,8 +1433,8 @@ func (m *Model) View() string {
 			msgInfo = fmt.Sprintf(" [%s]", m.message)
 		}
 
-		status = fmt.Sprintf(" %s%s%s  %s%s  %s%s%s%s",
-			pane.Filename(), sliceInfo, followInfo, lineInfo, timeInfo, percent, searchInfo, filterInfo, msgInfo)
+		status = fmt.Sprintf(" %s%s%s%s  %s%s  %s%s%s%s",
+			pane.Filename(), sliceInfo, followInfo, consolidatedInfo, lineInfo, timeInfo, percent, searchInfo, filterInfo, msgInfo)
 	}
 
 	builder.WriteString(statusStyle.Render(status))
@@ -1580,10 +1620,20 @@ func (m *Model) renderHelp() string {
 // Close cleans up resources
 func (m *Model) Close() error {
 	var err error
+
+	// Close panes first
 	for _, pane := range m.panes {
 		if paneErr := pane.Close(); paneErr != nil && err == nil {
 			err = paneErr
 		}
 	}
+
+	// Close consolidated writer (stops goroutine, removes temp file)
+	if m.consolidatedWriter != nil {
+		if writerErr := m.consolidatedWriter.Close(); writerErr != nil && err == nil {
+			err = writerErr
+		}
+	}
+
 	return err
 }
