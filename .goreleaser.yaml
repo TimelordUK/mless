@@ -1,0 +1,86 @@
+# GoReleaser config for mless
+# Docs: https://goreleaser.com
+# Test locally without tagging: goreleaser release --snapshot --clean
+version: 2
+
+project_name: mless
+
+before:
+  hooks:
+    - go mod tidy
+
+builds:
+  - id: mless
+    main: ./cmd/mless
+    binary: mless
+    env:
+      - CGO_ENABLED=0
+    goos:
+      - linux
+      - darwin
+      - windows
+    goarch:
+      - amd64
+      - arm64
+    ldflags:
+      - -s -w
+      - -X main.version={{ .Version }}
+      - -X main.commit={{ .ShortCommit }}
+      - -X main.date={{ .Date }}
+
+archives:
+  - id: mless
+    name_template: >-
+      {{ .ProjectName }}_{{ .Version }}_
+      {{- if eq .Os "darwin" }}macos
+      {{- else }}{{ .Os }}{{ end }}_
+      {{- if eq .Arch "amd64" }}x86_64
+      {{- else }}{{ .Arch }}{{ end }}
+    formats: [tar.gz]
+    format_overrides:
+      - goos: windows
+        formats: [zip]
+    files:
+      - README.md
+      - LICENSE*
+      - CLAUDE.md
+
+checksum:
+  name_template: "checksums.txt"
+
+snapshot:
+  version_template: "{{ incpatch .Version }}-snapshot-{{ .ShortCommit }}"
+
+changelog:
+  sort: asc
+  use: github
+  filters:
+    exclude:
+      - "^docs:"
+      - "^test:"
+      - "^chore:"
+      - "Merge pull request"
+      - "Merge branch"
+  groups:
+    - title: Features
+      regexp: '^.*?feat(\(.+\))??!?:.+$'
+      order: 0
+    - title: Bug fixes
+      regexp: '^.*?fix(\(.+\))??!?:.+$'
+      order: 1
+    - title: Other
+      order: 999
+
+release:
+  github:
+    owner: TimelordUK
+    name: mless
+  draft: false
+  prerelease: auto
+  header: |
+    ## mless {{ .Tag }}
+
+    Enhanced `less` for log files — level filtering, time navigation, slicing, split views.
+  footer: |
+    ---
+    Install: download the archive for your OS/arch below, extract, and put `mless` on your `PATH`.
