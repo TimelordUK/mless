@@ -11,7 +11,10 @@ permissions:
 
 jobs:
   goreleaser:
-    runs-on: ubuntu-latest
+    # windows-latest because GoReleaser's chocolatey packer needs the choco CLI,
+    # which is preinstalled on Windows runners. Cross-compiling Linux/macOS
+    # binaries from Windows is fine (pure Go, CGO_ENABLED=0).
+    runs-on: windows-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -32,3 +35,5 @@ jobs:
           args: release --clean
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          CHOCOLATEY_API_KEY: ${{ secrets.CHOCOLATEY_API_KEY }}
+          HOMEBREW_TAP_GITHUB_TOKEN: ${{ secrets.HOMEBREW_TAP_GITHUB_TOKEN }}

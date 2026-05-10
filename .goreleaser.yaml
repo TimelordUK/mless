@@ -84,3 +84,43 @@ release:
   footer: |
     ---
     Install: download the archive for your OS/arch below, extract, and put `mless` on your `PATH`.
+
+homebrew_casks:
+  - name: mless
+    repository:
+      owner: TimelordUK
+      name: homebrew-tap
+      token: "{{ .Env.HOMEBREW_TAP_GITHUB_TOKEN }}"
+      branch: main
+    homepage: https://github.com/TimelordUK/mless
+    description: A modern log-aware pager for the terminal — less, but for log files.
+    license: MIT
+    commit_author:
+      name: goreleaserbot
+      email: bot@goreleaser.com
+    commit_msg_template: "Cask update for {{ .ProjectName }} version {{ .Tag }}"
+
+chocolateys:
+  - name: mless
+    title: mless
+    authors: TimelordUK
+    project_url: https://github.com/TimelordUK/mless
+    project_source_url: https://github.com/TimelordUK/mless
+    docs_url: https://github.com/TimelordUK/mless/blob/master/README.md
+    bug_tracker_url: https://github.com/TimelordUK/mless/issues
+    license_url: https://github.com/TimelordUK/mless/blob/master/LICENSE
+    icon_url: https://raw.githubusercontent.com/TimelordUK/mless/master/assets/icon.png
+    summary: A modern, log-aware pager for the terminal — less, but for log files.
+    description: |
+      mless is a TUI pager focused on log files. It detects and color-codes log
+      levels, supports level filtering ("show WARN and above"), live fzf-style
+      text filtering, search, marks, time navigation, and a stack of revertable
+      slices for drilling into sub-ranges of a file. Split views give each pane
+      independent filters; consolidated mode (-C) merge-tails multiple files in
+      time order. Vim-style keys, count prefixes, visual selection, and
+      clipboard yank are supported.
+    tags: "log logs viewer pager less terminal cli tui devops sre observability"
+    release_notes: "https://github.com/TimelordUK/mless/releases/tag/v{{ .Version }}"
+    api_key: '{{ .Env.CHOCOLATEY_API_KEY }}'
+    source_repo: "https://push.chocolatey.org/"
+    skip_publish: false

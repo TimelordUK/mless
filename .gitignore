@@ -36,3 +36,6 @@ debug
 
 # Temp files
 *.tmp
+
+# GoReleaser output
+/dist/
