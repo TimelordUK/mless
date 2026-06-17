@@ -176,6 +176,61 @@ Open multiple files in tabs, switch between them.
 
 ---
 
+## Wrap-Aware Viewport (goto-line + wrap focus)  ← next session
+
+**Problem.** The viewport scrolls in *logical-line* units (`scrollOffset` = top
+logical line), but with wrap on the screen budget is *physical rows*. This
+mismatch causes three issues:
+
+1. The scroll anchor is the *top* line, not the line you care about. Search does
+   `GotoLine(match)` (match at top), but near EOF `clampScroll()` caps
+   `scrollOffset` at `LineCount - height`, so the match lands mid-screen; toggling
+   wrap (`Z`) then expands the lines above it and pushes it off the bottom — you
+   "lose focus" on the match.
+2. `clampScroll` uses logical math (`LineCount - height`), which is wrong under
+   wrap — a wrapped screenful holds *fewer* logical lines.
+3. You can't anchor to the middle of a wrapped line, so any wrap toggle re-flows
+   around the top line instead of your point of interest.
+
+Real-world workflow that hurts: search `instanceId=3`, find it, then need the
+full (very long) line → press `Z` to wrap → match scrolls away.
+
+### Phase A — cheap wins (do first)
+- **Re-anchor on `Z`:** when toggling wrap, if a line is highlighted,
+  `EnsureVisible(highlightedLine)` (or `GotoLine` it) instead of leaving
+  `scrollOffset` untouched. Match stays put across the toggle.
+- **"Context peek" overlay:** a key (e.g. `Enter` or `.`) pops the current /
+  highlighted line **plus a few lines of context around it** (configurable, e.g.
+  ±3), fully wrapped, in an overlay — *without* changing the viewport's wrap state
+  or scroll. Best fit for "I just need to read this and what's around it." Solves
+  the search-a-long-line case (e.g. reading a line with many command-line
+  arguments / structured fields) without touching the scroll model. The single
+  highlighted line should be visually marked within the peek.
+
+### Phase B — real fix: physical-row anchor
+Replace `scrollOffset int` with `{topLine int, topSubRow int}` (which logical
+line is at top, and which wrapped sub-row of it).
+- `displayRowsFor(line, width)` cached per (line, width).
+- `ScrollDown/Up`, `PageDown/Up` advance in display rows, recompute anchor.
+- `GotoLine(N)` = `{N, 0}` → target pinned at top, fully visible, wrap on or off.
+- `ToggleWrap` keeps the same anchor logical line (subRow→0) → focus preserved by
+  construction.
+- Clamp becomes wrap-aware.
+- **Cost control:** keep `PercentScrolled` and coarse clamp in *logical* space;
+  only do wrap-width math for the visible window + active scroll. Never index the
+  whole file (keeps it fast on huge logs). Also fixes `j/k` granularity and makes
+  goto-line exact.
+
+### Notes from the field
+- Split-view wrap corruption is already fixed: `Viewport.Render` now always emits
+  exactly `height` physical rows, so a wrapping pane can't overflow into the
+  adjacent pane (`internal/view/viewport.go`, test in `viewport_test.go`).
+- Pane-switch chords get trapped upstream: Windows Terminal eats `ctrl+w`;
+  vim-tmux-navigator's root-table `ctrl+h/j/k/l` switch tmux panes. Working paths:
+  `tab` (tmux-safe) and the leader chords `ctrl+x`/`ctrl+w` then `h/j/k/l`.
+
+---
+
 ## Future Ideas
 
 - **Diff view**: highlight differences between synced files
