@@ -82,6 +82,9 @@ type Model struct {
 	err     error
 	message string // Temporary status message (e.g., "5 lines yanked")
 
+	// Debug: last key string received from bubbletea (shown in status bar)
+	lastKey string
+
 	// Consolidated mode
 	consolidatedWriter *consolidate.Writer // nil if not consolidating
 }
@@ -219,6 +222,10 @@ func (m *Model) Init() tea.Cmd {
 func (m *Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	switch msg := msg.(type) {
 	case tea.KeyMsg:
+		// Capture the raw key string for the debug indicator. This is what the
+		// app actually receives, so if a chord never appears here it's being
+		// trapped upstream (terminal/multiplexer), not by mless.
+		m.lastKey = msg.String()
 		return m.handleKey(msg)
 
 	case tea.WindowSizeMsg:
@@ -495,12 +502,26 @@ func (m *Model) handleKey(msg tea.KeyMsg) (tea.Model, tea.Cmd) {
 	case "ctrl+g": // Show file info
 		m.mode = ModeFileInfo
 
-	case "ctrl+w": // Enter split command mode
+	case "ctrl+w", "ctrl+x": // Enter split command mode
+		// ctrl+x is an alias because some terminals (e.g. Windows Terminal)
+		// trap ctrl+w as "close tab" before it reaches the app.
 		m.mode = ModeSplitCmd
 
 	case "tab": // Quick pane switch
 		if len(m.panes) > 1 {
 			m.activePane = (m.activePane + 1) % len(m.panes)
+		}
+
+	// Directional pane switching (vim/tmux style, no chord needed).
+	// panes[0] is always left (vertical split) or top (horizontal split);
+	// panes[1] is right/bottom. So left/up -> pane 0, right/down -> pane 1.
+	case "ctrl+h", "ctrl+k": // move to left/top pane
+		if len(m.panes) > 1 {
+			m.activePane = 0
+		}
+	case "ctrl+l", "ctrl+j": // move to right/bottom pane
+		if len(m.panes) > 1 {
+			m.activePane = 1
 		}
 
 	// Split resizing
@@ -716,9 +737,19 @@ func (m *Model) handleSplitCmd(msg tea.KeyMsg) (tea.Model, tea.Cmd) {
 		m.splitVertical()
 	case "s": // Horizontal split (stacked)
 		m.splitHorizontal()
-	case "w": // Switch pane
+	case "w": // Switch pane (cycle)
 		if len(m.panes) > 1 {
 			m.activePane = (m.activePane + 1) % len(m.panes)
+		}
+	// Directional switch behind the leader, so tmux's root-table C-h/j/k/l
+	// (vim-tmux-navigator) can't intercept them. panes[0] = left/top.
+	case "h", "k": // left / up
+		if len(m.panes) > 1 {
+			m.activePane = 0
+		}
+	case "l", "j": // right / down
+		if len(m.panes) > 1 {
+			m.activePane = 1
 		}
 	case "q": // Close current pane
 		m.closeCurrentPane()
@@ -1437,6 +1468,18 @@ func (m *Model) View() string {
 			pane.Filename(), sliceInfo, followInfo, consolidatedInfo, lineInfo, timeInfo, percent, searchInfo, filterInfo, msgInfo)
 	}
 
+	// Debug indicator: last key received + active pane. Lets us confirm whether
+	// a chord actually reaches the app and whether the pane switch took effect.
+	dbgStyle := lipgloss.NewStyle().
+		Background(lipgloss.Color("57")).
+		Foreground(lipgloss.Color("231")).
+		Bold(true)
+	lastKey := m.lastKey
+	if lastKey == "" {
+		lastKey = "—"
+	}
+	dbg := dbgStyle.Render(fmt.Sprintf(" key=%s pane=%d/%d ", lastKey, m.activePane+1, len(m.panes)))
+	builder.WriteString(dbg)
 	builder.WriteString(statusStyle.Render(status))
 	builder.WriteString("\n")
 
@@ -1576,10 +1619,13 @@ func (m *Model) renderHelp() string {
 			"Z               Toggle line wrap",
 		}},
 		{"Split Views", []string{
-			"ctrl+w v        Vertical split (side-by-side)",
-			"ctrl+w s        Horizontal split (stacked)",
-			"ctrl+w w / tab  Switch pane",
-			"ctrl+w q        Close current pane",
+			"ctrl+w/ctrl+x   Split leader (ctrl+x if ctrl+w is trapped)",
+			"<leader> v      Vertical split (side-by-side)",
+			"<leader> s      Horizontal split (stacked)",
+			"<leader> w      Cycle panes",
+			"<leader> h/j/k/l  Switch pane (left/down/up/right)",
+			"<leader> q      Close current pane",
+			"tab             Cycle panes (tmux-safe)",
 			"ctrl+o          Toggle split orientation",
 			"H / L           Resize split",
 			"=               Reset split to 50/50",

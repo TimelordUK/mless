@@ -211,105 +211,138 @@ func (v *Viewport) clampScroll() {
 	}
 }
 
-// Render returns the viewport content as a string
+// Render returns the viewport content as a string.
+//
+// The output is ALWAYS exactly v.height physical rows, regardless of whether
+// line wrapping is enabled. When wrapping is on, a single logical line can
+// expand into several physical rows; those extra rows are counted against the
+// height budget so the viewport never overflows its allotted space. This is
+// what keeps split panes independent: each pane renders into its own fixed-size
+// block, so one pane wrapping cannot push the other pane's rows around.
 func (v *Viewport) Render() string {
 	if v.provider == nil {
 		return ""
 	}
 
+	// At most v.height logical lines can be visible (each occupies >= 1 row),
+	// so fetching v.height lines is always enough to fill the row budget.
 	lines, err := v.provider.GetLines(v.scrollOffset, v.height)
 	if err != nil {
 		return fmt.Sprintf("Error: %v", err)
 	}
 
-	var builder strings.Builder
 	lineCount := v.provider.LineCount()
 	lineNumWidth := len(fmt.Sprintf("%d", lineCount))
 
+	// Calculate available content width (gutter excluded)
+	availableWidth := v.width
+	gutterWidth := 0
+	if v.showLineNumbers {
+		gutterWidth = lineNumWidth + 2 // +2 for mark char and space
+		availableWidth -= gutterWidth
+	}
+
+	// Build the list of physical rows, stopping once the height budget is full.
+	rows := make([]string, 0, v.height)
 	for i, line := range lines {
+		if len(rows) >= v.height {
+			break
+		}
+
+		gutter := v.renderGutter(line, i, lineNumWidth)
+		content := v.renderer.Render(line)
+
+		if v.wrapLines {
+			// Wrap long lines into multiple physical rows.
+			segments := v.wrapContentRows(content, availableWidth)
+			contPad := strings.Repeat(" ", gutterWidth)
+			for j, seg := range segments {
+				if len(rows) >= v.height {
+					break
+				}
+				if j == 0 {
+					rows = append(rows, gutter+seg)
+				} else {
+					// Continuation rows have no line number; pad the gutter.
+					rows = append(rows, contPad+seg)
+				}
+			}
+		} else {
+			// Apply horizontal offset and truncation to a single row.
+			content = v.applyHorizontalScroll(content, availableWidth)
+			rows = append(rows, gutter+content)
+		}
+	}
+
+	// Assemble exactly v.height rows, padding the remainder with "~".
+	var builder strings.Builder
+	for i := 0; i < v.height; i++ {
 		if i > 0 {
 			builder.WriteString("\n")
 		}
-
-		// Line number: use OriginalIndex (always set by source/filtered provider)
-		lineNum := line.OriginalIndex + 1 // 1-based for display
-
-		// Check if this is the highlighted line
-		// Use OriginalIndex if set (> 0 or explicitly 0 for first line)
-		// For filtered views, OriginalIndex is always set
-		originalIdx := v.scrollOffset + i
-		if line.OriginalIndex > 0 || (i == 0 && line.OriginalIndex == 0) {
-			originalIdx = line.OriginalIndex
-		}
-		isHighlighted := v.highlightedLine >= 0 && originalIdx == v.highlightedLine
-
-		if v.showLineNumbers {
-			// Check if this line has a mark
-			markChar := ' '
-			if v.marks != nil {
-				if m, ok := v.marks[originalIdx]; ok {
-					markChar = m
-				}
-			}
-
-			// Check if this line is in visual selection
-			inVisualSelection := v.visualStart >= 0 && v.visualEnd >= 0 &&
-				originalIdx >= v.visualStart && originalIdx <= v.visualEnd
-			isVisualCursor := v.visualCursor >= 0 && originalIdx == v.visualCursor
-
-			numStr := fmt.Sprintf("%*d", lineNumWidth, lineNum)
-			if isHighlighted {
-				// Highlight line number with marker
-				builder.WriteString(v.highlightStyle.Render(fmt.Sprintf("%c%s ", markChar, numStr)))
-			} else if isVisualCursor {
-				// Visual cursor: show █ marker in bright cyan to indicate cursor position
-				cursorStyle := lipgloss.NewStyle().Foreground(lipgloss.Color("51")).Bold(true) // cyan
-				builder.WriteString(cursorStyle.Render("█"))
-				builder.WriteString(v.lineNumberStyle.Render(fmt.Sprintf("%s ", numStr)))
-			} else if inVisualSelection {
-				// Visual selection: show > marker in cyan
-				visualStyle := lipgloss.NewStyle().Foreground(lipgloss.Color("51")).Bold(true) // cyan
-				builder.WriteString(visualStyle.Render(">"))
-				builder.WriteString(v.lineNumberStyle.Render(fmt.Sprintf("%s ", numStr)))
-			} else {
-				if markChar != ' ' {
-					// Show mark character in highlight style
-					builder.WriteString(v.highlightStyle.Render(string(markChar)))
-					builder.WriteString(v.lineNumberStyle.Render(fmt.Sprintf("%s ", numStr)))
-				} else {
-					builder.WriteString(v.lineNumberStyle.Render(fmt.Sprintf(" %s ", numStr)))
-				}
-			}
-		}
-
-		// Use renderer for content
-		content := v.renderer.Render(line)
-
-		// Calculate available width
-		availableWidth := v.width
-		if v.showLineNumbers {
-			availableWidth -= lineNumWidth + 2 // +2 for mark char and space
-		}
-
-		if v.wrapLines {
-			// Wrap long lines
-			builder.WriteString(v.wrapContent(content, availableWidth))
+		if i < len(rows) {
+			builder.WriteString(rows[i])
 		} else {
-			// Apply horizontal offset and truncation
-			content = v.applyHorizontalScroll(content, availableWidth)
-			builder.WriteString(content)
+			builder.WriteString("~")
 		}
-	}
-
-	// Pad with empty lines if needed
-	for i := len(lines); i < v.height; i++ {
-		if i > 0 || len(lines) > 0 {
-			builder.WriteString("\n")
-		}
-		builder.WriteString("~")
 	}
 
 	return builder.String()
+}
+
+// renderGutter builds the line-number / mark / visual-selection gutter for a
+// logical line. Returns "" when line numbers are disabled. The index i is the
+// line's position within the fetched window (used as a fallback for the
+// original index of the first line).
+func (v *Viewport) renderGutter(line *source.Line, i, lineNumWidth int) string {
+	if !v.showLineNumbers {
+		return ""
+	}
+
+	// Line number: use OriginalIndex (always set by source/filtered provider)
+	lineNum := line.OriginalIndex + 1 // 1-based for display
+
+	// Check if this is the highlighted line
+	// Use OriginalIndex if set (> 0 or explicitly 0 for first line)
+	// For filtered views, OriginalIndex is always set
+	originalIdx := v.scrollOffset + i
+	if line.OriginalIndex > 0 || (i == 0 && line.OriginalIndex == 0) {
+		originalIdx = line.OriginalIndex
+	}
+	isHighlighted := v.highlightedLine >= 0 && originalIdx == v.highlightedLine
+
+	// Check if this line has a mark
+	markChar := ' '
+	if v.marks != nil {
+		if m, ok := v.marks[originalIdx]; ok {
+			markChar = m
+		}
+	}
+
+	// Check if this line is in visual selection
+	inVisualSelection := v.visualStart >= 0 && v.visualEnd >= 0 &&
+		originalIdx >= v.visualStart && originalIdx <= v.visualEnd
+	isVisualCursor := v.visualCursor >= 0 && originalIdx == v.visualCursor
+
+	numStr := fmt.Sprintf("%*d", lineNumWidth, lineNum)
+	switch {
+	case isHighlighted:
+		// Highlight line number with marker
+		return v.highlightStyle.Render(fmt.Sprintf("%c%s ", markChar, numStr))
+	case isVisualCursor:
+		// Visual cursor: show █ marker in bright cyan to indicate cursor position
+		cursorStyle := lipgloss.NewStyle().Foreground(lipgloss.Color("51")).Bold(true) // cyan
+		return cursorStyle.Render("█") + v.lineNumberStyle.Render(fmt.Sprintf("%s ", numStr))
+	case inVisualSelection:
+		// Visual selection: show > marker in cyan
+		visualStyle := lipgloss.NewStyle().Foreground(lipgloss.Color("51")).Bold(true) // cyan
+		return visualStyle.Render(">") + v.lineNumberStyle.Render(fmt.Sprintf("%s ", numStr))
+	case markChar != ' ':
+		// Show mark character in highlight style
+		return v.highlightStyle.Render(string(markChar)) + v.lineNumberStyle.Render(fmt.Sprintf("%s ", numStr))
+	default:
+		return v.lineNumberStyle.Render(fmt.Sprintf(" %s ", numStr))
+	}
 }
 
 // applyHorizontalScroll applies horizontal offset and truncates to width
@@ -413,44 +446,50 @@ func (v *Viewport) applyHorizontalScroll(content string, width int) string {
 	return truncated.String()
 }
 
-// wrapContent wraps content to fit within width (ANSI-aware)
-func (v *Viewport) wrapContent(content string, width int) string {
+// wrapContentRows splits content into physical rows of at most `width` visible
+// columns (ANSI-aware). Each returned segment is a single physical row's worth
+// of content (without any gutter/continuation padding) and is terminated with a
+// reset code. Always returns at least one segment so an empty/blank line still
+// occupies one row.
+func (v *Viewport) wrapContentRows(content string, width int) []string {
 	if width <= 0 {
-		return ""
+		return []string{""}
 	}
 
-	var result strings.Builder
+	var rows []string
+	var cur strings.Builder
 	visWidth := 0
 	inEscape := false
 
 	for _, r := range content {
 		if r == '\x1b' {
 			inEscape = true
-			result.WriteRune(r)
+			cur.WriteRune(r)
 			continue
 		}
 		if inEscape {
-			result.WriteRune(r)
+			cur.WriteRune(r)
 			if (r >= 'a' && r <= 'z') || (r >= 'A' && r <= 'Z') {
 				inEscape = false
 			}
 			continue
 		}
 
-		// Check if we need to wrap
+		// Flush the current row once it is full.
 		if visWidth >= width {
-			result.WriteString("\x1b[0m\n") // Reset and newline
-			// Pad for continuation (no line number)
-			result.WriteString(strings.Repeat(" ", v.width-width))
+			cur.WriteString("\x1b[0m")
+			rows = append(rows, cur.String())
+			cur.Reset()
 			visWidth = 0
 		}
 
-		result.WriteRune(r)
+		cur.WriteRune(r)
 		visWidth++
 	}
 
-	result.WriteString("\x1b[0m")
-	return result.String()
+	cur.WriteString("\x1b[0m")
+	rows = append(rows, cur.String())
+	return rows
 }
 
 // PercentScrolled returns how far through the file we are
