@@ -158,6 +158,10 @@ Show elapsed time from a reference point.
 
 ## Phase 7: Multi-Tab Support
 
+> Superseded — see **Workspace, Tabs & Window Management (planning)** below for
+> the current approach (extract a `Tab` struct from `Model` rather than a
+> `TabManager` of Models, plus zoom and the recommended sequencing).
+
 Open multiple files in tabs, switch between them.
 
 ### Features
@@ -176,7 +180,7 @@ Open multiple files in tabs, switch between them.
 
 ---
 
-## Wrap-Aware Viewport (goto-line + wrap focus)  ← next session
+## Wrap-Aware Viewport (goto-line + wrap focus)  — Phase A DONE
 
 **Problem.** The viewport scrolls in *logical-line* units (`scrollOffset` = top
 logical line), but with wrap on the screen budget is *physical rows*. This
@@ -195,19 +199,29 @@ mismatch causes three issues:
 Real-world workflow that hurts: search `instanceId=3`, find it, then need the
 full (very long) line → press `Z` to wrap → match scrolls away.
 
-### Phase A — cheap wins (do first)
-- **Re-anchor on `Z`:** when toggling wrap, if a line is highlighted,
-  `EnsureVisible(highlightedLine)` (or `GotoLine` it) instead of leaving
-  `scrollOffset` untouched. Match stays put across the toggle.
-- **"Context peek" overlay:** a key (e.g. `Enter` or `.`) pops the current /
-  highlighted line **plus a few lines of context around it** (configurable, e.g.
-  ±3), fully wrapped, in an overlay — *without* changing the viewport's wrap state
-  or scroll. Best fit for "I just need to read this and what's around it." Solves
-  the search-a-long-line case (e.g. reading a line with many command-line
-  arguments / structured fields) without touching the scroll model. The single
-  highlighted line should be visually marked within the peek.
+### Phase A — cheap wins ✅ DONE (shipped)
+- **Re-anchor on `Z`** ✅: `Pane.ToggleWrap` re-pins the highlighted line to the
+  top in the new mode (`Viewport.HighlightedLine` accessor). Match stays put
+  across the toggle.
+- **Wrap-aware scroll bounds** ✅: `bottomAnchorOffset` (EOF pinned to the bottom
+  for `G`) and a relaxed `maxScrollOffset` (last line can reach the top, vim
+  style) replace the old `LineCount - height` clamp. Fixes the near-EOF "lose the
+  match" case *and* a latent bug where wrap mode couldn't scroll to true EOF.
+  Files that fit on screen still don't scroll; `PercentScrolled` caps at 100%.
+- **In-place single-line expand (`z`)** ✅: instead of the planned context-peek
+  *overlay*, we landed a simpler in-place model — `z` expands/collapses the
+  current (top) line, wrapping just that line even with global wrap off. Keyed by
+  original line (survives filter/scroll like a mark); several can be expanded at
+  once; `esc` collapses all. This is the "read this one long line's full args on
+  one screen while n-nexting" case, with no overlay and no scroll-model change.
+  See `internal/ui/pane.go` (`ToggleExpandCurrentLine`) and
+  `internal/view/viewport.go` (per-line wrap in `Render`).
 
-### Phase B — real fix: physical-row anchor
+### Phase B — real fix: physical-row anchor (still future)
+The one case Phase A deliberately does **not** solve: you can't land the viewport
+*partway into* a line taller than the whole screen — scrolling is per logical
+line, so such a line shows from its first row or is scrolled off the top, tail
+unreachable. Fixing that needs the physical-row anchor below. Not yet needed.
 Replace `scrollOffset int` with `{topLine int, topSubRow int}` (which logical
 line is at top, and which wrapped sub-row of it).
 - `displayRowsFor(line, width)` cached per (line, width).
@@ -228,6 +242,66 @@ line is at top, and which wrapped sub-row of it).
 - Pane-switch chords get trapped upstream: Windows Terminal eats `ctrl+w`;
   vim-tmux-navigator's root-table `ctrl+h/j/k/l` switch tmux panes. Working paths:
   `tab` (tmux-safe) and the leader chords `ctrl+x`/`ctrl+w` then `h/j/k/l`.
+
+---
+
+## Workspace, Tabs & Window Management (planning)
+
+Supersedes the older Phase 7 sketch ("TabManager holding multiple Models") with a
+cleaner structural move. The guiding idea is to keep three concepts **orthogonal**
+so complexity never compounds:
+
+- **Tabs** = "more files open" (independent full workspaces)
+- **Split** = "compare two side by side" — **cap at 2 panes per tab**; resist
+  nested/recursive splits (that's where tmux-style complexity detonates — open a
+  tab instead)
+- **Zoom** = "focus one pane temporarily"
+
+### Sequencing (cheapest, highest-leverage first)
+
+**1. Split zoom — do first, nearly free.**
+A `zoomed bool` on the workspace: when set, render gives the active pane the full
+area and ignores `splitRatio`. Toggle with `<leader> z` (tmux muscle memory).
+No refactor; immediate payoff; reduces pressure for nested splits. *This is the
+"open with half zoom" win for next session.*
+
+**2. Time-synced scroll (the old Phase 4) — self-contained, high value.**
+NOTE: greenfield — there is currently **no sync code in the tree**, despite the
+Phase 4 entry. It's a property of a 2-pane split, needs no tab work: add
+`synced bool` + reuse the existing timestamp index so scrolling pane A
+binary-searches pane B for the nearest timestamp and repositions it. Very
+testable; the original "compare two services' logs" use-case.
+
+**3. Extract a `Tab`/`Workspace` struct — the one refactor worth doing.**
+Move `{panes, activePane, splitDir, splitRatio, zoomed}` out of `Model` into a
+`Tab`; `Model` holds `tabs []*Tab` + `activeTab` and stays the global shell
+(config, mode, status). Key routing and rendering delegate to the active tab.
+This single move unlocks tabs and makes zoom/layout per-tab.
+
+**4. Tabs + cross-tab follow — once the Tab struct exists.**
+- Cap at **9 tabs** — gives `1`–`9` as direct jump keys (vim/tmux window-number
+  model). Resource cost per file (mmap + line index + timestamp cache) is bounded;
+  the real cost is follow polling + redraw, not memory.
+- One **global ticker** iterates every follow-enabled pane across all tabs and
+  refreshes its source; only visible panes re-render. Show a "● new data" marker
+  on inactive tab labels.
+
+### Configurable keymaps — defer the engine, fix the real pain now
+
+The real pain isn't "rebind every key", it's **leader/chord collisions** with
+tmux / zellij / Windows Terminal trapping chords before mless sees them.
+
+- **Near term (cheap):** make the **leader key configurable**; keep the alias
+  approach already in use (`ctrl+x` for `ctrl+w`). Document which chords clash and
+  how to remap the leader. ~80% of the pain for ~5% of the effort.
+- **Later (only on real demand):** refactor the normal-mode `switch` into an
+  `Action` enum + `map[string]Action` keymap loaded from config (with defaults).
+  Side benefit: the help screen can be generated from the keymap instead of
+  hand-maintained. Real work — don't pay for it until someone wants per-key
+  rebinding.
+- **Principle:** one configurable leader for *window-management* verbs (split,
+  zoom, tab-next, close); single letters reserved for *in-file* navigation.
+  Minimizes collisions by construction.
 
 ---
 
@@ -284,7 +358,14 @@ type SliceInfo struct {
 - [x] Yank to clipboard (yy/Y, y'a to mark, count prefixes)
 - [x] Horizontal scrolling (</>, ^, Z wrap toggle)
 - [x] Syntax highlighting for source files (chroma-based)
-- [ ] **Phase 4: Time-synced views** ← Next
+- [x] Split-view wrap fix (Render emits exactly `height` rows; panes independent)
+- [x] Wrap-Aware Viewport Phase A: re-anchor on `Z`, wrap-aware scroll bounds,
+      reachable last screenful, in-place single-line expand (`z`)
+- [ ] **Split zoom (`<leader> z`)** ← Next (cheap, "open with half zoom")
+- [ ] Time-synced scroll (old Phase 4 — greenfield, no code yet)
+- [ ] Extract `Tab`/`Workspace` struct (enables tabs + per-tab zoom/layout)
+- [ ] Tabs (cap 9, `1`-`9` jump) + cross-tab follow ticker
+- [ ] Configurable leader key (then full keymap engine only on demand)
+- [ ] Wrap-Aware Viewport Phase B: physical-row anchor (partial-top-line)
 - [ ] Phase 5: Virtual merged view
 - [ ] Phase 6: Time delta features
-- [ ] Phase 7: Multi-tab support
