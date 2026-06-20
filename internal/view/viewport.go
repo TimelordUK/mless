@@ -76,6 +76,12 @@ func (v *Viewport) ClearHighlight() {
 	v.highlightedLine = -1
 }
 
+// HighlightedLine returns the original line index currently highlighted, or -1
+// if none. Used to re-anchor the view when wrapping is toggled.
+func (v *Viewport) HighlightedLine() int {
+	return v.highlightedLine
+}
+
 // SetMarks updates the marks to display (original line -> rune)
 func (v *Viewport) SetMarks(marks map[int]rune) {
 	v.marks = marks
@@ -176,7 +182,7 @@ func (v *Viewport) GotoBottom() {
 	if v.provider == nil {
 		return
 	}
-	v.scrollOffset = v.provider.LineCount() - v.height
+	v.scrollOffset = v.bottomAnchorOffset()
 	v.clampScroll()
 }
 
@@ -198,17 +204,84 @@ func (v *Viewport) clampScroll() {
 		return
 	}
 
-	maxScroll := v.provider.LineCount() - v.height
-	if maxScroll < 0 {
-		maxScroll = 0
-	}
-
+	maxScroll := v.maxScrollOffset()
 	if v.scrollOffset > maxScroll {
 		v.scrollOffset = maxScroll
 	}
 	if v.scrollOffset < 0 {
 		v.scrollOffset = 0
 	}
+}
+
+// contentWidth returns the column width available for line content, i.e. the
+// viewport width minus the line-number gutter.
+func (v *Viewport) contentWidth() int {
+	w := v.width
+	if v.showLineNumbers && v.provider != nil {
+		lineNumWidth := len(fmt.Sprintf("%d", v.provider.LineCount()))
+		w -= lineNumWidth + 2 // +2 for mark char and space
+	}
+	return w
+}
+
+// maxScrollOffset returns the furthest the view may scroll: the last logical
+// line sitting at the top row, with "~" filler below it. This is what lets the
+// current line (the top of the screen) and re-anchored jumps reach any line,
+// including those in the final screenful. Classic less stops a screen earlier
+// (last line pinned to the bottom row); we allow scrolling past that, vim-style,
+// so no line is ever unreachable.
+func (v *Viewport) maxScrollOffset() int {
+	if v.provider == nil || v.provider.LineCount() == 0 {
+		return 0
+	}
+	// When the whole file already fits on screen there is nothing below to
+	// reach, so don't allow scrolling its top lines off into "~".
+	if v.bottomAnchorOffset() == 0 {
+		return 0
+	}
+	return v.provider.LineCount() - 1
+}
+
+// bottomAnchorOffset returns the top-line offset that pins EOF to the bottom
+// row of a full screen — the destination for GotoBottom (G). Unlike
+// maxScrollOffset it keeps the screen full rather than scrolling into "~".
+//
+// In non-wrap mode every line is one physical row, so this is the familiar
+// LineCount-height. In wrap mode the trailing lines can each occupy several
+// rows, so fewer of them fill the final screen and the offset is higher.
+func (v *Viewport) bottomAnchorOffset() int {
+	if v.provider == nil {
+		return 0
+	}
+	n := v.provider.LineCount()
+
+	if !v.wrapLines {
+		maxScroll := n - v.height
+		if maxScroll < 0 {
+			maxScroll = 0
+		}
+		return maxScroll
+	}
+
+	// Walk backwards from the last line, accumulating physical rows. The top
+	// line can't be partially scrolled, so we keep the largest run of trailing
+	// lines whose rows still fit in the height budget: stop before the line that
+	// would overflow it. This keeps EOF visible at the bottom.
+	availableWidth := v.contentWidth()
+	used := 0
+	for i := n - 1; i >= 0; i-- {
+		line, err := v.provider.GetLine(i)
+		rows := 1
+		if err == nil {
+			rows = len(v.wrapContentRows(v.renderer.Render(line), availableWidth))
+		}
+		if used+rows > v.height && used > 0 {
+			// Including line i would push EOF off-screen; top is the line below.
+			return i + 1
+		}
+		used += rows
+	}
+	return 0
 }
 
 // Render returns the viewport content as a string.
@@ -235,12 +308,8 @@ func (v *Viewport) Render() string {
 	lineNumWidth := len(fmt.Sprintf("%d", lineCount))
 
 	// Calculate available content width (gutter excluded)
-	availableWidth := v.width
-	gutterWidth := 0
-	if v.showLineNumbers {
-		gutterWidth = lineNumWidth + 2 // +2 for mark char and space
-		availableWidth -= gutterWidth
-	}
+	availableWidth := v.contentWidth()
+	gutterWidth := v.width - availableWidth
 
 	// Build the list of physical rows, stopping once the height budget is full.
 	rows := make([]string, 0, v.height)
@@ -503,7 +572,13 @@ func (v *Viewport) PercentScrolled() float64 {
 		return 100
 	}
 
-	return float64(v.scrollOffset) / float64(total-v.height) * 100
+	// 100% is reached once EOF sits at the bottom; scrolling further (last line
+	// toward the top) stays at 100% rather than overshooting.
+	pct := float64(v.scrollOffset) / float64(total-v.height) * 100
+	if pct > 100 {
+		pct = 100
+	}
+	return pct
 }
 
 // SetShowLineNumbers toggles line numbers
@@ -521,9 +596,5 @@ func (v *Viewport) CanScrollDown() bool {
 	if v.provider == nil {
 		return false
 	}
-	maxScroll := v.provider.LineCount() - v.height
-	if maxScroll < 0 {
-		maxScroll = 0
-	}
-	return v.scrollOffset < maxScroll
+	return v.scrollOffset < v.maxScrollOffset()
 }
