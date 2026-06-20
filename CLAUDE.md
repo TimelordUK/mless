@@ -94,6 +94,12 @@ pkg/
 - `ctrl+w w` / `tab` - switch pane
 - `ctrl+w q` - close pane
 
+### Long Lines
+- `Z` - toggle line wrap (whole view)
+- `z` - expand current line in place (wrap just this line)
+- `< / >` - scroll horizontally
+- `^` - reset horizontal scroll
+
 ### Other
 - `F` - follow mode
 - `h` - help

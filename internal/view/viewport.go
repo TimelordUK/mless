@@ -38,6 +38,11 @@ type Viewport struct {
 	// Marks (original line number -> mark character)
 	marks map[int]rune
 
+	// Lines expanded in place: an original line in this set is wrapped across
+	// physical rows even when global wrapping is off, so a single long line can
+	// be read in full without committing the whole screen to wrap.
+	expandedLines map[int]bool
+
 	// Horizontal scroll offset
 	horizontalOffset int
 
@@ -85,6 +90,12 @@ func (v *Viewport) HighlightedLine() int {
 // SetMarks updates the marks to display (original line -> rune)
 func (v *Viewport) SetMarks(marks map[int]rune) {
 	v.marks = marks
+}
+
+// SetExpandedLines sets which original lines render expanded (wrapped) in place,
+// regardless of the global wrap setting.
+func (v *Viewport) SetExpandedLines(expanded map[int]bool) {
+	v.expandedLines = expanded
 }
 
 // SetVisualSelection sets the visual selection range and cursor (original line indices)
@@ -321,7 +332,10 @@ func (v *Viewport) Render() string {
 		gutter := v.renderGutter(line, i, lineNumWidth)
 		content := v.renderer.Render(line)
 
-		if v.wrapLines {
+		// A line wraps if global wrap is on, or it is individually expanded.
+		expand := v.wrapLines || v.expandedLines[line.OriginalIndex]
+
+		if expand {
 			// Wrap long lines into multiple physical rows.
 			segments := v.wrapContentRows(content, availableWidth)
 			contPad := strings.Repeat(" ", gutterWidth)
