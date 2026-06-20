@@ -103,3 +103,69 @@ func manyLines(count, width int) []string {
 	}
 	return out
 }
+
+// TestGotoBottomReachesEOFWhenWrapping verifies the wrap-aware scroll bound:
+// when long lines wrap, the final screen holds fewer logical lines, so the max
+// scroll offset must be higher than LineCount-height. Otherwise GotoBottom
+// stops short and the last line is never rendered.
+func TestGotoBottomReachesEOFWhenWrapping(t *testing.T) {
+	const width, height = 40, 10
+
+	lines := manyLines(30, 200) // each wraps to several rows
+	lines[29] = "LAST-LINE-MARKER"
+
+	v := NewViewport(width, height)
+	v.SetProvider(&fakeProvider{lines: lines})
+	v.ToggleWrap()
+	v.GotoBottom()
+
+	if got := v.Render(); !strings.Contains(got, "LAST-LINE-MARKER") {
+		t.Fatalf("GotoBottom did not reach EOF in wrap mode:\n%s", got)
+	}
+	if countRows(v.Render()) != height {
+		t.Fatalf("expected %d rows, got %d", height, countRows(v.Render()))
+	}
+}
+
+// TestScrollLastLineToTop verifies the vim-style relaxed scroll bound: the
+// final screenful is reachable, i.e. the last line can be scrolled all the way
+// to the top row. Classic less pins it to the bottom and forbids going further,
+// which made near-EOF lines unreachable as the current (top) line.
+func TestScrollLastLineToTop(t *testing.T) {
+	const width, height = 40, 10
+
+	lines := manyLines(30, 10)
+	lines[29] = "LAST-LINE-MARKER"
+
+	v := NewViewport(width, height)
+	v.SetProvider(&fakeProvider{lines: lines})
+
+	// Scroll down well past the classic LineCount-height bound (20).
+	v.ScrollDown(1000)
+
+	if v.CurrentLine() != len(lines)-1 {
+		t.Fatalf("expected top line %d (last line at top), got %d", len(lines)-1, v.CurrentLine())
+	}
+	first := strings.SplitN(v.Render(), "\n", 2)[0]
+	if !strings.Contains(first, "LAST-LINE-MARKER") {
+		t.Fatalf("last line not at top row:\n%s", first)
+	}
+	if v.PercentScrolled() != 100 {
+		t.Fatalf("expected 100%%, got %v", v.PercentScrolled())
+	}
+}
+
+// TestFileFittingOnScreenDoesNotScroll guards the relaxed bound: a file shorter
+// than the viewport must not scroll its top lines off into "~".
+func TestFileFittingOnScreenDoesNotScroll(t *testing.T) {
+	const width, height = 40, 10
+
+	v := NewViewport(width, height)
+	v.SetProvider(&fakeProvider{lines: []string{"a", "b", "c"}})
+
+	v.ScrollDown(1000)
+
+	if v.CurrentLine() != 0 {
+		t.Fatalf("short file scrolled to line %d, expected to stay at 0", v.CurrentLine())
+	}
+}

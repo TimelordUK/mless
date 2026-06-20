@@ -348,8 +348,8 @@ func (m *Model) handleKey(msg tea.KeyMsg) (tea.Model, tea.Cmd) {
 		pane.Viewport().ScrollRight(10)
 	case "^": // Reset horizontal scroll
 		pane.Viewport().ResetHorizontalScroll()
-	case "Z": // Toggle line wrap
-		pane.Viewport().ToggleWrap()
+	case "Z": // Toggle line wrap (re-anchors the focused line)
+		pane.ToggleWrap()
 
 	case "ctrl+d", "ctrl+f":
 		pane.Viewport().PageDown()

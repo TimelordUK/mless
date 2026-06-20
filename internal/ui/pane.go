@@ -168,6 +168,24 @@ func (p *Pane) Viewport() *view.Viewport {
 	return p.viewport
 }
 
+// ToggleWrap flips line wrapping and re-anchors the view so the focused line
+// stays put. Without re-anchoring, turning wrap on expands the lines above the
+// match into extra physical rows and pushes the match off-screen (worst near
+// EOF, where the scroll offset was clamped and the match sat mid-screen).
+//
+// When a line is highlighted (after a search, mark jump, or time jump) we pin
+// it back to the top in the new mode. With no highlight, the top logical line
+// is already preserved by the unchanged scroll offset, so nothing to do.
+func (p *Pane) ToggleWrap() bool {
+	wrapping := p.viewport.ToggleWrap()
+	if hl := p.viewport.HighlightedLine(); hl >= 0 {
+		if fi := p.filteredSource.FilteredIndexFor(hl); fi >= 0 {
+			p.viewport.GotoLine(fi)
+		}
+	}
+	return wrapping
+}
+
 // Source returns the pane's file source
 func (p *Pane) Source() *source.FileSource {
 	return p.source
