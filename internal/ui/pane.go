@@ -39,6 +39,10 @@ type Pane struct {
 	// Marks (a-z) - stores original line numbers
 	marks map[rune]int
 
+	// Lines expanded in place (original line numbers). Survives filter changes
+	// like marks, since it is keyed by original line.
+	expanded map[int]bool
+
 	// Search state
 	searchTerm    string
 	searchResults []int
@@ -118,6 +122,7 @@ func NewPane(filePath string, cfg *config.Config, cacheFile bool) (*Pane, error)
 		isCached:       isCached,
 		slicer:         slice.NewSlicer(),
 		marks:          make(map[rune]int),
+		expanded:       make(map[int]bool),
 		visualAnchor:   -1, // No selection
 	}, nil
 }
@@ -138,6 +143,13 @@ func (p *Pane) Render() string {
 		p.viewport.SetMarks(reverseMarks)
 	} else {
 		p.viewport.SetMarks(nil)
+	}
+
+	// Push the in-place line expansions to the viewport.
+	if len(p.expanded) > 0 {
+		p.viewport.SetExpandedLines(p.expanded)
+	} else {
+		p.viewport.SetExpandedLines(nil)
 	}
 
 	// Update viewport with visual selection and cursor position
@@ -166,6 +178,32 @@ func (p *Pane) Close() error {
 // Viewport returns the pane's viewport
 func (p *Pane) Viewport() *view.Viewport {
 	return p.viewport
+}
+
+// ToggleExpandCurrentLine expands or collapses the current (top) line in place,
+// so a single long line can be read in full without turning on global wrap.
+// Returns whether the line is expanded afterwards.
+func (p *Pane) ToggleExpandCurrentLine() bool {
+	original := p.filteredSource.OriginalLineNumber(p.viewport.CurrentLine())
+	if original < 0 {
+		return false
+	}
+	if p.expanded[original] {
+		delete(p.expanded, original)
+		return false
+	}
+	p.expanded[original] = true
+	return true
+}
+
+// ClearExpanded collapses all in-place line expansions.
+func (p *Pane) ClearExpanded() {
+	p.expanded = make(map[int]bool)
+}
+
+// HasExpanded reports whether any line is expanded in place.
+func (p *Pane) HasExpanded() bool {
+	return len(p.expanded) > 0
 }
 
 // ToggleWrap flips line wrapping and re-anchors the view so the focused line

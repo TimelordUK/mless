@@ -334,6 +334,9 @@ func (m *Model) handleKey(msg tea.KeyMsg) (tea.Model, tea.Cmd) {
 		if pane.SearchTerm() != "" {
 			pane.ClearSearch()
 		}
+		if pane.HasExpanded() {
+			pane.ClearExpanded()
+		}
 		// Clear highlighted line
 		pane.Viewport().SetHighlightedLine(-1)
 
@@ -350,6 +353,8 @@ func (m *Model) handleKey(msg tea.KeyMsg) (tea.Model, tea.Cmd) {
 		pane.Viewport().ResetHorizontalScroll()
 	case "Z": // Toggle line wrap (re-anchors the focused line)
 		pane.ToggleWrap()
+	case "z": // Expand/collapse the current line in place
+		pane.ToggleExpandCurrentLine()
 
 	case "ctrl+d", "ctrl+f":
 		pane.Viewport().PageDown()
@@ -1616,7 +1621,8 @@ func (m *Model) renderHelp() string {
 		{"Long Lines", []string{
 			"< / >           Scroll horizontally",
 			"^               Reset horizontal scroll",
-			"Z               Toggle line wrap",
+			"Z               Toggle line wrap (whole view)",
+			"z               Expand current line in place",
 		}},
 		{"Split Views", []string{
 			"ctrl+w/ctrl+x   Split leader (ctrl+x if ctrl+w is trapped)",
