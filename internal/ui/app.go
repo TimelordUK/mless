@@ -67,6 +67,7 @@ type Model struct {
 	activePane int
 	splitDir   SplitDirection
 	splitRatio float64 // 0.0 to 1.0, proportion for first pane (default 0.5)
+	zoomed     bool    // tmux-style: render only the active pane full-screen
 
 	searchInput textinput.Model
 	config      *config.Config
@@ -514,20 +515,16 @@ func (m *Model) handleKey(msg tea.KeyMsg) (tea.Model, tea.Cmd) {
 
 	case "tab": // Quick pane switch
 		if len(m.panes) > 1 {
-			m.activePane = (m.activePane + 1) % len(m.panes)
+			m.setActivePane((m.activePane + 1) % len(m.panes))
 		}
 
 	// Directional pane switching (vim/tmux style, no chord needed).
 	// panes[0] is always left (vertical split) or top (horizontal split);
 	// panes[1] is right/bottom. So left/up -> pane 0, right/down -> pane 1.
 	case "ctrl+h", "ctrl+k": // move to left/top pane
-		if len(m.panes) > 1 {
-			m.activePane = 0
-		}
+		m.setActivePane(0)
 	case "ctrl+l", "ctrl+j": // move to right/bottom pane
-		if len(m.panes) > 1 {
-			m.activePane = 1
-		}
+		m.setActivePane(1)
 
 	// Split resizing
 	case "H": // Shrink first pane (move splitter left/up)
@@ -742,20 +739,21 @@ func (m *Model) handleSplitCmd(msg tea.KeyMsg) (tea.Model, tea.Cmd) {
 		m.splitVertical()
 	case "s": // Horizontal split (stacked)
 		m.splitHorizontal()
+	case "z": // Zoom: toggle full-screen for the active pane
+		if len(m.panes) > 1 {
+			m.zoomed = !m.zoomed
+			m.calculatePaneSizes()
+		}
 	case "w": // Switch pane (cycle)
 		if len(m.panes) > 1 {
-			m.activePane = (m.activePane + 1) % len(m.panes)
+			m.setActivePane((m.activePane + 1) % len(m.panes))
 		}
 	// Directional switch behind the leader, so tmux's root-table C-h/j/k/l
 	// (vim-tmux-navigator) can't intercept them. panes[0] = left/top.
 	case "h", "k": // left / up
-		if len(m.panes) > 1 {
-			m.activePane = 0
-		}
+		m.setActivePane(0)
 	case "l", "j": // right / down
-		if len(m.panes) > 1 {
-			m.activePane = 1
-		}
+		m.setActivePane(1)
 	case "q": // Close current pane
 		m.closeCurrentPane()
 	case "esc": // Cancel
@@ -763,6 +761,18 @@ func (m *Model) handleSplitCmd(msg tea.KeyMsg) (tea.Model, tea.Cmd) {
 	}
 
 	return m, nil
+}
+
+// setActivePane focuses pane idx, re-sizing if zoomed so the newly active pane
+// fills the screen (the zoomed pane "follows" focus, tmux-style).
+func (m *Model) setActivePane(idx int) {
+	if idx < 0 || idx >= len(m.panes) {
+		return
+	}
+	m.activePane = idx
+	if m.zoomed {
+		m.calculatePaneSizes()
+	}
 }
 
 func (m *Model) handleYankKey(msg tea.KeyMsg) (tea.Model, tea.Cmd) {
@@ -1130,6 +1140,7 @@ func (m *Model) closeCurrentPane() {
 	// Reset split direction if only one pane left
 	if len(m.panes) == 1 {
 		m.splitDir = SplitNone
+		m.zoomed = false
 	}
 
 	// Close the pane (but not the shared source)
@@ -1147,6 +1158,13 @@ func (m *Model) calculatePaneSizes() {
 
 	if len(m.panes) == 1 {
 		m.panes[0].SetSize(m.width, contentHeight)
+		return
+	}
+
+	// Zoomed: the active pane fills the whole content area; the hidden pane
+	// keeps whatever size it had (it isn't rendered until we unzoom).
+	if m.zoomed {
+		m.currentPane().SetSize(m.width, contentHeight)
 		return
 	}
 
@@ -1333,6 +1351,10 @@ func (m *Model) View() string {
 	if len(m.panes) == 1 {
 		builder.WriteString(m.panes[0].Render())
 		builder.WriteString("\n")
+	} else if m.zoomed {
+		// Only the active pane is shown, full-screen.
+		builder.WriteString(m.currentPane().Render())
+		builder.WriteString("\n")
 	} else {
 		switch m.splitDir {
 		case SplitVertical:
@@ -1448,6 +1470,11 @@ func (m *Model) View() string {
 		followInfo := ""
 		if pane.IsFollowing() {
 			followInfo = " [following]"
+		}
+
+		// Zoom indicator (only meaningful in a split)
+		if m.zoomed && len(m.panes) > 1 {
+			followInfo += " [zoom]"
 		}
 
 		// Consolidated indicator
@@ -1630,6 +1657,7 @@ func (m *Model) renderHelp() string {
 			"<leader> s      Horizontal split (stacked)",
 			"<leader> w      Cycle panes",
 			"<leader> h/j/k/l  Switch pane (left/down/up/right)",
+			"<leader> z      Zoom active pane (toggle full-screen)",
 			"<leader> q      Close current pane",
 			"tab             Cycle panes (tmux-safe)",
 			"ctrl+o          Toggle split orientation",

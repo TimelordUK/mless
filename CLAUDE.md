@@ -92,6 +92,7 @@ pkg/
 - `ctrl+w v` - vertical split
 - `ctrl+w s` - horizontal split
 - `ctrl+w w` / `tab` - switch pane
+- `ctrl+w z` - zoom active pane (toggle full-screen, follows focus)
 - `ctrl+w q` - close pane
 
 ### Long Lines
