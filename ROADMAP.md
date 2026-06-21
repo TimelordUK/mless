@@ -259,11 +259,13 @@ so complexity never compounds:
 
 ### Sequencing (cheapest, highest-leverage first)
 
-**1. Split zoom — do first, nearly free.**
-A `zoomed bool` on the workspace: when set, render gives the active pane the full
-area and ignores `splitRatio`. Toggle with `<leader> z` (tmux muscle memory).
-No refactor; immediate payoff; reduces pressure for nested splits. *This is the
-"open with half zoom" win for next session.*
+**1. Split zoom — ✅ DONE.**
+`zoomed bool` on the Model: when set, `calculatePaneSizes` gives the active pane
+the full content area and `View` renders only that pane. Toggle with
+`<leader> z` (tmux muscle memory). Zoom *follows focus* — switching panes while
+zoomed re-sizes and shows the newly active one (`setActivePane` helper). Status
+bar shows `[zoom]`; collapsing back to one pane clears it. No refactor needed.
+See `internal/ui/app.go`, tests in `internal/ui/zoom_test.go`.
 
 **2. Time-synced scroll (the old Phase 4) — self-contained, high value.**
 NOTE: greenfield — there is currently **no sync code in the tree**, despite the
@@ -361,8 +363,8 @@ type SliceInfo struct {
 - [x] Split-view wrap fix (Render emits exactly `height` rows; panes independent)
 - [x] Wrap-Aware Viewport Phase A: re-anchor on `Z`, wrap-aware scroll bounds,
       reachable last screenful, in-place single-line expand (`z`)
-- [ ] **Split zoom (`<leader> z`)** ← Next (cheap, "open with half zoom")
-- [ ] Time-synced scroll (old Phase 4 — greenfield, no code yet)
+- [x] Split zoom (`<leader> z`, follows focus, `[zoom]` indicator)
+- [ ] **Time-synced scroll** (old Phase 4 — greenfield, no code yet) ← Next
 - [ ] Extract `Tab`/`Workspace` struct (enables tabs + per-tab zoom/layout)
 - [ ] Tabs (cap 9, `1`-`9` jump) + cross-tab follow ticker
 - [ ] Configurable leader key (then full keymap engine only on demand)
