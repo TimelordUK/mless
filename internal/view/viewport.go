@@ -541,19 +541,31 @@ func (v *Viewport) wrapContentRows(content string, width int) []string {
 
 	var rows []string
 	var cur strings.Builder
+	var esc strings.Builder // accumulates the escape sequence currently being read
+	activeSGR := ""         // last non-reset color/style, re-emitted on continuation rows
 	visWidth := 0
 	inEscape := false
 
 	for _, r := range content {
 		if r == '\x1b' {
 			inEscape = true
-			cur.WriteRune(r)
+			esc.Reset()
+			esc.WriteRune(r)
 			continue
 		}
 		if inEscape {
-			cur.WriteRune(r)
+			esc.WriteRune(r)
 			if (r >= 'a' && r <= 'z') || (r >= 'A' && r <= 'Z') {
 				inEscape = false
+				seq := esc.String()
+				// Track the active color so wrapped continuation rows can
+				// re-open it; a reset (\x1b[0m / \x1b[m) clears it.
+				if seq == "\x1b[0m" || seq == "\x1b[m" {
+					activeSGR = ""
+				} else {
+					activeSGR = seq
+				}
+				cur.WriteString(seq)
 			}
 			continue
 		}
@@ -564,6 +576,11 @@ func (v *Viewport) wrapContentRows(content string, width int) []string {
 			rows = append(rows, cur.String())
 			cur.Reset()
 			visWidth = 0
+			// Re-open the parent line's color on the continuation row so a
+			// wrapped error/warn line stays colored all the way down.
+			if activeSGR != "" {
+				cur.WriteString(activeSGR)
+			}
 		}
 
 		cur.WriteRune(r)
