@@ -96,6 +96,54 @@ func TestWrapStateIndependentPerViewport(t *testing.T) {
 	}
 }
 
+// TestWrapCarriesParentColor verifies that when a colored line (e.g. a red
+// error) wraps across multiple physical rows, every continuation row re-opens
+// the parent's color instead of falling back to the default foreground.
+func TestWrapCarriesParentColor(t *testing.T) {
+	const color = "\x1b[38;5;196m" // red foreground, as emitted by the renderer
+	const width = 10
+
+	// 35 visible chars at width 10 => 4 physical rows.
+	content := color + strings.Repeat("x", 35) + "\x1b[0m"
+
+	v := NewViewport(80, 24)
+	rows := v.wrapContentRows(content, width)
+
+	if len(rows) != 4 {
+		t.Fatalf("got %d rows, want 4", len(rows))
+	}
+	for i, row := range rows {
+		if !strings.Contains(row, color) {
+			t.Errorf("row %d does not re-open parent color %q: %q", i, color, row)
+		}
+		if !strings.HasSuffix(row, "\x1b[0m") {
+			t.Errorf("row %d is not reset-terminated: %q", i, row)
+		}
+	}
+}
+
+// TestWrapClearsColorAfterReset verifies a mid-content reset stops the color
+// from bleeding onto subsequent wrapped rows.
+func TestWrapClearsColorAfterReset(t *testing.T) {
+	const color = "\x1b[38;5;196m"
+	const width = 5
+
+	// Colored for the first 5 chars, reset, then 10 plain chars => rows 2+ plain.
+	content := color + strings.Repeat("x", 5) + "\x1b[0m" + strings.Repeat("y", 10)
+
+	v := NewViewport(80, 24)
+	rows := v.wrapContentRows(content, width)
+
+	if len(rows) != 3 {
+		t.Fatalf("got %d rows, want 3", len(rows))
+	}
+	for i := 1; i < len(rows); i++ {
+		if strings.Contains(rows[i], color) {
+			t.Errorf("row %d re-opened color after a reset: %q", i, rows[i])
+		}
+	}
+}
+
 func manyLines(count, width int) []string {
 	out := make([]string, count)
 	for i := range out {
