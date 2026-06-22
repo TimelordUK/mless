@@ -307,6 +307,56 @@ tmux / zellij / Windows Terminal trapping chords before mless sees them.
 
 ---
 
+## Scratch Pane (yank hunks into a working buffer)
+
+Field idea (from real log-triage at work): split vertical, **left = the open log
+(read-only source)**, **right = a scratch pane** you *pull hunks of interest
+into*. Read down the log, yank the sections that matter over to the right, and
+end up with a curated buffer of just-the-good-bits — then optionally write it to
+disk. Turns mless from "view + slice one file" into "harvest evidence from a
+file into a keepable artifact" without leaving the pager.
+
+### How it differs from what we already have
+- **Yank-to-clipboard** (`yy`/`Y`/visual-yank/`y'a`, shipped) sends text *out* of
+  the app to the system clipboard — one selection at a time, no accumulation.
+- **Slice + `:write`** (Phases 1–2, shipped) carves a *contiguous* range into a
+  file and *switches the view to it*.
+- **Scratch** is the missing middle: an **in-app, append-only buffer** you push
+  *many non-contiguous* hunks into while still reading the source, building up a
+  collection. Same extraction code as yank, different sink.
+
+### Phase 1 — in-memory scratch (MVP)
+- New `ScratchSource` in `internal/source` implementing `LineProvider` but
+  **mutable**: an append-only `[][]byte` (plus per-hunk provenance). A pane whose
+  provider is a `ScratchSource` is a "scratch pane".
+- **Open scratch** as the right pane: e.g. `ctrl+w n` (new empty scratch) — sits
+  in the existing 2-pane split, no tab work needed.
+- **Send hunk to scratch** by reusing the yank extraction (factor the visual /
+  mark-range / count-prefix grab so it can target either clipboard *or* the
+  scratch sink): in visual mode `A` = append selection; normal `"s yy`-style
+  register, or a leader verb — pick one, keep it one keystroke from a yank.
+- Scratch pane reuses the normal viewport (scroll, search, level coloring all
+  work for free since it's just a `LineProvider`).
+
+### Phase 2 — provenance & persistence
+- **Provenance separators**: each appended hunk gets an optional header line
+  (`── file.log:1240–1268 @ 13:42:01 ──`) so you know where every block came
+  from. Toggleable for clean exports.
+- **Write to disk**: reuse the existing `:write <path>` plumbing to dump the
+  scratch buffer; optionally back it with a temp file from the start (like the
+  cache/slice temp files) so it survives a crash and can be re-opened.
+- **Light editing**: delete the hunk under the cursor, clear all. Resist
+  full-editor scope — append + delete-hunk + write covers the workflow.
+
+### Notes / dependencies
+- Builds entirely on **Phase 3 split (done)** + **existing yank (done)**;
+  independent of the Tab/Workspace refactor but composes with it (a scratch could
+  later be "promoted to a tab", or be one global scratch shared across tabs).
+- Keep the source pane strictly read-only; the scratch is the only writable
+  surface, which keeps the mental model (and undo story) simple.
+
+---
+
 ## Future Ideas
 
 - **Diff view**: highlight differences between synced files
@@ -368,6 +418,8 @@ type SliceInfo struct {
 - [ ] Extract `Tab`/`Workspace` struct (enables tabs + per-tab zoom/layout)
 - [ ] Tabs (cap 9, `1`-`9` jump) + cross-tab follow ticker
 - [ ] Configurable leader key (then full keymap engine only on demand)
+- [ ] Scratch pane: yank non-contiguous hunks into an append-only buffer, then
+      `:write` to disk (Phase 1 in-memory; Phase 2 provenance + persistence)
 - [ ] Wrap-Aware Viewport Phase B: physical-row anchor (partial-top-line)
 - [ ] Phase 5: Virtual merged view
 - [ ] Phase 6: Time delta features
