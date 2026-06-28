@@ -274,11 +274,16 @@ Phase 4 entry. It's a property of a 2-pane split, needs no tab work: add
 binary-searches pane B for the nearest timestamp and repositions it. Very
 testable; the original "compare two services' logs" use-case.
 
-**3. Extract a `Tab`/`Workspace` struct — the one refactor worth doing.**
-Move `{panes, activePane, splitDir, splitRatio, zoomed}` out of `Model` into a
-`Tab`; `Model` holds `tabs []*Tab` + `activeTab` and stays the global shell
-(config, mode, status). Key routing and rendering delegate to the active tab.
-This single move unlocks tabs and makes zoom/layout per-tab.
+**3. Extract a `Tab`/`Workspace` struct — ✅ DONE.**
+`{panes, activePane, splitDir, splitRatio, zoomed}` now live on a `Tab`
+(`internal/ui/tab.go`), which also carries its `config` + content `width/height`
+and owns all window-management (`splitVertical/Horizontal`, `closeCurrentPane`,
+`calculatePaneSizes`, `setActivePane`, `toggleZoom/Orientation`, `adjustRatio`,
+`renderContent`). `Model` holds `tabs []*Tab` + `activeTab` and stays the global
+shell (config, mode, status, dimensions); a thin `tab()` accessor + a
+`currentPane()` delegate kept the in-file key handlers untouched, and resize flows
+through `Model.layoutTabs()`. Pure structural move, no behavior change — zoom +
+constructor smoke tests green. This unlocks tabs and makes zoom/layout per-tab.
 
 **4. Tabs + cross-tab follow — once the Tab struct exists.**
 - Cap at **9 tabs** — gives `1`–`9` as direct jump keys (vim/tmux window-number
@@ -415,7 +420,8 @@ type SliceInfo struct {
       reachable last screenful, in-place single-line expand (`z`)
 - [x] Split zoom (`<leader> z`, follows focus, `[zoom]` indicator)
 - [ ] **Time-synced scroll** (old Phase 4 — greenfield, no code yet) ← Next
-- [ ] Extract `Tab`/`Workspace` struct (enables tabs + per-tab zoom/layout)
+- [x] Extract `Tab`/`Workspace` struct (`internal/ui/tab.go`) — enables tabs +
+      per-tab zoom/layout
 - [ ] Tabs (cap 9, `1`-`9` jump) + cross-tab follow ticker
 - [ ] Configurable leader key (then full keymap engine only on demand)
 - [ ] Scratch pane: yank non-contiguous hunks into an append-only buffer, then

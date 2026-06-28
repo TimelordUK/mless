@@ -31,17 +31,15 @@ func newSplitModel(t *testing.T, width, height int, markerA, markerB string) *Mo
 		t.Fatalf("NewPane B: %v", err)
 	}
 	m := &Model{
-		panes:       []*Pane{paneA, paneB},
-		activePane:  0,
-		splitDir:    SplitVertical,
-		splitRatio:  0.5,
+		tabs:        []*Tab{newTab([]*Pane{paneA, paneB}, SplitVertical, cfg)},
+		activeTab:   0,
 		searchInput: textinput.New(),
 		config:      cfg,
 		mode:        ModeNormal,
 		width:       width,
 		height:      height,
 	}
-	m.calculatePaneSizes()
+	m.layoutTabs()
 	return m
 }
 
@@ -54,7 +52,7 @@ func TestZoomRendersOnlyActivePane(t *testing.T) {
 
 	m := newSplitModel(t, width, height, a, b)
 	defer func() {
-		for _, p := range m.panes {
+		for _, p := range m.tab().panes {
 			p.Close()
 		}
 	}()
@@ -65,14 +63,14 @@ func TestZoomRendersOnlyActivePane(t *testing.T) {
 	}
 
 	// Zoom the active pane (A): only A shown.
-	m.zoomed = true
-	m.calculatePaneSizes()
+	m.tab().zoomed = true
+	m.tab().calculatePaneSizes()
 	if got := m.View(); !strings.Contains(got, a) || strings.Contains(got, b) {
 		t.Fatalf("zoom should show only active pane A:\n%s", got)
 	}
 
 	// Switch panes while zoomed: zoom follows focus to B.
-	m.setActivePane(1)
+	m.tab().setActivePane(1)
 	got := m.View()
 	if !strings.Contains(got, b) || strings.Contains(got, a) {
 		t.Fatalf("zoom should follow focus to pane B:\n%s", got)
@@ -82,8 +80,8 @@ func TestZoomRendersOnlyActivePane(t *testing.T) {
 	}
 
 	// Unzoom: split restored, both visible again.
-	m.zoomed = false
-	m.calculatePaneSizes()
+	m.tab().zoomed = false
+	m.tab().calculatePaneSizes()
 	if got := m.View(); !strings.Contains(got, a) || !strings.Contains(got, b) {
 		t.Fatalf("unzoom should restore the split:\n%s", got)
 	}
@@ -96,20 +94,20 @@ func TestClosePaneResetsZoom(t *testing.T) {
 
 	m := newSplitModel(t, width, height, "AAAAAAAA", "BBBBBBBB")
 	defer func() {
-		for _, p := range m.panes {
+		for _, p := range m.tab().panes {
 			p.Close()
 		}
 	}()
 
-	m.zoomed = true
-	m.calculatePaneSizes()
+	m.tab().zoomed = true
+	m.tab().calculatePaneSizes()
 
-	m.closeCurrentPane() // drops to one pane
+	m.tab().closeCurrentPane() // drops to one pane
 
-	if m.zoomed {
+	if m.tab().zoomed {
 		t.Fatal("zoom should be reset after collapsing to a single pane")
 	}
-	if len(m.panes) != 1 {
-		t.Fatalf("expected 1 pane after close, got %d", len(m.panes))
+	if len(m.tab().panes) != 1 {
+		t.Fatalf("expected 1 pane after close, got %d", len(m.tab().panes))
 	}
 }

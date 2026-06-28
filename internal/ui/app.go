@@ -14,10 +14,7 @@ import (
 	"github.com/charmbracelet/lipgloss"
 	"github.com/TimelordUK/mless/internal/config"
 	"github.com/TimelordUK/mless/internal/consolidate"
-	"github.com/TimelordUK/mless/internal/render"
 	"github.com/TimelordUK/mless/internal/source"
-	"github.com/TimelordUK/mless/internal/view"
-	"github.com/TimelordUK/mless/pkg/logformat"
 )
 
 // tickMsg is sent periodically in follow mode
@@ -63,11 +60,10 @@ const (
 
 // Model is the main application model
 type Model struct {
-	panes      []*Pane
-	activePane int
-	splitDir   SplitDirection
-	splitRatio float64 // 0.0 to 1.0, proportion for first pane (default 0.5)
-	zoomed     bool    // tmux-style: render only the active pane full-screen
+	// tabs are independent workspaces; the global shell (mode, status, config,
+	// dimensions) lives here while per-tab pane/split/zoom layout lives on Tab.
+	tabs      []*Tab
+	activeTab int
 
 	searchInput textinput.Model
 	config      *config.Config
@@ -176,10 +172,8 @@ func NewModelWithOptions(opts ModelOptions) (*Model, error) {
 	}
 
 	return &Model{
-		panes:              panes,
-		activePane:         0,
-		splitDir:           splitDir,
-		splitRatio:         0.5,
+		tabs:               []*Tab{newTab(panes, splitDir, cfg)},
+		activeTab:          0,
 		searchInput:        ti,
 		config:             cfg,
 		mode:               ModeNormal,
@@ -187,9 +181,23 @@ func NewModelWithOptions(opts ModelOptions) (*Model, error) {
 	}, nil
 }
 
-// activePane returns the currently active pane
+// tab returns the currently active tab.
+func (m *Model) tab() *Tab {
+	return m.tabs[m.activeTab]
+}
+
+// currentPane returns the active pane of the active tab.
 func (m *Model) currentPane() *Pane {
-	return m.panes[m.activePane]
+	return m.tab().currentPane()
+}
+
+// layoutTabs resizes every tab's content area to the current window size.
+func (m *Model) layoutTabs() {
+	statusHeight := 2 // status bar + help line
+	contentHeight := m.height - statusHeight
+	for _, t := range m.tabs {
+		t.setSize(m.width, contentHeight)
+	}
 }
 
 // copyFile copies a file from src to dst
@@ -232,7 +240,7 @@ func (m *Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	case tea.WindowSizeMsg:
 		m.width = msg.Width
 		m.height = msg.Height
-		m.calculatePaneSizes()
+		m.layoutTabs()
 		return m, nil
 
 	case tickMsg:
@@ -301,6 +309,7 @@ func (m *Model) handleKey(msg tea.KeyMsg) (tea.Model, tea.Cmd) {
 
 	// Normal mode
 	pane := m.currentPane()
+	tab := m.tab()
 	key := msg.String()
 
 	// Handle digit prefix for counts (1-9 to start, 0-9 to continue)
@@ -514,50 +523,28 @@ func (m *Model) handleKey(msg tea.KeyMsg) (tea.Model, tea.Cmd) {
 		m.mode = ModeSplitCmd
 
 	case "tab": // Quick pane switch
-		if len(m.panes) > 1 {
-			m.setActivePane((m.activePane + 1) % len(m.panes))
+		if len(tab.panes) > 1 {
+			tab.setActivePane((tab.activePane + 1) % len(tab.panes))
 		}
 
 	// Directional pane switching (vim/tmux style, no chord needed).
 	// panes[0] is always left (vertical split) or top (horizontal split);
 	// panes[1] is right/bottom. So left/up -> pane 0, right/down -> pane 1.
 	case "ctrl+h", "ctrl+k": // move to left/top pane
-		m.setActivePane(0)
+		tab.setActivePane(0)
 	case "ctrl+l", "ctrl+j": // move to right/bottom pane
-		m.setActivePane(1)
+		tab.setActivePane(1)
 
 	// Split resizing
 	case "H": // Shrink first pane (move splitter left/up)
-		if len(m.panes) > 1 {
-			m.splitRatio -= 0.05
-			if m.splitRatio < 0.1 {
-				m.splitRatio = 0.1
-			}
-			m.calculatePaneSizes()
-		}
+		tab.adjustRatio(-0.05)
 	case "L": // Grow first pane (move splitter right/down)
-		if len(m.panes) > 1 {
-			m.splitRatio += 0.05
-			if m.splitRatio > 0.9 {
-				m.splitRatio = 0.9
-			}
-			m.calculatePaneSizes()
-		}
+		tab.adjustRatio(0.05)
 	case "=": // Reset split to 50/50
-		if len(m.panes) > 1 {
-			m.splitRatio = 0.5
-			m.calculatePaneSizes()
-		}
+		tab.resetRatio()
 
 	case "ctrl+o": // Toggle split orientation
-		if len(m.panes) > 1 {
-			if m.splitDir == SplitVertical {
-				m.splitDir = SplitHorizontal
-			} else {
-				m.splitDir = SplitVertical
-			}
-			m.calculatePaneSizes()
-		}
+		tab.toggleOrientation()
 
 	case "y": // Enter yank mode (count already captured)
 		m.mode = ModeYank
@@ -733,46 +720,32 @@ func (m *Model) handleMarkJumpKey(msg tea.KeyMsg) (tea.Model, tea.Cmd) {
 
 func (m *Model) handleSplitCmd(msg tea.KeyMsg) (tea.Model, tea.Cmd) {
 	m.mode = ModeNormal
+	tab := m.tab()
 
 	switch msg.String() {
 	case "v": // Vertical split (side-by-side)
-		m.splitVertical()
+		tab.splitVertical()
 	case "s": // Horizontal split (stacked)
-		m.splitHorizontal()
+		tab.splitHorizontal()
 	case "z": // Zoom: toggle full-screen for the active pane
-		if len(m.panes) > 1 {
-			m.zoomed = !m.zoomed
-			m.calculatePaneSizes()
-		}
+		tab.toggleZoom()
 	case "w": // Switch pane (cycle)
-		if len(m.panes) > 1 {
-			m.setActivePane((m.activePane + 1) % len(m.panes))
+		if len(tab.panes) > 1 {
+			tab.setActivePane((tab.activePane + 1) % len(tab.panes))
 		}
 	// Directional switch behind the leader, so tmux's root-table C-h/j/k/l
 	// (vim-tmux-navigator) can't intercept them. panes[0] = left/top.
 	case "h", "k": // left / up
-		m.setActivePane(0)
+		tab.setActivePane(0)
 	case "l", "j": // right / down
-		m.setActivePane(1)
+		tab.setActivePane(1)
 	case "q": // Close current pane
-		m.closeCurrentPane()
+		tab.closeCurrentPane()
 	case "esc": // Cancel
 		// Just return to normal mode
 	}
 
 	return m, nil
-}
-
-// setActivePane focuses pane idx, re-sizing if zoomed so the newly active pane
-// fills the screen (the zoomed pane "follows" focus, tmux-style).
-func (m *Model) setActivePane(idx int) {
-	if idx < 0 || idx >= len(m.panes) {
-		return
-	}
-	m.activePane = idx
-	if m.zoomed {
-		m.calculatePaneSizes()
-	}
 }
 
 func (m *Model) handleYankKey(msg tea.KeyMsg) (tea.Model, tea.Cmd) {
@@ -1052,204 +1025,6 @@ func (m *Model) yankVisualSelection() {
 	}
 }
 
-// splitVertical creates a vertical split (side-by-side panes)
-func (m *Model) splitVertical() {
-	if len(m.panes) >= 2 {
-		return // Already have max panes
-	}
-
-	current := m.currentPane()
-
-	// Create new pane sharing the same source
-	detector := logformat.NewLevelDetector(&m.config.LogLevels)
-	newPane := &Pane{
-		viewport:       view.NewViewport(80, 24),
-		source:         current.source, // Shared source
-		filteredSource: source.NewFilteredProvider(current.source, detector.Detect),
-		config:         current.config,
-		filename:       current.filename,
-		sourcePath:     current.sourcePath,
-		cachePath:      current.cachePath,
-		isCached:       current.isCached,
-		marks:          make(map[rune]int),
-		visualAnchor:   -1,
-	}
-	newPane.viewport.SetProvider(newPane.filteredSource)
-	newPane.viewport.SetRenderer(render.NewLogLevelRenderer(m.config))
-	newPane.viewport.GotoLine(current.viewport.CurrentLine())
-
-	m.panes = append(m.panes, newPane)
-	m.splitDir = SplitVertical
-	m.calculatePaneSizes()
-}
-
-// splitHorizontal creates a horizontal split (stacked panes)
-func (m *Model) splitHorizontal() {
-	if len(m.panes) >= 2 {
-		return
-	}
-
-	current := m.currentPane()
-
-	detector := logformat.NewLevelDetector(&m.config.LogLevels)
-	newPane := &Pane{
-		viewport:       view.NewViewport(80, 24),
-		source:         current.source,
-		filteredSource: source.NewFilteredProvider(current.source, detector.Detect),
-		config:         current.config,
-		filename:       current.filename,
-		sourcePath:     current.sourcePath,
-		cachePath:      current.cachePath,
-		isCached:       current.isCached,
-		marks:          make(map[rune]int),
-		visualAnchor:   -1,
-	}
-	newPane.viewport.SetProvider(newPane.filteredSource)
-	newPane.viewport.SetRenderer(render.NewLogLevelRenderer(m.config))
-	newPane.viewport.GotoLine(current.viewport.CurrentLine())
-
-	m.panes = append(m.panes, newPane)
-	m.splitDir = SplitHorizontal
-	m.calculatePaneSizes()
-}
-
-// closeCurrentPane closes the active pane
-func (m *Model) closeCurrentPane() {
-	if len(m.panes) <= 1 {
-		return // Can't close the last pane
-	}
-
-	// Don't close the source if other panes are using it
-	closingPane := m.panes[m.activePane]
-	sharedSource := false
-	for i, p := range m.panes {
-		if i != m.activePane && p.source == closingPane.source {
-			sharedSource = true
-			break
-		}
-	}
-
-	// Remove the pane
-	m.panes = append(m.panes[:m.activePane], m.panes[m.activePane+1:]...)
-
-	// Adjust active pane index
-	if m.activePane >= len(m.panes) {
-		m.activePane = len(m.panes) - 1
-	}
-
-	// Reset split direction if only one pane left
-	if len(m.panes) == 1 {
-		m.splitDir = SplitNone
-		m.zoomed = false
-	}
-
-	// Close the pane (but not the shared source)
-	if !sharedSource {
-		closingPane.Close()
-	}
-
-	m.calculatePaneSizes()
-}
-
-// calculatePaneSizes sets the dimensions for each pane
-func (m *Model) calculatePaneSizes() {
-	statusHeight := 2 // status bar + help line
-	contentHeight := m.height - statusHeight
-
-	if len(m.panes) == 1 {
-		m.panes[0].SetSize(m.width, contentHeight)
-		return
-	}
-
-	// Zoomed: the active pane fills the whole content area; the hidden pane
-	// keeps whatever size it had (it isn't rendered until we unzoom).
-	if m.zoomed {
-		m.currentPane().SetSize(m.width, contentHeight)
-		return
-	}
-
-	switch m.splitDir {
-	case SplitVertical:
-		// Side by side, leave 1 char for separator
-		firstWidth := int(float64(m.width-1) * m.splitRatio)
-		if firstWidth < 10 {
-			firstWidth = 10
-		}
-		if firstWidth > m.width-11 {
-			firstWidth = m.width - 11
-		}
-		m.panes[0].SetSize(firstWidth, contentHeight)
-		m.panes[1].SetSize(m.width-firstWidth-1, contentHeight)
-
-	case SplitHorizontal:
-		// Stacked, leave 1 line for separator
-		firstHeight := int(float64(contentHeight-1) * m.splitRatio)
-		if firstHeight < 3 {
-			firstHeight = 3
-		}
-		if firstHeight > contentHeight-4 {
-			firstHeight = contentHeight - 4
-		}
-		m.panes[0].SetSize(m.width, firstHeight)
-		m.panes[1].SetSize(m.width, contentHeight-firstHeight-1)
-	}
-}
-
-// renderVerticalSplit renders two panes side by side
-func (m *Model) renderVerticalSplit() string {
-	left := m.panes[0].Render()
-	right := m.panes[1].Render()
-
-	leftLines := strings.Split(left, "\n")
-	rightLines := strings.Split(right, "\n")
-
-	var result strings.Builder
-
-	// Choose separator based on active pane
-	separator := "│"
-	if m.activePane == 0 {
-		separator = "┃"
-	}
-
-	// Get pane widths from ratio
-	leftWidth := int(float64(m.width-1) * m.splitRatio)
-	if leftWidth < 10 {
-		leftWidth = 10
-	}
-	if leftWidth > m.width-11 {
-		leftWidth = m.width - 11
-	}
-	rightWidth := m.width - leftWidth - 1
-
-	maxLines := len(leftLines)
-	if len(rightLines) > maxLines {
-		maxLines = len(rightLines)
-	}
-
-	for i := 0; i < maxLines; i++ {
-		leftLine := ""
-		if i < len(leftLines) {
-			leftLine = leftLines[i]
-		}
-		rightLine := ""
-		if i < len(rightLines) {
-			rightLine = rightLines[i]
-		}
-
-		// Truncate or pad left line to fit width
-		leftLine = truncateOrPad(leftLine, leftWidth)
-		// Truncate right line
-		rightLine = truncateString(rightLine, rightWidth)
-
-		result.WriteString(leftLine)
-		result.WriteString(separator)
-		result.WriteString(rightLine)
-		result.WriteString("\n")
-	}
-
-	return result.String()
-}
-
 // truncateOrPad ensures a string is exactly the given visible width (ANSI-aware)
 func truncateOrPad(s string, width int) string {
 	visWidth := visibleWidth(s)
@@ -1318,21 +1093,6 @@ func truncateToWidth(s string, width int) string {
 	return result.String()
 }
 
-// renderHorizontalSplit renders two panes stacked
-func (m *Model) renderHorizontalSplit() string {
-	top := m.panes[0].Render()
-	bottom := m.panes[1].Render()
-
-	// Choose separator based on active pane
-	separator := strings.Repeat("─", m.width)
-	if m.activePane == 1 {
-		separator = strings.Repeat("━", m.width)
-	}
-
-	return top + "\n" + separator + "\n" + bottom + "\n"
-}
-
-
 // View implements tea.Model
 func (m *Model) View() string {
 	var builder strings.Builder
@@ -1347,22 +1107,8 @@ func (m *Model) View() string {
 		return m.renderFileInfo()
 	}
 
-	// Render pane(s)
-	if len(m.panes) == 1 {
-		builder.WriteString(m.panes[0].Render())
-		builder.WriteString("\n")
-	} else if m.zoomed {
-		// Only the active pane is shown, full-screen.
-		builder.WriteString(m.currentPane().Render())
-		builder.WriteString("\n")
-	} else {
-		switch m.splitDir {
-		case SplitVertical:
-			builder.WriteString(m.renderVerticalSplit())
-		case SplitHorizontal:
-			builder.WriteString(m.renderHorizontalSplit())
-		}
-	}
+	// Render the active tab's content area (single pane, zoom, or split).
+	builder.WriteString(m.tab().renderContent())
 
 	pane := m.currentPane()
 
@@ -1473,7 +1219,7 @@ func (m *Model) View() string {
 		}
 
 		// Zoom indicator (only meaningful in a split)
-		if m.zoomed && len(m.panes) > 1 {
+		if m.tab().zoomed && len(m.tab().panes) > 1 {
 			followInfo += " [zoom]"
 		}
 
@@ -1510,7 +1256,7 @@ func (m *Model) View() string {
 	if lastKey == "" {
 		lastKey = "—"
 	}
-	dbg := dbgStyle.Render(fmt.Sprintf(" key=%s pane=%d/%d ", lastKey, m.activePane+1, len(m.panes)))
+	dbg := dbgStyle.Render(fmt.Sprintf(" key=%s pane=%d/%d ", lastKey, m.tab().activePane+1, len(m.tab().panes)))
 	builder.WriteString(dbg)
 	builder.WriteString(statusStyle.Render(status))
 	builder.WriteString("\n")
@@ -1701,10 +1447,12 @@ func (m *Model) renderHelp() string {
 func (m *Model) Close() error {
 	var err error
 
-	// Close panes first
-	for _, pane := range m.panes {
-		if paneErr := pane.Close(); paneErr != nil && err == nil {
-			err = paneErr
+	// Close panes first (across all tabs)
+	for _, t := range m.tabs {
+		for _, pane := range t.panes {
+			if paneErr := pane.Close(); paneErr != nil && err == nil {
+				err = paneErr
+			}
 		}
 	}
 
