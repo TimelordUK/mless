@@ -9,6 +9,7 @@ cmd/mless/main.go          - Entry point, CLI argument parsing
 internal/
   ui/
     app.go                  - Main bubbletea Model, key handling, rendering
+    tab.go                  - Tab: panes + split/zoom layout for one workspace
     pane.go                 - Single file view with its own state
   view/
     viewport.go             - Scrolling viewport, renders lines
@@ -32,10 +33,16 @@ pkg/
 
 ## Key Concepts
 
-### Model / Pane Separation
-- `Model` is the top-level bubbletea model handling global state (mode, split layout)
+### Model / Tab / Pane Separation
+- `Model` is the top-level bubbletea model: global shell state (mode, status,
+  config, window size) plus `tabs []*Tab` and `activeTab`
+- `Tab` (`tab.go`) is one workspace: `panes`, `activePane`, split layout
+  (`splitDir`/`splitRatio`), `zoomed`, and its content `width/height`. It owns
+  window-management (split, close pane, calculate sizes, zoom, render content)
 - `Pane` represents a single file view with its own viewport, filters, marks, search state
-- Split views use multiple panes sharing or independent sources
+- `Model.tab()` returns the active tab; `Model.currentPane()` delegates to it, so
+  in-file key handlers stay unaware of tabs. Resize flows through `layoutTabs()`
+- Split views use multiple panes (max 2/tab) sharing or independent sources
 
 ### Filtering Architecture
 - `FilteredProvider` wraps `FileSource` and maintains `filteredIndices []int`
@@ -94,6 +101,15 @@ pkg/
 - `ctrl+w w` / `tab` - switch pane
 - `ctrl+w z` - zoom active pane (toggle full-screen, follows focus)
 - `ctrl+w q` - close pane
+
+### Tabs
+- `:tabnew <file>` / `:tabe <file>` - open a file in a new tab
+- `:tabclose` / `:tabc` - close current tab
+- `ctrl+w t` - new tab (prompts for file via the `:tabnew` line)
+- `ctrl+w c` - close current tab
+- `ctrl+w 1`-`9` - jump to tab N
+- `ctrl+w n` / `ctrl+w p` - next / previous tab
+- Capped at 9 tabs; tab bar shows only with >1 tab
 
 ### Long Lines
 - `Z` - toggle line wrap (whole view)

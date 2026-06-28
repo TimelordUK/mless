@@ -191,12 +191,70 @@ func (m *Model) currentPane() *Pane {
 	return m.tab().currentPane()
 }
 
-// layoutTabs resizes every tab's content area to the current window size.
+// maxTabs caps open tabs at 9 so <leader> 1-9 can address every tab directly.
+const maxTabs = 9
+
+// layoutTabs resizes every tab's content area to the current window size. The
+// tab bar only appears with >1 tab, so it steals a content row only then.
 func (m *Model) layoutTabs() {
 	statusHeight := 2 // status bar + help line
-	contentHeight := m.height - statusHeight
+	tabBarHeight := 0
+	if len(m.tabs) > 1 {
+		tabBarHeight = 1
+	}
+	contentHeight := m.height - statusHeight - tabBarHeight
 	for _, t := range m.tabs {
 		t.setSize(m.width, contentHeight)
+	}
+}
+
+// openTab opens path in a new tab and switches to it.
+func (m *Model) openTab(path string) error {
+	if len(m.tabs) >= maxTabs {
+		return fmt.Errorf("max %d tabs open", maxTabs)
+	}
+	pane, err := NewPane(path, m.config, false)
+	if err != nil {
+		return err
+	}
+	m.tabs = append(m.tabs, newTab([]*Pane{pane}, SplitNone, m.config))
+	m.activeTab = len(m.tabs) - 1
+	m.layoutTabs()
+	return nil
+}
+
+// closeTab closes the active tab and frees its panes (cannot close the last).
+func (m *Model) closeTab() {
+	if len(m.tabs) <= 1 {
+		m.message = "can't close last tab"
+		return
+	}
+	closing := m.tabs[m.activeTab]
+	m.tabs = append(m.tabs[:m.activeTab], m.tabs[m.activeTab+1:]...)
+	if m.activeTab >= len(m.tabs) {
+		m.activeTab = len(m.tabs) - 1
+	}
+	closing.Close()
+	m.layoutTabs()
+}
+
+// gotoTab switches to tab idx (0-based) if it exists.
+func (m *Model) gotoTab(idx int) {
+	if idx >= 0 && idx < len(m.tabs) {
+		m.activeTab = idx
+	}
+}
+
+// nextTab / prevTab cycle through tabs.
+func (m *Model) nextTab() {
+	if len(m.tabs) > 1 {
+		m.activeTab = (m.activeTab + 1) % len(m.tabs)
+	}
+}
+
+func (m *Model) prevTab() {
+	if len(m.tabs) > 1 {
+		m.activeTab = (m.activeTab - 1 + len(m.tabs)) % len(m.tabs)
 	}
 }
 
@@ -393,7 +451,7 @@ func (m *Model) handleKey(msg tea.KeyMsg) (tea.Model, tea.Cmd) {
 	case ":":
 		m.mode = ModeGoto
 		m.searchInput.SetValue("")
-		m.searchInput.Placeholder = "Line number..."
+		m.searchInput.Placeholder = "Line number, or tabnew <file> / tabclose"
 		m.searchInput.Focus()
 		return m, textinput.Blink
 
@@ -584,11 +642,7 @@ func (m *Model) handleSearchKey(msg tea.KeyMsg) (tea.Model, tea.Cmd) {
 func (m *Model) handleGotoKey(msg tea.KeyMsg) (tea.Model, tea.Cmd) {
 	switch msg.String() {
 	case "enter":
-		var lineNum int
-		fmt.Sscanf(m.searchInput.Value(), "%d", &lineNum)
-		if lineNum > 0 {
-			m.currentPane().Viewport().GotoLine(lineNum - 1) // Convert to 0-based
-		}
+		m.runCommand(m.searchInput.Value())
 		m.mode = ModeNormal
 		m.searchInput.Blur()
 		m.searchInput.Placeholder = "Search..."
@@ -604,6 +658,40 @@ func (m *Model) handleGotoKey(msg tea.KeyMsg) (tea.Model, tea.Cmd) {
 	var cmd tea.Cmd
 	m.searchInput, cmd = m.searchInput.Update(msg)
 	return m, cmd
+}
+
+// runCommand interprets the ":" command line: a bare number is a goto-line, and
+// tab verbs (tabnew/tabe, tabclose/tabc) manage tabs.
+func (m *Model) runCommand(input string) {
+	val := strings.TrimSpace(input)
+	if val == "" {
+		return
+	}
+
+	verb := val
+	if i := strings.IndexByte(val, ' '); i >= 0 {
+		verb = val[:i]
+	}
+
+	switch verb {
+	case "tabnew", "tabe", "tabedit":
+		// Everything after the verb is the path (preserve spaces in filenames).
+		path := strings.TrimSpace(val[len(verb):])
+		if path == "" {
+			m.message = "usage: tabnew <file>"
+			return
+		}
+		if err := m.openTab(path); err != nil {
+			m.message = err.Error()
+		}
+	case "tabclose", "tabc":
+		m.closeTab()
+	default:
+		var lineNum int
+		if _, err := fmt.Sscanf(val, "%d", &lineNum); err == nil && lineNum > 0 {
+			m.currentPane().Viewport().GotoLine(lineNum - 1) // Convert to 0-based
+		}
+	}
 }
 
 func (m *Model) handleGotoTimeKey(msg tea.KeyMsg) (tea.Model, tea.Cmd) {
@@ -741,8 +829,29 @@ func (m *Model) handleSplitCmd(msg tea.KeyMsg) (tea.Model, tea.Cmd) {
 		tab.setActivePane(1)
 	case "q": // Close current pane
 		tab.closeCurrentPane()
+
+	// Tab management (leader-based, tmux-style).
+	case "t": // New tab: open the command line prefilled with "tabnew "
+		m.mode = ModeGoto
+		m.searchInput.SetValue("tabnew ")
+		m.searchInput.CursorEnd()
+		m.searchInput.Placeholder = "tabnew <file>"
+		m.searchInput.Focus()
+		return m, textinput.Blink
+	case "c": // Close current tab
+		m.closeTab()
+	case "n": // Next tab
+		m.nextTab()
+	case "p": // Previous tab
+		m.prevTab()
+
 	case "esc": // Cancel
 		// Just return to normal mode
+	default:
+		// <leader> 1-9 jumps directly to that tab.
+		if key := msg.String(); len(key) == 1 && key[0] >= '1' && key[0] <= '9' {
+			m.gotoTab(int(key[0] - '1'))
+		}
 	}
 
 	return m, nil
@@ -1107,6 +1216,12 @@ func (m *Model) View() string {
 		return m.renderFileInfo()
 	}
 
+	// Tab bar (only with more than one tab).
+	if len(m.tabs) > 1 {
+		builder.WriteString(m.renderTabBar())
+		builder.WriteString("\n")
+	}
+
 	// Render the active tab's content area (single pane, zoom, or split).
 	builder.WriteString(m.tab().renderContent())
 
@@ -1269,6 +1384,31 @@ func (m *Model) View() string {
 	return builder.String()
 }
 
+// renderTabBar renders the one-line tab strip shown when more than one tab is
+// open, with the active tab highlighted.
+func (m *Model) renderTabBar() string {
+	activeStyle := lipgloss.NewStyle().
+		Background(lipgloss.Color("39")).
+		Foreground(lipgloss.Color("231")).
+		Bold(true)
+	inactiveStyle := lipgloss.NewStyle().
+		Background(lipgloss.Color("236")).
+		Foreground(lipgloss.Color("250"))
+
+	var b strings.Builder
+	for i, t := range m.tabs {
+		label := fmt.Sprintf(" %d:%s ", i+1, t.currentPane().Filename())
+		if i == m.activeTab {
+			b.WriteString(activeStyle.Render(label))
+		} else {
+			b.WriteString(inactiveStyle.Render(label))
+		}
+	}
+
+	// Keep the bar within the window width (ANSI-aware).
+	return truncateString(b.String(), m.width)
+}
+
 // renderFileInfo renders file information (ctrl+g)
 func (m *Model) renderFileInfo() string {
 	pane := m.currentPane()
@@ -1409,6 +1549,14 @@ func (m *Model) renderHelp() string {
 			"ctrl+o          Toggle split orientation",
 			"H / L           Resize split",
 			"=               Reset split to 50/50",
+		}},
+		{"Tabs", []string{
+			":tabnew <file>  Open a file in a new tab (:tabe alias)",
+			":tabclose       Close the current tab (:tabc alias)",
+			"<leader> t      New tab (prompts for file)",
+			"<leader> c      Close current tab",
+			"<leader> 1-9    Jump to tab 1-9",
+			"<leader> n/p    Next / previous tab",
 		}},
 		{"Other", []string{
 			"F               Toggle follow mode",

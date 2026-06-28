@@ -206,6 +206,27 @@ func (t *Tab) closeCurrentPane() {
 	t.calculatePaneSizes()
 }
 
+// Close releases the tab's panes, closing each distinct source only once
+// (split panes within a tab share a source).
+func (t *Tab) Close() error {
+	var err error
+	closed := make(map[*source.FileSource]bool)
+	for _, p := range t.panes {
+		// Skip panes whose source a sibling already closed; their cache path is
+		// shared too, so there's nothing left to release.
+		if p.source != nil {
+			if closed[p.source] {
+				continue
+			}
+			closed[p.source] = true
+		}
+		if e := p.Close(); e != nil && err == nil {
+			err = e
+		}
+	}
+	return err
+}
+
 // calculatePaneSizes sets the dimensions for each pane within the content area.
 func (t *Tab) calculatePaneSizes() {
 	contentHeight := t.height

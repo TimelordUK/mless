@@ -285,13 +285,18 @@ shell (config, mode, status, dimensions); a thin `tab()` accessor + a
 through `Model.layoutTabs()`. Pure structural move, no behavior change — zoom +
 constructor smoke tests green. This unlocks tabs and makes zoom/layout per-tab.
 
-**4. Tabs + cross-tab follow — once the Tab struct exists.**
-- Cap at **9 tabs** — gives `1`–`9` as direct jump keys (vim/tmux window-number
-  model). Resource cost per file (mmap + line index + timestamp cache) is bounded;
-  the real cost is follow polling + redraw, not memory.
-- One **global ticker** iterates every follow-enabled pane across all tabs and
-  refreshes its source; only visible panes re-render. Show a "● new data" marker
-  on inactive tab labels.
+**4. Tabs — ✅ DONE (core); cross-tab follow still TODO.**
+- Shipped: `:tabnew <file>`/`:tabe` + `:tabclose`/`:tabc` command verbs (parsed in
+  `Model.runCommand`), leader keys `<leader> t` (new, prefills the `:tabnew`
+  line), `<leader> c` (close), `<leader> 1`-`9` (jump), `<leader> n`/`p`
+  (next/prev). `Model` owns `tabs []*Tab` + `activeTab`; a one-line tab bar shows
+  only with >1 tab and steals a content row (`layoutTabs` accounts for it).
+- Cap at **9 tabs** — chose `<leader> 1`-`9` rather than bare `1`-`9` because the
+  latter collide with count prefixes (`5j`, `10yy`). `Tab.Close` frees each
+  distinct source once (split panes within a tab share a source).
+- **Still TODO — cross-tab follow:** one global ticker iterating every
+  follow-enabled pane across all tabs (today the tick only refreshes the active
+  tab's current pane); show a "● new data" marker on inactive tab labels.
 
 ### Configurable keymaps — defer the engine, fix the real pain now
 
@@ -422,7 +427,10 @@ type SliceInfo struct {
 - [ ] **Time-synced scroll** (old Phase 4 — greenfield, no code yet) ← Next
 - [x] Extract `Tab`/`Workspace` struct (`internal/ui/tab.go`) — enables tabs +
       per-tab zoom/layout
-- [ ] Tabs (cap 9, `1`-`9` jump) + cross-tab follow ticker
+- [x] Tabs (cap 9, `:tabnew`/`:tabclose`, `<leader> t/c/n/p`, `<leader> 1`-`9`
+      jump, tab bar)
+- [ ] Cross-tab follow ticker (refresh follow panes across all tabs; "● new
+      data" marker on inactive tabs)
 - [ ] Configurable leader key (then full keymap engine only on demand)
 - [ ] Scratch pane: yank non-contiguous hunks into an append-only buffer, then
       `:write` to disk (Phase 1 in-memory; Phase 2 provenance + persistence)
